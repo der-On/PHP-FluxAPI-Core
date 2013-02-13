@@ -4,7 +4,7 @@ $loader = require __DIR__ . '/../vendor/autoload.php';
 // create application
 $app = new Silex\Application();
 
-$fluxApi = new FluxAPI\Core();
+$fluxApi = new FluxAPI\Core($app);
 
 $project = $fluxApi->api->loadProject(1);
 $fluxApi->api->saveProject($project);

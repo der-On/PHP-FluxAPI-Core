@@ -12,11 +12,15 @@ class Core
     );
 
     public $api = NULL;
+    public $rest = NULL;
+    public $app = NULL;
 
     public $config = array();
 
-    public function __construct($config = array())
+    public function __construct(\Silex\Application $app, $config = array())
     {
+        $this->app = $app;
+
         // overwrite default config with given config
         $this->config = array_merge(
             array(
@@ -28,6 +32,7 @@ class Core
         $this->registerPlugins();
 
         $this->api = new Api($this);
+        $this->rest = new Rest($this);
     }
 
     public function registerPlugins()
