@@ -25,18 +25,20 @@ abstract class Model
         return get_called_class();
     }
 
-    public static function load($id)
+    public static function load($query)
     {
         $class_name = self::getClassName();
 
-        return new $class_name(array(
-            'id' => $id
-        ));
+        return array(
+            new $class_name(array(
+                'id' => 1
+            ))
+        );
     }
 
     public function save()
     {
-
+        return TRUE;
     }
 
     public function update($data = array())
@@ -44,9 +46,9 @@ abstract class Model
         $this->populate($data);
     }
 
-    public static function delete($id)
+    public static function delete($query)
     {
-
+        return TRUE;
     }
 
     public function __get($name)
