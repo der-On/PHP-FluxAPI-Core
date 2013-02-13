@@ -18,4 +18,4 @@ composer.lock
 # Plugins
 !src/Plugins/
 src/Plugins/*
-!src/Plugins/core
+!src/Plugins/Core

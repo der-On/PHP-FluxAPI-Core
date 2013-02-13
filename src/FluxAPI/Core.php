@@ -4,11 +4,11 @@ namespace FluxAPI;
 class Core
 {
     private $_plugins = array(
-        'model' => array(),
-        'controller' => array(),
-        'storage' => array(),
-        'cache' => array(),
-        'permission' => array()
+        'Model' => array(),
+        'Controller' => array(),
+        'Storage' => array(),
+        'Cache' => array(),
+        'Permission' => array()
     );
 
     public $api = NULL;
@@ -67,8 +67,14 @@ class Core
         }
     }
 
-    public function getPlugins()
+    public function getPlugins($namespace = NULL)
     {
-        return $this->_plugins;
+        if (empty($namespace)) {
+            return $this->_plugins;
+        } elseif (isset($this->_plugins[$namespace])) {
+            return $this->_plugins[$namespace];
+        } else {
+            return array();
+        }
     }
 }
