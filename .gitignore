@@ -14,3 +14,6 @@ app/config/parameters.yml
 
 # IDE files
 .idea
+
+# Composer
+composer.lock
