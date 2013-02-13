@@ -87,6 +87,13 @@ class Api
         }
     }
 
+    public function registerMethod($method,$callback)
+    {
+        if (!isset($this->_methods[$method]) && is_callable($callback)) {
+            $this->_methods[$method] = $callback;
+        }
+    }
+
     public function registerPluginMethods($type, $name)
     {
         switch (ucfirst($type)) {
