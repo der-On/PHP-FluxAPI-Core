@@ -3,8 +3,8 @@ namespace Plugins\Core\Model;
 
 class Project extends \FluxAPI\Model
 {
-    private function _defineFields()
+    public function defineFields()
     {
-
+        parent::defineFields();
     }
 }

@@ -15,13 +15,13 @@ abstract class Model
 
     public function  __construct($data = array())
     {
-        $this->_defineFields();
+        $this->defineFields();
         $this->_setDefaults();
 
         $this->populate($data);
     }
 
-    private function _defineFields()
+    public function defineFields()
     {
         $this->_fields['id'] = new Field(array(
             'type' => 'integer',
