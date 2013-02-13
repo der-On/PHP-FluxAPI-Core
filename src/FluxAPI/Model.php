@@ -7,6 +7,12 @@ abstract class Model
 
     private $_fields = array();
 
+    private $_belongs_to_one = array();
+    private $_belongs_to_many = array();
+
+    private $_has_one = array();
+    private $_has_many = array();
+
     public function  __construct($data = array())
     {
         $this->_defineFields();

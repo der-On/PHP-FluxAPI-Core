@@ -4,10 +4,10 @@ namespace FluxAPI;
 class Field
 {
     public $name = NULL;
-    public $value = NULL;
     public $type = NULL;
     public $length = NULL;
     public $default = NULL;
+    public $primary = FALSE;
 
     public function __construct($config = array())
     {
