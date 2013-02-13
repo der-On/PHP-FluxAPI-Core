@@ -27,6 +27,16 @@ class Api
             array(
                 'plugins_path' => realpath(__DIR__ . '/../../src/Plugins'),
                 'base_route' => '/',
+                'storage.plugin' => 'MySql',
+                'storage.options' => array(
+                    'host' => 'localhost',
+                    'user' => 'username',
+                    'password' => 'password',
+                    'database' => 'database',
+                    'table_prefix' => '',
+                    'port' => 3306,
+                    'socket' => NULL,
+                )
             ),
             $config
         );
