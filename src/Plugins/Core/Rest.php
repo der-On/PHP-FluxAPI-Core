@@ -14,6 +14,6 @@ class Rest
 
     public function registerRoutes()
     {
-
+        
     }
 }

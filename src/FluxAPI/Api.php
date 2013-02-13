@@ -131,16 +131,29 @@ class Api
 
         $model = ucfirst($model);
 
+        $this->_methods['load'.$model.'s'] = function($query) use ($model, $self) {
+            return $self->loadModels($model,$query);
+        };
+
         $this->_methods['load'.$model] = function($query) use ($model, $self) {
-            return $self->loadModel($model,$query);
+            $models = $self->loadModels($model,$query);
+            if (count($models)) {
+                return $models[0];
+            } else {
+                return NULL;
+            }
         };
 
         $this->_methods['save'.$model] = function($instance) use ($model, $self) {
             return $self->saveModel($model,$instance);
         };
 
-        $this->_methods['delete'.$model] = function($query) use ($model, $self) {
-            return $self->deleteModel($model, $query);
+        $this->_methods['delete'.$model.'s'] = function($query) use ($model, $self) {
+            return $self->deleteModels($model, $query);
+        };
+
+        $this->_methods['delete'.$model] = function($id) use ($model, $self) {
+            return $self->deleteModels($model, $id);
         };
 
         $this->_methods['update'.$model] = function($id, $data = array()) use ($model, $self) {
@@ -159,7 +172,7 @@ class Api
         }
     }
 
-    public function loadModel($model,$query)
+    public function loadModels($model,$query)
     {
         $models = $this->getPlugins('Model');
 
@@ -205,7 +218,7 @@ class Api
         return FALSE;
     }
 
-    public function deleteModel($model, $query)
+    public function deleteModels($model, $query)
     {
         $models = $this->getPlugins('Model');
 
