@@ -1,5 +1,5 @@
 {
-  "name": "anzui/FluxAPI",
+  "name": "FluxAPI",
   "license": "GPL",
   "require": {
     "php": ">=5.3.3",
