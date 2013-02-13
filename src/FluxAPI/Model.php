@@ -3,13 +3,32 @@ namespace FluxAPI;
 
 abstract class Model
 {
-    private $_data = array(
-        'id' => NULL
-    );
+    private $_data = array();
+
+    private $_fields = array();
 
     public function  __construct($data = array())
     {
+        $this->_defineFields();
+        $this->_setDefaults();
+
         $this->populate($data);
+    }
+
+    private function _defineFields()
+    {
+        $this->_fields['id'] = new Field(array(
+            'type' => 'integer',
+            'primary' => TRUE,
+            'default' => NULL
+        ));
+    }
+
+    private function _setDefaults()
+    {
+        foreach($this->_fields as $name => $field) {
+            $this->_data[$name] = $field->default;
+        }
     }
 
     public function populate($data = array())
