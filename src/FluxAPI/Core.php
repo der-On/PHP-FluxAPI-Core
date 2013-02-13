@@ -24,7 +24,8 @@ class Core
         // overwrite default config with given config
         $this->config = array_merge(
             array(
-                'plugins_path' => realpath(__DIR__ . '/../../src/Plugins')
+                'plugins_path' => realpath(__DIR__ . '/../../src/Plugins'),
+                'base_route' => '/',
             ),
             $config
         );
