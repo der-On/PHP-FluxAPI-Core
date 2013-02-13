@@ -16,6 +16,6 @@ app/config/parameters.yml
 composer.lock
 
 # Plugins
-!plugins/
-plugins/*
-!plugins/core
+!src/Plugins/
+src/Plugins/*
+!src/Plugins/core

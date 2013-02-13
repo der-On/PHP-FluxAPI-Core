@@ -1,5 +1,5 @@
 <?php
-namespace FluxApi;
+namespace FluxAPI;
 
 class Core
 {
@@ -11,6 +11,8 @@ class Core
         'permission' => array()
     );
 
+    public $api = NULL;
+
     public $config = array();
 
     public function __construct($config = array())
@@ -18,12 +20,14 @@ class Core
         // overwrite default config with given config
         $this->config = array_merge(
             array(
-                'plugins_path' => realpath(__DIR__ . '/../../plugins')
+                'plugins_path' => realpath(__DIR__ . '/../../src/Plugins')
             ),
             $config
         );
 
         $this->registerPlugins();
+
+        $this->api = new Api($this);
     }
 
     public function registerPlugins()
@@ -51,9 +55,10 @@ class Core
 
                             if (is_file($plugin_file_path) && substr($plugin_file,-strlen('.php')) == '.php') {
 
-                                $plugin_name = basename($plugin_file,'.php');
+                                $plugin_name = ucfirst(basename($plugin_file,'.php'));
+                                $plugin_class_name = 'Plugins\\'.ucfirst($plugin).'\\'.ucfirst($plugin_dir).'\\'.$plugin_name;
 
-                                $this->_plugins[$plugin_dir][$plugin_name] = $plugin_file_path;
+                                $this->_plugins[$plugin_dir][$plugin_name] = $plugin_class_name;
                             }
                         }
                     }
