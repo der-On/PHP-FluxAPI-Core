@@ -34,6 +34,18 @@ class Api
         $this->registerPlugins();
     }
 
+
+    public function __call($method,$arguments)
+    {
+        if (isset($this->_methods[$method])) {
+            $callback = $this->_methods[$method];
+
+            return call_user_func_array($callback,$arguments);
+        }
+
+        return NULL;
+    }
+
     public function registerPlugins()
     {
         $plugins = scandir($this->config['plugins_path']);
@@ -193,16 +205,5 @@ class Api
         }
 
         return FALSE;
-    }
-
-    public function __call($method,$arguments)
-    {
-        if (isset($this->_methods[$method])) {
-            $callback = $this->_methods[$method];
-
-            return call_user_func_array($callback,$arguments);
-        }
-
-        return NULL;
     }
 }
