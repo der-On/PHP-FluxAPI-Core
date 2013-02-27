@@ -27,6 +27,7 @@ abstract class Storage
         if (!$this->hasFilter($name)) {
             $this->_filters[$name] = $callback;
         }
+        return $this; // make it chainable
     }
 
     public function hasFilter($name)

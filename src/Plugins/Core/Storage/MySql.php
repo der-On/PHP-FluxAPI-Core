@@ -137,11 +137,10 @@ class MySql extends \FluxAPI\Storage
                 }
             }
 
-            //var_dump($qb->getSQL());
             $result = $qb->execute();
 
             if (!is_object($result)) {
-                return TRUE;
+                return boolval($result);
             }
             $result = $result->fetchAll();
 

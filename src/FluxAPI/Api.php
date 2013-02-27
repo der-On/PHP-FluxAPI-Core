@@ -124,6 +124,8 @@ class Api
         if (!isset($this->_methods[$method]) && is_callable($callback)) {
             $this->_methods[$method] = $callback;
         }
+
+        return $this; // make it chainable
     }
 
     public function registerPluginMethods($type, $name)
