@@ -111,4 +111,9 @@ abstract class Storage
     {
         return NULL;
     }
+
+    public function migrate()
+    {
+
+    }
 }

@@ -7,7 +7,7 @@ class MySql extends \FluxAPI\Storage
 {
     public function addFilters()
     {
-        $this->addFilter('fields',function(QueryBuilder &$qb, array $params) {
+        $this->addFilter('select',function(QueryBuilder &$qb, array $params) {
             $qb->select($params);
         });
     }

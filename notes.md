@@ -37,10 +37,10 @@ Parameters are listed comma seperated and passed to the filter function in the s
 
 Complex example:
 
-    ?active=1&@fields=title,name&@range=time,50,100&@from=time,10&@order=time,DESC&@limit=0,10
+    ?active=1&@select=title,name&@range=time,50,100&@from=time,10&@order=time,DESC&@limit=0,10
 
 - "active=1" equals to SQL: "WHERE active = 1"
-- "@fields=title,name" equals to SQL: "SELECT title,name"
+- "@select=title,name" equals to SQL: "SELECT title,name"
 - "@range=time,50,100" equals to SQL: "WHERE (time >= 50 AND time <= 100)"
 - "@order=time,DESC" equals to SQL: "ORDER BY time DESC"
 - "@limit=0,10" equals to SQL: "LIMIT 0,10"
@@ -61,8 +61,8 @@ Taken from the example above it could look as follows:
 
     $api->loadProjects(
       new Query()
-      ->filter("field",array("active","1"))
-      ->filter("fields",array("title","name"))
+      ->filter("equals",array("active","1"))
+      ->filter("select",array("title","name"))
       ->filter("range",array("time",50,100))
       ->filter("order",array("time","DESC"))
       ->filter("limit",array(0,10))
