@@ -189,7 +189,7 @@ class Api
         // get default storage plugin
         $storageClass = $storagePlugins[$this->config['storage.plugin']];
 
-        return new $storageClass($this);
+        return new $storageClass($this,$this->config['storage.options']);
     }
 
     public function loadModels($model, Query $query)

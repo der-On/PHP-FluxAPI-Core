@@ -10,22 +10,49 @@ class MySql extends \FluxAPI\Storage
         });
     }
 
+    public function isConnected()
+    {
+        return exists($this->_api->app['db']);
+    }
+
+    public function connect()
+    {
+        $this->_api->app->register(new \Silex\Provider\DoctrineServiceProvider(), array(
+            'db.options' => array(
+                'driver' => 'pdo_mysql',
+                'host' => $this->config['host'],
+                'user' => $this->config['user'],
+                'password' => $this->config['password'],
+                'dbname' => $this->config['database'],
+            ),
+        ));
+    }
+
+    public function getConnection()
+    {
+        return $this->_api->app['db'];
+    }
+
     public function executeQuery($query)
     {
         parent::executeQuery($query);
 
-        $connection =
+        $connection = $this->getConnection();
+
         $qb = $connection->createQueryBuilder();
 
-        $filters = $query->getFilters();
+        $queryFilters = $query->getFilters();
 
-        foreach($filters as $filter) {
+        $filters = $this->getFilters();
+
+        foreach($queryFilters as $filter) {
             if ($this->hasFilter($filter)) {
-                $callback = $this->getFilter($filter);
-
-                $callback($this,);
+                $filters[$filter]($qb);
             }
         }
+
+        $result = $qb->getQuery()->execute();
+        var_dump($result);
     }
 
 }

@@ -5,8 +5,8 @@ use \Doctrine\DBAL\Query\QueryBuilder;
 
 abstract class Storage
 {
-    private $_api = NULL;
-    private $_filters = NULL;
+    protected $_api = NULL;
+    protected $_filters = NULL;
     public $config = array();
 
     public function __construct(Api $api, array $config = array())
@@ -45,6 +45,11 @@ abstract class Storage
         }
     }
 
+    public function getFilters()
+    {
+        return $this->_filters;
+    }
+
     public function save($model, array $models)
     {
         $query = new Query();
@@ -71,6 +76,25 @@ abstract class Storage
     {
         $query->setStorage($this);
 
+        if (!$this->isConnected()) {
+            $this->connect();
+        }
+
+        return NULL;
+    }
+
+    public function isConnected()
+    {
+        return FALSE;
+    }
+
+    public function connect()
+    {
+
+    }
+
+    public function getConnection()
+    {
         return NULL;
     }
 }

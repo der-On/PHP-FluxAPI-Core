@@ -7,7 +7,7 @@ abstract class Model
 
     private $_fields = array();
 
-    private $_storage = NULL;
+    protected $_storage = NULL;
 
     private $_belongs_to_one = array();
     private $_belongs_to_many = array();
@@ -36,6 +36,11 @@ abstract class Model
         } else {
             return NULL;
         }
+    }
+
+    public function getFields()
+    {
+        return $this->_fields;
     }
 
     public function defineFields()
