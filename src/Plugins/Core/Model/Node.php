@@ -3,7 +3,7 @@ namespace Plugins\Core\Model;
 
 use \FluxAPI\Field;
 
-class Project extends \FluxAPI\Model
+class Node extends \FluxAPI\Model
 {
     public function defineFields()
     {

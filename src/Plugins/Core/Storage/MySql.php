@@ -1,18 +1,20 @@
 <?php
 namespace Plugins\Core\Storage;
 
+use \FluxAPI\Query;
+
 class MySql extends \FluxAPI\Storage
 {
     public function addFilters()
     {
-        $this->addFilter('equals',function(QueryBuilder $qb) {
-
+        $this->addFilter('fields',function(QueryBuilder &$qb, array $params) {
+            $qb->select($params);
         });
     }
 
     public function isConnected()
     {
-        return exists($this->_api->app['db']);
+        return isset($this->_api->app['db']);
     }
 
     public function connect()
@@ -37,21 +39,38 @@ class MySql extends \FluxAPI\Storage
     {
         parent::executeQuery($query);
 
+        $modelClass = $query->getModel();
+        $tableName = $modelClass::getCollectionName();
+
         $connection = $this->getConnection();
 
         $qb = $connection->createQueryBuilder();
 
-        $queryFilters = $query->getFilters();
+        switch($query->getType()) {
+            case Query::TYPE_SELECT:
+                $qb->select('*'); // by default select all fields
+                $qb->from($tableName,$tableName);
+                break;
 
-        $filters = $this->getFilters();
+            case Query::TYPE_DELETE:
+                $qb->delete($tableName);
+                break;
 
-        foreach($queryFilters as $filter) {
-            if ($this->hasFilter($filter)) {
-                $filters[$filter]($qb);
-            }
+            case Query::TYPE_UPDATE:
+                $qb->update($tableName);
+                break;
         }
 
-        $result = $qb->getQuery()->execute();
+        $queryFilters = $query->getFilters();
+
+        foreach($queryFilters as $filter => $params) {
+            if ($this->hasFilter($filter)) {
+                $callback = $this->getFilter($filter);
+                $callback($qb,$params);
+            }
+        }
+        var_dump($qb->getSQL());
+        $result = $qb->execute();
         var_dump($result);
     }
 

@@ -1,4 +1,6 @@
 <?php
+namespace FluxAPI;
+
 class Query
 {
     private $_filters = array();

@@ -24,6 +24,13 @@ abstract class Model
         $this->populate($data);
     }
 
+    public static function getCollectionName()
+    {
+        $class_name = self::getClassName();
+        $parts = explode('\\',$class_name);
+        return strtolower($parts[count($parts)-1]);
+    }
+
     public function addField(Field $field)
     {
         $this->_fields[$field->name] = $field;
@@ -81,7 +88,7 @@ abstract class Model
         return $storage;
     }
 
-    public static function load(Query $query)
+    public static function load(Query $query = NULL)
     {
         $class_name = self::getClassName();
 
@@ -100,7 +107,7 @@ abstract class Model
         $this->save();
     }
 
-    public static function delete(Query $query)
+    public static function delete(Query $query = NULL)
     {
         $class_name = self::getClassName();
         return self::getStorage()->delete($class_name, $query);

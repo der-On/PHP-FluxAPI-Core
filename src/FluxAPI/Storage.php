@@ -6,15 +6,13 @@ use \Doctrine\DBAL\Query\QueryBuilder;
 abstract class Storage
 {
     protected $_api = NULL;
-    protected $_filters = NULL;
+    protected $_filters = array();
     public $config = array();
 
     public function __construct(Api $api, array $config = array())
     {
         $this->config = array_merge($this->config,$config);
         $this->_api = $api;
-
-        $this->_filters = new Pimple();
 
         $this->addFilters();
     }
@@ -53,21 +51,37 @@ abstract class Storage
     public function save($model, array $models)
     {
         $query = new Query();
-        $query->setType(Query::TYPE_INSERT); // TODO: depending on if the models already exists it needs to be TYPE_UPDATE or TYPE_INSERT
+        $query->setType(Query::TYPE_UPDATE);
         $query->setModel($model);
         return $this->executeQuery($query);
     }
 
-    public function load($model, Query $query)
+    public function load($model, Query $query = NULL)
     {
+        if (empty($query)) {
+            $query = new Query();
+        }
         $query->setType(Query::TYPE_SELECT);
         $query->setModel($model);
         return $this->executeQuery($query);
     }
 
-    public function update($model, Query $query, array $fields)
+    public function update($model, Query $query = NULL, array $fields)
     {
+        if (empty($query)) {
+            $query = new Query();
+        }
         $query->setType(Query::TYPE_UPDATE);
+        $query->setModel($model);
+        return $this->executeQuery($query);
+    }
+
+    public function delete($model, Query $query = NULL)
+    {
+        if (empty($query)) {
+            $query = new Query();
+        }
+        $query->setType(Query::TYPE_DELETE);
         $query->setModel($model);
         return $this->executeQuery($query);
     }
