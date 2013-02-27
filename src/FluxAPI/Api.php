@@ -18,8 +18,10 @@ class Api
 
     public $config = array();
 
-    public function __construct(\Silex\Application $app, $config = array())
+    public function __construct(\Silex\Application $app, array $config = array())
     {
+        $GLOBALS['fluxApi'] = $this;
+
         $this->app = $app;
 
         // overwrite default config with given config
@@ -44,8 +46,16 @@ class Api
         $this->registerPlugins();
     }
 
+    public static function getInstance(\Silex\Application $app = NULL, array $config = array())
+    {
+        if (!isset($GLOBALS['fluxApi']) && !empty($app)) {
+            $GLOBALS['fluxApi'] = new FluxApi($app,$config);
+        } else {
+            return $GLOBALS['fluxApi'];
+        }
+    }
 
-    public function __call($method,$arguments)
+    public function __call($method, array $arguments)
     {
         if (isset($this->_methods[$method])) {
             $callback = $this->_methods[$method];
@@ -109,7 +119,7 @@ class Api
         }
     }
 
-    public function registerMethod($method,$callback)
+    public function registerMethod($method, $callback)
     {
         if (!isset($this->_methods[$method]) && is_callable($callback)) {
             $this->_methods[$method] = $callback;
@@ -172,7 +182,17 @@ class Api
         }
     }
 
-    public function loadModels($model,$query)
+    public function getStorage($model)
+    {
+        $storagePlugins = $this->getPlugins('Storage');
+
+        // for now we take the first storage plugin found
+        $storageClass = $storagePlugins[0];
+
+        return new $storageClass($this);
+    }
+
+    public function loadModels($model, Query $query)
     {
         $models = $this->getPlugins('Model');
 
@@ -206,7 +226,7 @@ class Api
         return FALSE;
     }
 
-    public function updateModel($model, $id, $data = array())
+    public function updateModel($model, $id, array $data = array())
     {
         $instances = $this->loadModel($model,$id);
 
@@ -218,7 +238,7 @@ class Api
         return FALSE;
     }
 
-    public function deleteModels($model, $query)
+    public function deleteModels($model, Query $query)
     {
         $models = $this->getPlugins('Model');
 

@@ -27,7 +27,7 @@ class Field
     const BELONGS_TO_ONE = 'belongs_to_one';
     const BELONGS_TO_MANY = 'belongs_to_many';
 
-    public function __construct($config = array())
+    public function __construct(array $config = array())
     {
         foreach($config as $name => $value) {
             if (property_exists($this,$name)) {

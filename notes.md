@@ -37,7 +37,7 @@ Parameters are listed comma seperated and passed to the filter function in the s
 
 Complex example:
 
-    ?active=1&@fields=title,name&@range=time,50,100&@avg=time,10&@from=time,10&@order=time,DESC&@limit=0,10
+    ?active=1&@fields=title,name&@range=time,50,100&@from=time,10&@order=time,DESC&@limit=0,10
 
 - "active=1" equals to SQL: "WHERE active = 1"
 - "@fields=title,name" equals to SQL: "SELECT title,name"
@@ -48,17 +48,22 @@ Complex example:
 
 ### In PHP this could look like
 
-    $api->loadProjects()
+    $api->loadProjects(
+      new Query()
       ->filter([filter name],array(param1,param2,param3))
       ->filter(...)
-      ->filter(...);
+      ->filter(...)
+      ...
+    );
 
 
 Taken from the example above it could look as follows:
 
-    $api->loadProjects()
+    $api->loadProjects(
+      new Query()
       ->filter("field",array("active","1"))
       ->filter("fields",array("title","name"))
       ->filter("range",array("time",50,100))
       ->filter("order",array("time","DESC"))
-      ->filter("limit",array(0,10));
+      ->filter("limit",array(0,10))
+    );

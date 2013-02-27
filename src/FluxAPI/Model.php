@@ -7,6 +7,8 @@ abstract class Model
 
     private $_fields = array();
 
+    private $_storage = NULL;
+
     private $_belongs_to_one = array();
     private $_belongs_to_many = array();
 
@@ -15,6 +17,7 @@ abstract class Model
 
     public function  __construct($data = array())
     {
+        $this->_storage = self::getStorage();
         $this->defineFields();
         $this->_setDefaults();
 
@@ -52,7 +55,7 @@ abstract class Model
         }
     }
 
-    public function populate($data = array())
+    public function populate(Array $data = array())
     {
         foreach($data as $name =>  $value)
         {
@@ -65,33 +68,40 @@ abstract class Model
         return get_called_class();
     }
 
-    public static function load($query)
+    public static function getStorage()
     {
         $class_name = self::getClassName();
 
-        return array(
-            new $class_name(array(
-                'id' => 1
-            ))
-        );
+        $storage = Api::getInstance()->getStorage($class_name);
+        return $storage;
+    }
+
+    public static function load(Query $query)
+    {
+        $class_name = self::getClassName();
+
+        return self::getStorage()->load($class_name, $query);
     }
 
     public function save()
     {
-        return TRUE;
+        $class_name = self::getClassName();
+        return $this->_storage->save($class_name, $this);
     }
 
     public function update($data = array())
     {
         $this->populate($data);
+        $this->save();
     }
 
-    public static function delete($query)
+    public static function delete(Query $query)
     {
-        return TRUE;
+        $class_name = self::getClassName();
+        return self::getStorage()->delete($class_name, $query);
     }
 
-    public function __get($name)
+    public function __get(String $name)
     {
         return $this->_data[$name];
     }
@@ -101,17 +111,22 @@ abstract class Model
         $this->_data[$name] = $value;
     }
 
-    public function __isset($name)
+    public function __isset(String $name)
     {
         return isset($this->_data[$name]);
     }
 
-    public function __unset($name)
+    public function __unset(String $name)
     {
         unset($this->_data[$name]);
     }
 
     public function __toString()
+    {
+        return $this->toString();
+    }
+
+    public function toString()
     {
         return json_encode($this->_data,4);
     }
