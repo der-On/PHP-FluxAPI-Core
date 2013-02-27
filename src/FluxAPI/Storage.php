@@ -1,16 +1,48 @@
 <?php
 namespace FluxAPI;
 
+use \Doctrine\DBAL\Query\QueryBuilder;
+
 abstract class Storage
 {
     private $_api = NULL;
+    private $_filters = NULL;
     public $config = array();
 
     public function __construct(Api $api, array $config = array())
     {
         $this->config = array_merge($this->config,$config);
-
         $this->_api = $api;
+
+        $this->_filters = new Pimple();
+
+        $this->addFilters();
+    }
+
+    public function addFilters()
+    {
+
+    }
+
+    public function addFilter($name,$callback)
+    {
+        if (!$this->hasFilter($name)) {
+            $this->_filters[$name] = $callback;
+        }
+    }
+
+    public function hasFilter($name)
+    {
+        return (isset($this->_filters[$name]) && !empty($this->_filters[$name]));
+    }
+
+    public function getFilter($name)
+    {
+        if ($this->hasFilter($name)) {
+            return $this->_filters[$name];
+        } else {
+            return NULL;
+        }
     }
 
     public function save($model, array $models)
@@ -38,6 +70,7 @@ abstract class Storage
     public function executeQuery(Query $query)
     {
         $query->setStorage($this);
+
         return NULL;
     }
 }

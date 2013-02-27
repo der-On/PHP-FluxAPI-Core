@@ -3,9 +3,29 @@ namespace Plugins\Core\Storage;
 
 class MySql extends \FluxAPI\Storage
 {
-    public function __construct(\FluxApi\Api $api, $config = array())
+    public function addFilters()
     {
-        parent::__construct($api,$config);
+        $this->addFilter('equals',function(QueryBuilder $qb) {
+
+        });
+    }
+
+    public function executeQuery($query)
+    {
+        parent::executeQuery($query);
+
+        $connection =
+        $qb = $connection->createQueryBuilder();
+
+        $filters = $query->getFilters();
+
+        foreach($filters as $filter) {
+            if ($this->hasFilter($filter)) {
+                $callback = $this->getFilter($filter);
+
+                $callback($this,);
+            }
+        }
     }
 
 }

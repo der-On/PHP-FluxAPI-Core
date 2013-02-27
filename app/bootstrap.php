@@ -4,7 +4,13 @@ $loader = require __DIR__ . '/../vendor/autoload.php';
 // create application
 $app = new Silex\Application();
 
-$fluxApi = new FluxAPI\Api($app);
+$config = json_decode(file_get_contents('../config/development.json'),TRUE);
+
+if ($config['debug'] == TRUE) {
+    $app['debug'] = TRUE;
+}
+
+$fluxApi = new FluxAPI\Api($app,$config);
 
 $app->match('/',function() {
     return 'Welcome to the PHP-FluxAPI';

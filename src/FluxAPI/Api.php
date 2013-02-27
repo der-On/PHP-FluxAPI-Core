@@ -186,8 +186,8 @@ class Api
     {
         $storagePlugins = $this->getPlugins('Storage');
 
-        // for now we take the first storage plugin found
-        $storageClass = $storagePlugins[0];
+        // get default storage plugin
+        $storageClass = $storagePlugins[$this->config['storage.plugin']];
 
         return new $storageClass($this);
     }
