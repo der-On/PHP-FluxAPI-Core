@@ -56,7 +56,8 @@ abstract class Model
             'name' => 'id',
             'type' => Field::TYPE_INTEGER,
             'primary' => TRUE,
-            'default' => NULL
+            'default' => NULL,
+            'autoIncrement' => TRUE,
         )));
     }
 
@@ -101,19 +102,25 @@ abstract class Model
         return $this->_storage->save($class_name, $this);
     }
 
-    public function update($data = array())
+    public function update(array $data = array())
     {
         $this->populate($data);
         $this->save();
     }
 
-    public static function delete(Query $query = NULL)
+    public static function delete(Model $instance = NULL, Query $query = NULL)
     {
         $class_name = self::getClassName();
-        return self::getStorage()->delete($class_name, $query);
+        return self::getStorage()->delete($class_name, $instance, $query);
     }
 
-    public function __get(String $name)
+    public static function create(array $data = array())
+    {
+        $class_name = self::getClassName();
+        return new $class_name($data);
+    }
+
+    public function __get($name)
     {
         return $this->_data[$name];
     }
@@ -123,12 +130,12 @@ abstract class Model
         $this->_data[$name] = $value;
     }
 
-    public function __isset(String $name)
+    public function __isset($name)
     {
         return isset($this->_data[$name]);
     }
 
-    public function __unset(String $name)
+    public function __unset($name)
     {
         unset($this->_data[$name]);
     }
@@ -138,14 +145,19 @@ abstract class Model
         return $this->toString();
     }
 
+    public function toArray()
+    {
+        return $this->_data;
+    }
+
     public function toString()
     {
-        return json_encode($this->_data,4);
+        return json_encode($this->toArray(),4);
     }
 
     public function toJson()
     {
-        return json_encode($this->_data);
+        return json_encode($this->toArray());
     }
 
     public function toXml()

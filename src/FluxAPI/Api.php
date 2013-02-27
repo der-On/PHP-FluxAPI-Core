@@ -25,7 +25,7 @@ class Api
         $this->app = $app;
 
         // overwrite default config with given config
-        $this->config = array_merge(
+        $this->config = array_replace_recursive(
             array(
                 'plugins_path' => realpath(__DIR__ . '/../../src/Plugins'),
                 'base_route' => '/',
@@ -158,8 +158,8 @@ class Api
             return $self->saveModel($model,$instance);
         };
 
-        $this->_methods['delete'.$model.'s'] = function($query = NULL) use ($model, $self) {
-            return $self->deleteModels($model, $query);
+        $this->_methods['delete'.$model.'s'] = function($instance = NULL, $query = NULL) use ($model, $self) {
+            return $self->deleteModels($model, $instance, $query);
         };
 
         $this->_methods['delete'.$model] = function($query) use ($model, $self) {
@@ -168,6 +168,10 @@ class Api
 
         $this->_methods['update'.$model] = function($id, $data = array()) use ($model, $self) {
             return $self->updateModel($model,$id,$data);
+        };
+
+        $this->_methods['create'.$model] = function($data = array()) use ($model, $self) {
+            return $self->createModel($model,$data);
         };
     }
 
@@ -182,7 +186,7 @@ class Api
         }
     }
 
-    public function getStorage($model)
+    public function getStorage($model = NULL)
     {
         $storagePlugins = $this->getPlugins('Storage');
 
@@ -238,15 +242,33 @@ class Api
         return FALSE;
     }
 
-    public function deleteModels($model, Query $query = NULL)
+    public function createModel($model, array $data = array())
     {
         $models = $this->getPlugins('Model');
 
         if (isset($models[$model])) {
             $class_name = $models[$model];
-            return $class_name::delete($query);
+            return $class_name::create($data);
         }
 
         return FALSE;
+    }
+
+    public function deleteModels($model, Model $instance = NULL, Query $query = NULL)
+    {
+        $models = $this->getPlugins('Model');
+
+        if (isset($models[$model])) {
+            $class_name = $models[$model];
+            return $class_name::delete($instance, $query);
+        }
+
+        return FALSE;
+    }
+
+    public function migrate()
+    {
+        $storage = $this->getStorage();
+        $storage->migrate();
     }
 }

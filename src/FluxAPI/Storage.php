@@ -11,7 +11,7 @@ abstract class Storage
 
     public function __construct(Api $api, array $config = array())
     {
-        $this->config = array_merge($this->config,$config);
+        $this->config = array_replace_recursive($this->config,$config);
         $this->_api = $api;
 
         $this->addFilters();
@@ -48,11 +48,44 @@ abstract class Storage
         return $this->_filters;
     }
 
-    public function save($model, array $models)
+    public function count($model, Query $query = NULL)
+    {
+        if (empty($query)) {
+            $query = new Query();
+        }
+
+        $query->setType(Query::TYPE_COUNT);
+
+        $result = $this->executeQuery($query);
+        return $result;
+    }
+
+    public function exists($model, Model $instance)
+    {
+        if (isset($instance->id) && !empty($instance->id)) {
+            $query = new Query();
+            $query->setType(Query::TYPE_COUNT);
+            $query->setModel($model);
+            $query->filter('equals',array('id',$instance->id));
+
+            $result = $this->executeQuery($query);
+            return $result > 0;
+        }
+
+        return FALSE;
+    }
+
+    public function save($model, Model $instance)
     {
         $query = new Query();
-        $query->setType(Query::TYPE_UPDATE);
+        $query->setType(Query::TYPE_INSERT);
+
+        if ($this->exists($model, $instance)) {
+            $query->setType(Query::TYPE_UPDATE);
+        }
+
         $query->setModel($model);
+        $query->setData($instance->toArray());
         return $this->executeQuery($query);
     }
 
@@ -66,23 +99,29 @@ abstract class Storage
         return $this->executeQuery($query);
     }
 
-    public function update($model, Query $query = NULL, array $fields)
+    public function update($model, Query $query = NULL, array $data = array())
     {
         if (empty($query)) {
             $query = new Query();
         }
         $query->setType(Query::TYPE_UPDATE);
         $query->setModel($model);
+        $query->setData($data);
         return $this->executeQuery($query);
     }
 
-    public function delete($model, Query $query = NULL)
+    public function delete($model, Model $instance = NULL, Query $query = NULL)
     {
         if (empty($query)) {
             $query = new Query();
         }
         $query->setType(Query::TYPE_DELETE);
         $query->setModel($model);
+
+        if (!empty($instance)) {
+            $query->filter('equals',array('id',$instance->id));
+        }
+
         return $this->executeQuery($query);
     }
 

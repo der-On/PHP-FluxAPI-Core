@@ -7,11 +7,13 @@ class Query
     private $_model = NULL;
     private $_storage = NULL;
     private $_type = NULL;
+    private $_data = array();
 
     const TYPE_UPDATE = 'update';
     const TYPE_INSERT = 'insert';
     const TYPE_DELETE = 'delete';
     const TYPE_SELECT = 'select';
+    const TYPE_COUNT = 'count';
 
     public function __construct()
     {
@@ -56,7 +58,7 @@ class Query
 
     public function setType($type)
     {
-        if (in_array($type, array(self::TYPE_DELETE, self::TYPE_INSERT, self::TYPE_UPDATE, self::TYPE_SELECT))) {
+        if (in_array($type, array(self::TYPE_DELETE, self::TYPE_INSERT, self::TYPE_UPDATE, self::TYPE_SELECT, self::TYPE_COUNT))) {
             $this->_type = $type;
         }
     }
@@ -64,5 +66,31 @@ class Query
     public function getType()
     {
         return $this->_type;
+    }
+
+    public function setData(array $data = array())
+    {
+        $this->_data = array_replace($this->_data,$data);
+    }
+
+    public function hasData($field = NULL)
+    {
+        if (empty($field)) {
+            return count($this->_data) > 0;
+        } else {
+            return isset($this->_data[$field]);
+        }
+        return FALSE;
+    }
+
+    public function getData($field = NULL)
+    {
+        if (empty($field)) {
+            return $this->_data;
+        } elseif ($this->hasData($field)) {
+            return $this->_data[$field];
+        }
+
+        return NULL;
     }
 }

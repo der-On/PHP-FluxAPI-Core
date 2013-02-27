@@ -5,9 +5,12 @@ class Field
 {
     public $name = NULL;
     public $type = NULL;
+    public $unsigned = FALSE;
     public $length = NULL;
     public $default = NULL;
     public $primary = FALSE;
+    public $unique = FALSE;
+    public $autoIncrement = FALSE;
     public $relationType = NULL;
     public $relationModel = NULL;
 
