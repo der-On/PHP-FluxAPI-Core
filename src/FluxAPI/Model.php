@@ -21,13 +21,28 @@ abstract class Model
         $this->populate($data);
     }
 
+    public function addField(Field $field)
+    {
+        $this->_fields[$field->name] = $field;
+    }
+
+    public function getField($name)
+    {
+        if (isset($this->_fields[$name])) {
+            return $this->_fields[$name];
+        } else {
+            return NULL;
+        }
+    }
+
     public function defineFields()
     {
-        $this->_fields['id'] = new Field(array(
-            'type' => 'integer',
+        $this->addField(new Field(array(
+            'name' => 'id',
+            'type' => Field::TYPE_INTEGER,
             'primary' => TRUE,
             'default' => NULL
-        ));
+        )));
     }
 
     private function _setDefaults()

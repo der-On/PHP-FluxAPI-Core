@@ -8,6 +8,24 @@ class Field
     public $length = NULL;
     public $default = NULL;
     public $primary = FALSE;
+    public $relationType = NULL;
+    public $relationModel = NULL;
+
+    const TYPE_STRING = 'string';
+    const TYPE_BINARY = 'binary';
+    const TYPE_INTEGER = 'integer';
+    const TYPE_FLOAT = 'float';
+    const TYPE_LONGSTRING = 'longstring';
+    const TYPE_DATE = 'date';
+    const TYPE_TIMESTAMP = 'timestamp';
+    const TYPE_ARRAY = 'array';
+    const TYPE_OBJECT = 'object';
+    const TYPE_RELATION = 'relation';
+
+    const HAS_ONE = 'has_one';
+    const HAS_MANY = 'has_many';
+    const BELONGS_TO_ONE = 'belongs_to_one';
+    const BELONGS_TO_MANY = 'belongs_to_many';
 
     public function __construct($config = array())
     {
