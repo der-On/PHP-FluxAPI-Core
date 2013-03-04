@@ -20,3 +20,6 @@ composer.lock
 !src/Plugins/
 src/Plugins/*
 !src/Plugins/Core
+
+# Test reports
+src/Tests/reports/
