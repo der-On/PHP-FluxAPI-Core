@@ -152,11 +152,45 @@ class Api
 
         $model = ucfirst($model);
 
-        $this->_methods['load'.$model.'s'] = function($query = NULL) use ($model, $self) {
-            return $self->loadModels($model,$query);
+        $this->_methods['load'.$model.'s'] = function($query = NULL, $format = NULL) use ($model, $self) {
+            $models =  $self->loadModels($model,$query);
+
+            if (in_array($format,array(Api::DATA_FORMAT_ARRAY,Api::DATA_FORMAT_JSON,Api::DATA_FORMAT_YAML))) {
+                foreach($models as $i => $model) {
+                    $models[$i] = $models[$i]->toArray();
+                }
+            }
+
+            switch($format) {
+                case Api::DATA_FORMAT_ARRAY:
+                    return $models;
+                    break;
+
+                case Api::DATA_FORMAT_JSON:
+                    return json_encode($models);
+                    break;
+
+                case Api::DATA_FORMAT_YAML:
+                    $dumper = new \Symfony\Component\Yaml\Dumper();
+                    return $dumper->dump($models,2);
+                    break;
+
+                case Api::DATA_FORMAT_XML:
+                    $xml = '<?xml version="1.0"?>'."\n"."<".strtolower($model)."s>\n";
+
+                    foreach($models as $_model) {
+                        $xml .= trim(str_replace('<?xml version="1.0"?>','',$_model->toXml()))."\n";
+                    }
+                    $xml .= "</".strtolower($model)."s>";
+                    return $xml;
+                    break;
+
+                default:
+                    return $models;
+            }
         };
 
-        $this->_methods['load'.$model] = function($query) use ($model, $self) {
+        $this->_methods['load'.$model] = function($query, $format = NULL) use ($model, $self) {
 
             if (is_string($query)) {
                 $id = $query;
@@ -170,7 +204,26 @@ class Api
 
             $models = $self->loadModels($model,$query);
             if (count($models)) {
-                return $models[0];
+                switch($format) {
+                    case Api::DATA_FORMAT_XML:
+                        return $models[0]->toXml();
+                        break;
+
+                    case Api::DATA_FORMAT_JSON:
+                        return $models[0]->toJson();
+                        break;
+
+                    case Api::DATA_FORMAT_YAML:
+                        return $models[0]->toYaml();
+                        break;
+
+                    case Api::DATA_FORMAT_ARRAY:
+                        return $models[0]->toArray();
+                        break;
+
+                    default:
+                        return $models[0];
+                }
             } else {
                 return NULL;
             }
@@ -205,22 +258,22 @@ class Api
             return $self->deleteModels($model, $query);
         };
 
-        $this->_methods['update'.$model.'s'] = function($query, array $data = array()) use ($model, $self) {
+        $this->_methods['update'.$model.'s'] = function($query, array $data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model, $self) {
             if (is_array($query)) {
                 $ids = $query;
 
                 $query = new Query();
                 $query->filter('in',array('id',$ids));
             }
-            return $self->updateModels($model,$query,$data);
+            return $self->updateModels($model, $query, $data, $format);
         };
 
-        $this->_methods['update'.$model] = function($id, array $data = array()) use ($model, $self) {
+        $this->_methods['update'.$model] = function($id, array $data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model, $self) {
             $query = new Query();
             $query->filter('equals',array('id',$id));
             $query->filter('limit',array(0,1));
 
-            return $self->updateModels($model,$query,$data);
+            return $self->updateModels($model, $query, $data, $format);
         };
 
         $this->_methods['create'.$model] = function($data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model, $self) {

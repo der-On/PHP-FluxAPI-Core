@@ -16,9 +16,80 @@ class ApiTest extends FluxApi_Database_TestCase
         $this->deleteAllNodes();
     }
 
+    public function testLoadXml()
+    {
+        $this->migrate();
+        $this->createNodes();
+
+        $nodes = self::$fluxApi->loadNodes(NULL,\FluxAPI\Api::DATA_FORMAT_XML);
+
+        $this->assertXmlStringEqualsXmlFile(__DIR__ . '/_files/nodes.xml',$nodes);
+    }
+
+    public function testLoadSingleXml()
+    {
+        $this->migrate();
+        $this->createSingleNode();
+
+        $node = self::$fluxApi->loadNode('1',\FluxAPI\Api::DATA_FORMAT_XML);
+
+        $this->assertXmlStringEqualsXmlFile(__DIR__ . '/_files/node.xml',$node);
+    }
+
+    public function testLoadJson()
+    {
+        $this->migrate();
+        $this->createNodes();
+
+        $nodes = self::$fluxApi->loadNodes(NULL,\FluxAPI\Api::DATA_FORMAT_JSON);
+
+        $this->assertJsonStringEqualsJsonFile(__DIR__ . '/_files/nodes.json',$nodes);
+    }
+
+    public function testLoadSingleJson()
+    {
+        $this->migrate();
+        $this->createSingleNode();
+
+        $node = self::$fluxApi->loadNode('1',\FluxAPI\Api::DATA_FORMAT_JSON);
+
+        $this->assertJsonStringEqualsJsonFile(__DIR__ . '/_files/node.json',$node);
+    }
+
+    public function testLoadYaml()
+    {
+        $this->migrate();
+        $this->createNodes();
+
+        $nodes = self::$fluxApi->loadNodes(NULL,\FluxAPI\Api::DATA_FORMAT_YAML);
+
+        $this->assertStringEqualsFile(__DIR__ . '/_files/nodes.yml',$nodes);
+    }
+
+    public function testLoadSingleYaml()
+    {
+        $this->migrate();
+        $this->createSingleNode();
+
+        $node = self::$fluxApi->loadNode('1',\FluxAPI\Api::DATA_FORMAT_YAML);
+
+        $this->assertStringEqualsFile(__DIR__ . '/_files/node.yml',$node);
+    }
+
     public function migrate()
     {
         self::$fluxApi->migrate();
+    }
+
+    public function createSingleNode()
+    {
+        $node = self::$fluxApi->createNode(array('title'=>'Node title','body'=>"Node body\non multiple lines"));
+
+        $this->assertNotEmpty($node);
+        $this->assertEquals($node->title,'Node title');
+        $this->assertEquals($node->body,"Node body\non multiple lines");
+
+        self::$fluxApi->saveNode($node);
     }
 
     public function createNodes()

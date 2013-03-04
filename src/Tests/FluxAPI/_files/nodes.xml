@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<nodes>
+    <node><id>1</id><body>Body for Node 1</body><title>Node 1</title></node>
+    <node><id>2</id><body>Body for Node 2</body><title>Node 2</title></node>
+    <node><id>3</id><body>Body for Node 3</body><title>Node 3</title></node>
+    <node><id>4</id><body>Body for Node 4</body><title>Node 4</title></node>
+    <node><id>5</id><body>Body for Node 5</body><title>Node 5</title></node>
+    <node><id>6</id><body>Body for Node 6</body><title>Node 6</title></node>
+    <node><id>7</id><body>Body for Node 7</body><title>Node 7</title></node>
+    <node><id>8</id><body>Body for Node 8</body><title>Node 8</title></node>
+    <node><id>9</id><body>Body for Node 9</body><title>Node 9</title></node>
+    <node><id>10</id><body>Body for Node 10</body><title>Node 10</title></node>
+</nodes>
