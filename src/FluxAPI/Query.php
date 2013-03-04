@@ -31,9 +31,34 @@ class Query
         return $this->_storage->executeQuery($this);
     }
 
-    public function getFilters()
+    public function getFilters($name = NULL)
     {
-        return $this->_filters;
+        if (empty($name)) {
+            return $this->_filters;
+        } else {
+            $filters = array();
+
+            foreach($this->_filters as $filter) {
+                if ($filter[0] == $name) {
+                    $filters[] = &$filter;
+                }
+            }
+
+            return $filters;
+        }
+    }
+
+    public function hasFilter($name)
+    {
+        if (!empty($name)) {
+            foreach($this->_filters as $filter) {
+                if ($filter[0] == $name) {
+                    return TRUE;
+                }
+            }
+        }
+
+        return FALSE;
     }
 
     public function setStorage(Storage $storage)
