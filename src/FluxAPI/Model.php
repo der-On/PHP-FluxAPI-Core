@@ -7,22 +7,12 @@ abstract class Model
 
     private $_fields = array();
 
-    protected $_storage = NULL;
-
     public function  __construct($data = array())
     {
-        $this->_storage = self::getStorage();
         $this->defineFields();
         $this->_setDefaults();
 
         $this->populate($data);
-    }
-
-    public static function getCollectionName()
-    {
-        $class_name = self::getClassName();
-        $parts = explode('\\',$class_name);
-        return strtolower($parts[count($parts)-1]);
     }
 
     public function addField(Field $field)
@@ -75,45 +65,6 @@ abstract class Model
     public static function getClassName()
     {
         return get_called_class();
-    }
-
-    public static function getStorage()
-    {
-        $class_name = self::getClassName();
-
-        $storage = Api::getInstance()->getStorage($class_name);
-        return $storage;
-    }
-
-    public static function load(Query $query = NULL)
-    {
-        $class_name = self::getClassName();
-
-        return self::getStorage()->load($class_name, $query);
-    }
-
-    public function save()
-    {
-        $class_name = self::getClassName();
-        return $this->_storage->save($class_name, $this);
-    }
-
-    public function update(array $data = array())
-    {
-        $this->populate($data);
-        $this->save();
-    }
-
-    public static function delete(Model $instance = NULL, Query $query = NULL)
-    {
-        $class_name = self::getClassName();
-        return self::getStorage()->delete($class_name, $instance, $query);
-    }
-
-    public static function create(array $data = array())
-    {
-        $class_name = self::getClassName();
-        return new $class_name($data);
     }
 
     public function __get($name)

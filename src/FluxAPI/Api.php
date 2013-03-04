@@ -38,6 +38,7 @@ class Api
                     'table_prefix' => '',
                     'port' => 3306,
                     'socket' => NULL,
+                    'debug_sql' => FALSE,
                 )
             ),
             $config
@@ -148,6 +149,13 @@ class Api
         };
 
         $this->_methods['load'.$model] = function($query) use ($model, $self) {
+
+            if (is_string($query)) {
+                $id = $query;
+                $query = new Query();
+                $query->filter('equals',array('id',$id));
+            }
+
             $models = $self->loadModels($model,$query);
             if (count($models)) {
                 return $models[0];
@@ -160,16 +168,36 @@ class Api
             return $self->saveModel($model,$instance);
         };
 
-        $this->_methods['delete'.$model.'s'] = function($instance = NULL, $query = NULL) use ($model, $self) {
-            return $self->deleteModels($model, $instance, $query);
-        };
-
-        $this->_methods['delete'.$model] = function($query) use ($model, $self) {
+        $this->_methods['delete'.$model.'s'] = function($query = NULL) use ($model, $self) {
             return $self->deleteModels($model, $query);
         };
 
-        $this->_methods['update'.$model] = function($id, $data = array()) use ($model, $self) {
-            return $self->updateModel($model,$id,$data);
+        $this->_methods['delete'.$model] = function($query) use ($model, $self) {
+            if (is_string($query)) {
+                $id = $query;
+                $query = new Query();
+
+                $query->filter('equals',array('id',$id));
+            }
+
+            return $self->deleteModels($model, $query);
+        };
+
+        $this->_methods['update'.$model.'s'] = function($query, array $data = array()) use ($model, $self) {
+            if (is_array($query)) {
+                $ids = $query;
+
+                $query = new Query();
+                $query->filter('in',array('id',$ids));
+            }
+            return $self->updateModels($model,$query,$data);
+        };
+
+        $this->_methods['update'.$model] = function($id, array $data = array()) use ($model, $self) {
+            $query = new Query();
+            $query->filter('equals',array('id',$id));
+
+            return $self->updateModels($model,$query,$data);
         };
 
         $this->_methods['create'.$model] = function($data = array()) use ($model, $self) {
@@ -188,6 +216,15 @@ class Api
         }
     }
 
+    public function getPluginClass($namespace, $name)
+    {
+        if (!empty($namespace) && isset($this->_plugins[$namespace]) && isset($this->_plugins[$namespace][$name])) {
+            return $this->_plugins[$namespace][$name];
+        } else {
+            return NULL;
+        }
+    }
+
     public function getStorage($model = NULL)
     {
         $storagePlugins = $this->getPlugins('Storage');
@@ -203,8 +240,7 @@ class Api
         $models = $this->getPlugins('Model');
 
         if (isset($models[$model])) {
-            $class_name = $models[$model];
-            return $class_name::load($query);
+            return $this->getStorage($model)->load($model,$query);
         }
 
         return array();
@@ -219,29 +255,27 @@ class Api
                 return FALSE;
             }
 
+            $storage = $this->getStorage($model);
+
             if (is_array($instances)) {
                 foreach($instances as $instance) {
-                    $instance->save();
+                    $storage->save($model,$instance);
                 }
                 return TRUE;
             } else {
-                return $instances->save();
+                return $storage->save($model,$instances);
             }
         }
 
         return FALSE;
     }
 
-    public function updateModel($model, $id, array $data = array())
+    public function updateModels($model, Query $query, array $data = array())
     {
-        $instances = $this->loadModel($model,$id);
 
-        if (count($instances) > 0) {
-            $instance = $instances[0];
-            return $instance->update($data);
-        }
+        $storage = $this->getStorage($model);
 
-        return FALSE;
+        return $storage->update($model, $query, $data);
     }
 
     public function createModel($model, array $data = array())
@@ -250,27 +284,27 @@ class Api
 
         if (isset($models[$model])) {
             $class_name = $models[$model];
-            return $class_name::create($data);
+            return new $class_name($data);
         }
 
         return FALSE;
     }
 
-    public function deleteModels($model, Model $instance = NULL, Query $query = NULL)
+    public function deleteModels($model, Query $query = NULL)
     {
         $models = $this->getPlugins('Model');
 
         if (isset($models[$model])) {
-            $class_name = $models[$model];
-            return $class_name::delete($instance, $query);
+            $storage = $this->getStorage($model);
+            return $storage->delete($model, $query);
         }
 
         return FALSE;
     }
 
-    public function migrate()
+    public function migrate($model = NULL)
     {
-        $storage = $this->getStorage();
-        $storage->migrate();
+        $storage = $this->getStorage($model);
+        $storage->migrate($model);
     }
 }

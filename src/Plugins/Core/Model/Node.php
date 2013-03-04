@@ -12,6 +12,10 @@ class Node extends \FluxAPI\Model
         $this->addField(new Field(array(
             'name' => 'body',
             'type' => Field::TYPE_LONGSTRING
+        )))
+        ->addField(new Field(array(
+            'name' => 'title',
+            'type' => Field::TYPE_STRING
         )));
     }
 }

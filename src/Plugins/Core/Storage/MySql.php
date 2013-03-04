@@ -13,23 +13,41 @@ class MySql extends \FluxAPI\Storage
     {
         $this->addFilter('select',function(QueryBuilder &$qb, array $params) {
             $qb->select($params);
-        });
-
-        $this->addFilter('equals',function(QueryBuilder &$qb, array $params) {
-            $qb->andWhere($qb->expr()->eq($params[0],$params[1]));
-        });
-
-        $this->addFilter('order',function(QueryBuilder &$qb, array $params) {
+        })
+        ->addFilter('equals',function(QueryBuilder &$qb, array $params) {
+            $qb->andWhere($qb->expr()->eq($params[0],$qb->expr()->literal($params[1])));
+        })
+        ->addFilter('order',function(QueryBuilder &$qb, array $params) {
             $qb->orderBy($params[0],isset($params[1])?$params[1]:'ASC');
-        });
-
-        $this->addFilter('limit',function(QueryBuilder &$qb, array $params) {
+        })
+        ->addFilter('limit',function(QueryBuilder &$qb, array $params) {
             $qb->setFirstResult(intval($params[0]));
             $qb->setMaxResults(intval($params[1]));
-        });
-
-        $this->addFilter('count',function(QueryBuilder &$qb, array $params) {
+        })
+        ->addFilter('count',function(QueryBuilder &$qb, array $params) {
             $qb->select('COUNT('.$params[0].')');
+        })
+        ->addFilter('like',function(QueryBuilder &$qb, array $params) {
+            $qb->andWhere($qb->expr()->like($params[0],$params[1]));
+        })
+        ->addFilter('in',function(QueryBuilder &$qb, array $params) {
+            $values = $params[1];
+
+            $in = '';
+
+            if (!is_array($values)) {
+                $values = explode(',',$values);
+            }
+
+            foreach($values as $i => $value) {
+                $in .= $qb->expr()->literal($value);
+
+                if ($i < count($values) -1) {
+                    $in .= ', ';
+                }
+            }
+
+            $qb->andWhere($params[0].' IN ('.$in.')');
         });
     }
 
@@ -46,7 +64,8 @@ class MySql extends \FluxAPI\Storage
                 'host' => $this->config['host'],
                 'user' => $this->config['user'],
                 'password' => $this->config['password'],
-                'dbname' => $this->config['database']
+                'dbname' => $this->config['database'],
+                'debug_sql' => FALSE,
             ),
         ));
     }
@@ -58,14 +77,17 @@ class MySql extends \FluxAPI\Storage
 
     public function getTableName($model)
     {
-        return $this->config['table_prefix'].$model::getCollectionName();
+        return $this->config['table_prefix'].$this->getCollectionName($model);
     }
 
     public function executeQuery($query)
     {
         parent::executeQuery($query);
 
-        $modelClass = $query->getModel();
+        $model = $query->getModel();
+
+        $modelClass = $this->_api->getPluginClass('Model',$model);
+
         $tableName = $this->getTableName($modelClass);
 
         $connection = $this->getConnection();
@@ -86,8 +108,13 @@ class MySql extends \FluxAPI\Storage
                     .implode(', ',array_keys($data))
                 .') VALUES(';
 
-                foreach(array_values($data) as $value) {
+                $values = array_values($data);
+                foreach($values as $i => $value) {
                     $sql .= $qb->expr()->literal($value);
+
+                    if ($i < count($values) - 1) {
+                        $sql .= ',';
+                    }
                 }
                 $sql .= ')';
 
@@ -112,8 +139,6 @@ class MySql extends \FluxAPI\Storage
                 case Query::TYPE_UPDATE:
                     $qb->update($tableName);
 
-                    $query->filter('equals',array('id',$query->getData('id')));
-
                     foreach($query->getData() as $name => $value)
                     {
                         if ($name != 'id') { // do not set the ID again
@@ -137,10 +162,14 @@ class MySql extends \FluxAPI\Storage
                 }
             }
 
+            if ($this->config['debug_sql']) {
+                print("\nSQL: ".$qb->getSQL()."\n");
+            }
+
             $result = $qb->execute();
 
             if (!is_object($result)) {
-                return boolval($result);
+                return (intval($result) == 1)?FALSE:TRUE;
             }
             $result = $result->fetchAll();
 
@@ -159,7 +188,7 @@ class MySql extends \FluxAPI\Storage
         return NULL;
     }
 
-    public function migrate()
+    public function migrate($model = NULL)
     {
         if (!$this->isConnected()) {
             $this->connect();
@@ -178,6 +207,8 @@ class MySql extends \FluxAPI\Storage
             $table = $toSchema->createTable($this->getTableName($modelClass));
             $primary = array();
             $unique = array();
+
+            // TODO: split this into multiple methods
 
             foreach($model->getFields() as $field) {
                 if (!empty($field->name) && !empty($field->type) && $field->type != Field::TYPE_RELATION) {

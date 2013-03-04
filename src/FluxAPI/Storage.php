@@ -17,6 +17,12 @@ abstract class Storage
         $this->addFilters();
     }
 
+    public static function getCollectionName($model)
+    {
+        $parts = explode('\\',$model);
+        return strtolower($parts[count($parts)-1]);
+    }
+
     public function addFilters()
     {
 
@@ -111,17 +117,13 @@ abstract class Storage
         return $this->executeQuery($query);
     }
 
-    public function delete($model, Model $instance = NULL, Query $query = NULL)
+    public function delete($model, Query $query = NULL)
     {
         if (empty($query)) {
             $query = new Query();
         }
         $query->setType(Query::TYPE_DELETE);
         $query->setModel($model);
-
-        if (!empty($instance)) {
-            $query->filter('equals',array('id',$instance->id));
-        }
 
         return $this->executeQuery($query);
     }
@@ -152,7 +154,7 @@ abstract class Storage
         return NULL;
     }
 
-    public function migrate()
+    public function migrate($model = NULL)
     {
 
     }
