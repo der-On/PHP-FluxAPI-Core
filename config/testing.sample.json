@@ -1,0 +1,10 @@
+{
+  "debug": true,
+  "storage.options": {
+    "host": "host",
+    "user": "user",
+    "password": "password",
+    "database": "flux-api-testing",
+    "debug_sql": true
+  }
+}
