@@ -3,6 +3,11 @@ namespace FluxAPI;
 
 class Api
 {
+    const DATA_FORMAT_ARRAY = 'array';
+    const DATA_FORMAT_JSON = 'json';
+    const DATA_FORMAT_XML = 'xml';
+    const DATA_FORMAT_YAML = 'yaml';
+
     private $_plugins = array(
         'Model' => array(),
         'Controller' => array(),
@@ -43,6 +48,9 @@ class Api
             ),
             $config
         );
+
+        // register Serializer
+        $this->app->register(new \Silex\Provider\SerializerServiceProvider());
 
         $this->registerPlugins();
     }
@@ -215,8 +223,8 @@ class Api
             return $self->updateModels($model,$query,$data);
         };
 
-        $this->_methods['create'.$model] = function($data = array()) use ($model, $self) {
-            return $self->createModel($model,$data);
+        $this->_methods['create'.$model] = function($data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model, $self) {
+            return $self->createModel($model, $data, $format);
         };
     }
 
@@ -293,13 +301,33 @@ class Api
         return $storage->update($model, $query, $data);
     }
 
-    public function createModel($model, array $data = array())
+    public function createModel($model, array $data = array(), $format = Api::DATA_FORMAT_ARRAY)
     {
         $models = $this->getPlugins('Model');
 
         if (isset($models[$model])) {
             $class_name = $models[$model];
-            return new $class_name($data);
+
+            switch($format) {
+                case self::DATA_FORMAT_ARRAY:
+                    return $class_name::fromArray($data);
+                    break;
+
+                case self::DATA_FORMAT_JSON:
+                    return $class_name::fromJson($data);
+                    break;
+
+                case self::DATA_FORMAT_XML:
+                    return $class_name::fromXml($data);
+                    break;
+
+                case self::DATA_FORMAT_YAML:
+                    return $class_name::fromYaml($data);
+                    break;
+
+                default:
+                    return $class_name::fromArray($data);
+            }
         }
 
         return FALSE;

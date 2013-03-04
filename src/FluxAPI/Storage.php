@@ -19,8 +19,7 @@ abstract class Storage
 
     public static function getCollectionName($model)
     {
-        $parts = explode('\\',$model);
-        return strtolower($parts[count($parts)-1]);
+        return $model::getModelName();
     }
 
     public function addFilters()

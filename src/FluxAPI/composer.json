@@ -6,6 +6,8 @@
     "silex/silex": "1.0.*",
     "silex/web-profiler": "1.0.*",
     "doctrine/dbal": "2.3.*",
+    "symfony/serializer": ">=2.2.0",
+    "symfony/yaml": ">=2.2.0",
     "FluxAPI/plugins/core": ">=0.1"
   },
   "autoload": {
