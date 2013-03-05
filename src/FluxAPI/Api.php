@@ -195,7 +195,7 @@ class Api
             if (is_string($query)) {
                 $id = $query;
                 $query = new Query();
-                $query->filter('equals',array('id',$id));
+                $query->filter('equal',array('id',$id));
             }
 
             if (!$query->hasFilter('limit')) {
@@ -242,7 +242,7 @@ class Api
                 $id = $query;
                 $query = new Query();
 
-                $query->filter('equals',array('id',$id));
+                $query->filter('equal',array('id',$id));
             }
 
             $limit_filters = $query->getFilters('limit');
@@ -270,7 +270,7 @@ class Api
 
         $this->_methods['update'.$model] = function($id, array $data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model, $self) {
             $query = new Query();
-            $query->filter('equals',array('id',$id));
+            $query->filter('equal',array('id',$id));
             $query->filter('limit',array(0,1));
 
             return $self->updateModels($model, $query, $data, $format);

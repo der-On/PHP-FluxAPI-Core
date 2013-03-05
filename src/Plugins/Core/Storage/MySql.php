@@ -9,6 +9,105 @@ use \Doctrine\DBAL\Schema\Comparator;
 
 class MySql extends \FluxAPI\Storage
 {
+    public function filterSelect(QueryBuilder &$qb, array $params)
+    {
+        $qb->select($params);
+        return $qb;
+    }
+
+    public function filterEqual(QueryBuilder &$qb, array $params)
+    {
+        $qb->andWhere($qb->expr()->eq($params[0],$qb->expr()->literal($params[1])));
+        return $qb;
+    }
+
+    public function filterNotEqual(QueryBuilder &$qb, array $params)
+    {
+        $qb->andWhere($qb->expr()->neq($params[0],$params[1]));
+        return $qb;
+    }
+
+    public function filterGreaterThen(QueryBuilder &$qb, array $params)
+    {
+        $qb->andWhere($qb->expr()->gt($params[0],$params[1]));
+        return $qb;
+    }
+
+    public function filterGreaterThenOrEqual(QueryBuilder &$qb, array $params)
+    {
+        $qb->andWhere($qb->expr()->gte($params[0],$params[1]));
+        return $qb;
+    }
+
+    public function filterLessThen(QueryBuilder &$qb, array $params)
+    {
+        $qb->andWhere($qb->expr()->lt($params[0],$params[1]));
+        return $qb;
+    }
+
+    public function filterLessThenOrEqual(QueryBuilder &$qb, array $params)
+    {
+        $qb->andWhere($qb->expr()->lte($params[0],$params[1]));
+        return $qb;
+    }
+
+    public function filterRange(QueryBuilder &$qb, array $params)
+    {
+        $qb->andWhere($qb->expr()->andX(
+            $qb->expr()->gte($params[0],$params[1]),
+            $qb->expr()->lte($params[0],$params[2])
+        ));
+        return $qb;
+    }
+
+    public function filterOrder(QueryBuilder &$qb, array $params)
+    {
+        $qb->orderBy($params[0],isset($params[1])?$params[1]:'ASC');
+        return $qb;
+    }
+
+    public function filterLimit(QueryBuilder &$qb, array $params)
+    {
+        $qb->setFirstResult(intval($params[0]));
+        $qb->setMaxResults(intval($params[1]));
+        return $qb;
+    }
+
+    public function filterCount(QueryBuilder &$qb, array $params)
+    {
+        $qb->select('COUNT('.$params[0].')');
+        return $qb;
+    }
+
+    public function filterLike(QueryBuilder &$qb, array $params)
+    {
+        $qb->andWhere($qb->expr()->like($params[0],$params[1]));
+        return $qb;
+    }
+
+    public function filterIn(QueryBuilder &$qb, array $params)
+    {
+        $values = $params[1];
+
+        $in = '';
+
+        if (!is_array($values)) {
+            $values = explode(',',$values);
+        }
+
+        foreach($values as $i => $value) {
+            $in .= $qb->expr()->literal($value);
+
+            if ($i < count($values) -1) {
+                $in .= ', ';
+            }
+        }
+
+        $qb->andWhere($params[0].' IN ('.$in.')');
+        return $qb;
+    }
+
+    /*
     public function addFilters()
     {
         $this->addFilter('select',function(QueryBuilder &$qb, array $params) {
@@ -50,6 +149,7 @@ class MySql extends \FluxAPI\Storage
             $qb->andWhere($params[0].' IN ('.$in.')');
         });
     }
+    */
 
     public function isConnected()
     {
@@ -158,7 +258,7 @@ class MySql extends \FluxAPI\Storage
             foreach($queryFilters as $filter) {
                 if ($this->hasFilter($filter[0])) {
                     $callback = $this->getFilter($filter[0]);
-                    $callback($qb,$filter[1]);
+                    $this->executeFilter($callback,array(&$qb,$filter[1]));
                 }
             }
 

@@ -24,7 +24,25 @@ abstract class Storage
 
     public function addFilters()
     {
-
+        $this->addFilter('select','filterSelect')
+            ->addFilter('equal','filterEqual')
+            ->addFilter('=','filterEqual')
+            ->addFilter('not','filterNotEqual')
+            ->addFilter('!=','filterNotEqual')
+            ->addFilter('gt','filterGreaterThen')
+            ->addFilter('>','filterGreaterThen')
+            ->addFilter('gte','filterGreaterThenOrEqual')
+            ->addFilter('>=','filterGreaterThenOrEqual')
+            ->addFilter('lt','filterLessThen')
+            ->addFilter('<','filterLessThen')
+            ->addFilter('lte','filterLessThenOrEqual')
+            ->addFilter('<=','filterLessThenOrEqual')
+            ->addFilter('range','filterRange')
+            ->addFilter('order','filterOrder')
+            ->addFilter('limit','filterLimit')
+            ->addFilter('count','filterCount')
+            ->addFilter('like','filterLike')
+            ->addFilter('in','filterIn');
     }
 
     public function addFilter($name,$callback)
@@ -54,6 +72,76 @@ abstract class Storage
         return $this->_filters;
     }
 
+    public function executeFilter($callback,array $params = array())
+    {
+        return call_user_func_array(array($this,$callback),$params);
+    }
+
+    public function filterSelect()
+    {
+
+    }
+
+    public function filterEqual()
+    {
+
+    }
+
+    public function filterNotEqual()
+    {
+
+    }
+
+    public function filterGreaterThen()
+    {
+
+    }
+
+    public function filterGreaterThenOrEqual()
+    {
+
+    }
+
+    public function filterLessThen()
+    {
+
+    }
+
+    public function filterLessThenOrEqual()
+    {
+
+    }
+
+    public function filterRange()
+    {
+
+    }
+
+    public function filterOrder()
+    {
+
+    }
+
+    public function filterLimit()
+    {
+
+    }
+
+    public function filterCount()
+    {
+
+    }
+
+    public function filterLike()
+    {
+
+    }
+
+    public function filterIn()
+    {
+
+    }
+
     public function count($model, Query $query = NULL)
     {
         if (empty($query)) {
@@ -72,7 +160,7 @@ abstract class Storage
             $query = new Query();
             $query->setType(Query::TYPE_COUNT);
             $query->setModel($model);
-            $query->filter('equals',array('id',$instance->id));
+            $query->filter('equal',array('id',$instance->id));
 
             $result = $this->executeQuery($query);
             return $result > 0;

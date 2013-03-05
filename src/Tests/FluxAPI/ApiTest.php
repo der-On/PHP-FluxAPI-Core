@@ -156,7 +156,7 @@ class ApiTest extends FluxApi_Database_TestCase
     public function deleteNodes()
     {
         $query = new \FluxAPI\Query();
-        $query->filter('equals',array('title','Node 1'));
+        $query->filter('equal',array('title','Node 1'));
 
         self::$fluxApi->deleteNodes($query);
 
