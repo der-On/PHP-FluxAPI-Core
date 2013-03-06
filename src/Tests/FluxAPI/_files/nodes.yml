@@ -2,39 +2,49 @@
     id: '1'
     body: 'Body for Node 1'
     title: 'Node 1'
+    parent: null
 -
     id: '2'
     body: 'Body for Node 2'
     title: 'Node 2'
+    parent: null
 -
     id: '3'
     body: 'Body for Node 3'
     title: 'Node 3'
+    parent: null
 -
     id: '4'
     body: 'Body for Node 4'
     title: 'Node 4'
+    parent: null
 -
     id: '5'
     body: 'Body for Node 5'
     title: 'Node 5'
+    parent: null
 -
     id: '6'
     body: 'Body for Node 6'
     title: 'Node 6'
+    parent: null
 -
     id: '7'
     body: 'Body for Node 7'
     title: 'Node 7'
+    parent: null
 -
     id: '8'
     body: 'Body for Node 8'
     title: 'Node 8'
+    parent: null
 -
     id: '9'
     body: 'Body for Node 9'
     title: 'Node 9'
+    parent: null
 -
     id: '10'
     body: 'Body for Node 10'
     title: 'Node 10'
+    parent: null

@@ -59,4 +59,9 @@ abstract class FluxApi_Database_TestCase extends PHPUnit_Extensions_Database_Tes
     {
         return new PHPUnit_Extensions_Database_DataSet_DefaultDataSet();
     }
+
+    public function migrate()
+    {
+        self::$fluxApi->migrate();
+    }
 }

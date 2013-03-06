@@ -76,11 +76,6 @@ class ApiTest extends FluxApi_Database_TestCase
         $this->assertStringEqualsFile(__DIR__ . '/_files/node.yml',$node);
     }
 
-    public function migrate()
-    {
-        self::$fluxApi->migrate();
-    }
-
     public function createSingleNode()
     {
         $node = self::$fluxApi->createNode(array('title'=>'Node title','body'=>"Node body\non multiple lines"));

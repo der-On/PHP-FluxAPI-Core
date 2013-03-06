@@ -9,6 +9,13 @@ use \Doctrine\DBAL\Schema\Comparator;
 
 class MySql extends \FluxAPI\Storage
 {
+    public function addFilters()
+    {
+        parent::addFilters();
+
+        $this->addFilter('join','filterJoin');
+    }
+
     public function filterSelect(QueryBuilder &$qb, array $params)
     {
         $qb->select($params);
@@ -17,7 +24,9 @@ class MySql extends \FluxAPI\Storage
 
     public function filterEqual(QueryBuilder &$qb, array $params)
     {
-        $qb->andWhere($qb->expr()->eq($params[0],$qb->expr()->literal($params[1])));
+        $type = (isset($params[2]))?$params[2]:'string';
+
+        $qb->andWhere($qb->expr()->eq($params[0],($type!='string')?$params[1]:$qb->expr()->literal($params[1])));
         return $qb;
     }
 
@@ -107,49 +116,35 @@ class MySql extends \FluxAPI\Storage
         return $qb;
     }
 
-    /*
-    public function addFilters()
+    public function filterJoin(QueryBuilder &$qb, array $params)
     {
-        $this->addFilter('select',function(QueryBuilder &$qb, array $params) {
-            $qb->select($params);
-        })
-        ->addFilter('equals',function(QueryBuilder &$qb, array $params) {
-            $qb->andWhere($qb->expr()->eq($params[0],$qb->expr()->literal($params[1])));
-        })
-        ->addFilter('order',function(QueryBuilder &$qb, array $params) {
-            $qb->orderBy($params[0],isset($params[1])?$params[1]:'ASC');
-        })
-        ->addFilter('limit',function(QueryBuilder &$qb, array $params) {
-            $qb->setFirstResult(intval($params[0]));
-            $qb->setMaxResults(intval($params[1]));
-        })
-        ->addFilter('count',function(QueryBuilder &$qb, array $params) {
-            $qb->select('COUNT('.$params[0].')');
-        })
-        ->addFilter('like',function(QueryBuilder &$qb, array $params) {
-            $qb->andWhere($qb->expr()->like($params[0],$params[1]));
-        })
-        ->addFilter('in',function(QueryBuilder &$qb, array $params) {
-            $values = $params[1];
+        $_params = $params;
+        array_shift($_params);
 
-            $in = '';
+        switch($params[0]) {
+            case 'inner':
+                return $this->filterInnerJoin($qb,$_params);
+                break;
 
-            if (!is_array($values)) {
-                $values = explode(',',$values);
-            }
+            case 'left':
+                return $this->filterLeftJoin($qb,$_params);
+                break;
 
-            foreach($values as $i => $value) {
-                $in .= $qb->expr()->literal($value);
-
-                if ($i < count($values) -1) {
-                    $in .= ', ';
-                }
-            }
-
-            $qb->andWhere($params[0].' IN ('.$in.')');
-        });
+            default:
+                return $qb;
+        }
     }
-    */
+
+    public function filterInnerJoin(QueryBuilder &$qb, array $params)
+    {
+        return $qb;
+    }
+
+    public function filterLeftJoin(QueryBuilder &$qb, array $params)
+    {
+        $qb->leftJoin($params[0],$params[1], $params[1], $params[2]);
+        return $qb;
+    }
 
     public function isConnected()
     {
@@ -173,6 +168,45 @@ class MySql extends \FluxAPI\Storage
     public function getConnection()
     {
         return $this->_api->app['db'];
+    }
+
+    public function loadRelation(\FluxAPI\Model $model, $name)
+    {
+        if (!$model->hasField($name)) {
+            return NULL;
+        } else {
+            $field = $model->getField($name);
+        }
+
+        if ($field->type == Field::TYPE_RELATION && !empty($field->relationModel)) {
+            $id = $model->id;
+            $model_name = $model->getModelName();
+            $id_field_name = strtolower($model_name).'_id';
+            $model_class = $model->getClassName();
+
+            $rel_id_field = $this->getRelationField($field);
+            $table_name = $this->getTableNameFromModelClass($model_class);
+            $relation_table = $this->getRelationTableNameFromModelClass($model_class);
+
+            $rel_field_name = $field->name.'_id';
+
+            $query = new Query();
+            $query->filter('join',array('left', $table_name, $relation_table, $relation_table.'.'.$id_field_name.'='.$id))
+                  ->filter('equal',array($table_name.'.id',$relation_table.'.'.$rel_field_name,'field'));
+
+            $models = $this->load($model_name,$query);
+
+            if (in_array($field->relationType,array(Field::BELONGS_TO_ONE,Field::HAS_ONE))) {
+                if (count($models) > 0) {
+                    return $models[0];
+                } else {
+                    return NULL;
+                }
+            } else {
+                return $models;
+            }
+        }
+        return NULL;
     }
 
     public function getTableName($name)
@@ -200,9 +234,7 @@ class MySql extends \FluxAPI\Storage
         parent::executeQuery($query);
 
         $model = $query->getModel();
-
         $modelClass = $this->_api->getPluginClass('Model',$model);
-
         $tableName = $this->getTableNameFromModelClass($modelClass);
 
         $connection = $this->getConnection();
@@ -232,6 +264,10 @@ class MySql extends \FluxAPI\Storage
                     }
                 }
                 $sql .= ')';
+
+            if ($this->config['debug_sql']) {
+                print("\nSQL: ".$sql."\n");
+            }
 
             $connection->query($sql);
             return TRUE;
@@ -336,6 +372,20 @@ class MySql extends \FluxAPI\Storage
         return $config;
     }
 
+    public function getRelationField(\FluxAPI\Field $field)
+    {
+        $rel_model_instance = $this->_api->createModel($field->relationModel);
+
+        if (!empty($rel_model_instance)) {
+            // we need the id field of the model so we can create a field in the relation table matching the field config
+            $rel_id_field = $rel_model_instance->getField('id');
+
+            return $rel_id_field;
+        } else {
+            return NULL;
+        }
+    }
+
     public function migrate($model = NULL)
     {
         if (!$this->isConnected()) {
@@ -364,42 +414,48 @@ class MySql extends \FluxAPI\Storage
             // TODO: split this into multiple methods
 
             foreach($model->getFields() as $field) {
-                if (!empty($field->name) && !empty($field->type) && $field->type != Field::TYPE_RELATION) {
+                if (!empty($field->name) && !empty($field->type)) {
 
-                    $type = $this->getFieldType($field);
-                    $config = $this->getFieldConfig($field);
+                    if ($field->type != Field::TYPE_RELATION) {
 
-                    $table->addColumn($field->name,$type,$config);
+                        $type = $this->getFieldType($field);
+                        $config = $this->getFieldConfig($field);
 
-                    // add model id field to relation table
-                    if ($field->name == 'id') {
-                        $relation_field_name = $this->getCollectionName($modelClass).'_id';
-                        unset($config['autoincrement']);
-                        $relation_table->addColumn($relation_field_name, $type, $config);
-                        $relation_primary[] = $relation_field_name;
-                    }
+                        $table->addColumn($field->name,$type,$config);
 
-                    if ($field->primary) {
-                        $primary[] = $field->name;
-                    }
-                } elseif($field->type == Field::TYPE_RELATION && !empty($field->relationModel)) {
-                    $rel_model_instance = $this->_api->createModel($field->relationModel);
+                        // add own model id field to relation table
+                        if ($field->name == 'id') {
+                            $relation_field_name = $this->getCollectionName($modelClass).'_id';
 
-                    if (!empty($rel_model_instance)) {
-                        $rel_id_field = $rel_model_instance->getField('id');
+                            // autoincrement must be removed
+                            if (isset($config['autoincrement'])) {
+                                unset($config['autoincrement']);
+                            }
 
-                        if (!empty($rel_id_field)) {
+                            $relation_table->addColumn($relation_field_name, $type, $config);
+                            $relation_primary[] = $relation_field_name;
+                        }
+
+                        if ($field->primary) {
+                            $primary[] = $field->name;
+                        }
+                    } elseif($field->type == Field::TYPE_RELATION && !empty($field->relationModel)) { // add relation model id field to relation table
+                        // we need the id field of the related model so we can create a matching field in the relation table
+                        $rel_id_field = $this->getRelationField($field);
+
+                        if ($rel_id_field) {
                             $relation_field_name = $field->name.'_id';
 
                             $rel_field_type = $this->getFieldType($rel_id_field);
                             $rel_field_config = $this->getFieldConfig($rel_id_field);
 
+                            // autoincrement must be removed
                             if (isset($rel_field_config['autoincrement'])) {
                                 unset($rel_field_config['autoincrement']);
                             }
 
                             $relation_table->addColumn($relation_field_name, $rel_field_type, $rel_field_config);
-                            $relation_primary[] = $relation_field_name;
+                            //$relation_primary[] = $relation_field_name;
                         }
                     }
                 }
@@ -430,6 +486,9 @@ class MySql extends \FluxAPI\Storage
         $sql = $schemaDiff->toSql($dp);
 
         foreach($sql as $query) {
+            if ($this->config['debug_sql']) {
+                print("\nSQL: ".$query."\n");
+            }
             $connection->query($query);
         }
     }

@@ -27,7 +27,7 @@ abstract class Model
 
     public function getField($name)
     {
-        if (isset($this->_fields[$name])) {
+        if ($this->hasField($name)) {
             return $this->_fields[$name];
         } else {
             return NULL;
@@ -37,6 +37,23 @@ abstract class Model
     public function getFields()
     {
         return $this->_fields;
+    }
+
+    public function getRelationFields()
+    {
+        $fields = array();
+
+        foreach($this->_fields as $field) {
+            if ($field->type == Field::TYPE_RELATION) {
+                $fields[$field->name] = $field;
+            }
+        }
+        return $fields;
+    }
+
+    public function hasField($name)
+    {
+        return isset($this->_fields[$name]);
     }
 
     public function defineFields()
@@ -78,7 +95,11 @@ abstract class Model
 
     public function __get($name)
     {
-        return $this->_data[$name];
+        if ($this->hasField($name) && $this->getField($name)->type == Field::TYPE_RELATION && empty($this->_data[$name])) {
+            return $this->_api->getStorage($this->getModelName())->loadRelation($this,$name);
+        } else {
+            return $this->_data[$name];
+        }
     }
 
     public function __set($name,$value)

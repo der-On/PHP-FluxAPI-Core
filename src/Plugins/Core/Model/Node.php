@@ -16,6 +16,12 @@ class Node extends \FluxAPI\Model
         ->addField(new Field(array(
             'name' => 'title',
             'type' => Field::TYPE_STRING
+        )))
+        ->addField(new Field(array(
+            'name' => 'parent',
+            'type' => Field::TYPE_RELATION,
+            'relationType' => Field::BELONGS_TO_ONE,
+            'relationModel' => 'Node'
         )));
     }
 }

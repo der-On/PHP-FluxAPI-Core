@@ -193,6 +193,11 @@ abstract class Storage
         return $this->executeQuery($query);
     }
 
+    public function loadRelation(Model $model, $name)
+    {
+        return NULL;
+    }
+
     public function update($model, Query $query = NULL, array $data = array())
     {
         if (empty($query)) {

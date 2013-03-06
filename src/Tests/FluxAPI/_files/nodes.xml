@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <Nodes>
-    <Node><id>1</id><body>Body for Node 1</body><title>Node 1</title></Node>
-    <Node><id>2</id><body>Body for Node 2</body><title>Node 2</title></Node>
-    <Node><id>3</id><body>Body for Node 3</body><title>Node 3</title></Node>
-    <Node><id>4</id><body>Body for Node 4</body><title>Node 4</title></Node>
-    <Node><id>5</id><body>Body for Node 5</body><title>Node 5</title></Node>
-    <Node><id>6</id><body>Body for Node 6</body><title>Node 6</title></Node>
-    <Node><id>7</id><body>Body for Node 7</body><title>Node 7</title></Node>
-    <Node><id>8</id><body>Body for Node 8</body><title>Node 8</title></Node>
-    <Node><id>9</id><body>Body for Node 9</body><title>Node 9</title></Node>
-    <Node><id>10</id><body>Body for Node 10</body><title>Node 10</title></Node>
+    <Node><id>1</id><body>Body for Node 1</body><title>Node 1</title><parent/></Node>
+    <Node><id>2</id><body>Body for Node 2</body><title>Node 2</title><parent/></Node>
+    <Node><id>3</id><body>Body for Node 3</body><title>Node 3</title><parent/></Node>
+    <Node><id>4</id><body>Body for Node 4</body><title>Node 4</title><parent/></Node>
+    <Node><id>5</id><body>Body for Node 5</body><title>Node 5</title><parent/></Node>
+    <Node><id>6</id><body>Body for Node 6</body><title>Node 6</title><parent/></Node>
+    <Node><id>7</id><body>Body for Node 7</body><title>Node 7</title><parent/></Node>
+    <Node><id>8</id><body>Body for Node 8</body><title>Node 8</title><parent/></Node>
+    <Node><id>9</id><body>Body for Node 9</body><title>Node 9</title><parent/></Node>
+    <Node><id>10</id><body>Body for Node 10</body><title>Node 10</title><parent/></Node>
 </Nodes>
