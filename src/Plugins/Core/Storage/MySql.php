@@ -209,6 +209,16 @@ class MySql extends \FluxAPI\Storage
         return NULL;
     }
 
+    public function addRelation(\FluxAPI\Model $model, \FluxAPI\Model $relation)
+    {
+
+    }
+
+    public function removeRelation(\FluxAPI\Model $model, \FluxAPI\Model $relation)
+    {
+
+    }
+
     public function getTableName($name)
     {
         return $this->config['table_prefix'].strtolower($name);

@@ -6,6 +6,7 @@ abstract class Model
     private $_data = array();
 
     private $_fields = array();
+    private $_modified = false;
 
     protected $_api;
 
@@ -93,6 +94,16 @@ abstract class Model
         return $parts[count($parts)-1];
     }
 
+    public function isNew()
+    {
+        return (empty($this->id));
+    }
+
+    public function isModified()
+    {
+        return $this->_modified;
+    }
+
     public function __get($name)
     {
         if ($this->hasField($name) && $this->getField($name)->type == Field::TYPE_RELATION && empty($this->_data[$name])) {
@@ -104,7 +115,11 @@ abstract class Model
 
     public function __set($name,$value)
     {
+        if ($this->_data[$name] != $value) {
+            $this->_modified = TRUE;
+        }
         $this->_data[$name] = $value;
+
     }
 
     public function __isset($name)

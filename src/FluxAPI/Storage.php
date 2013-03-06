@@ -171,6 +171,30 @@ abstract class Storage
 
     public function save($model, Model $instance)
     {
+        // save relations
+        $relation_fields = $instance->getRelationFields();
+
+        foreach($relation_fields as $relation_field) {
+            $relation_instances = array();
+
+            $field_name = $relation_field->name;
+            if (isset($instance->$field_name)) {
+                if (in_array($relation_field->relationType,array(Field::BELONGS_TO_ONE,Field::HAS_ONE))) {
+                    $relation_instances[] = $instance->$field_name;
+                } else {
+                    $relation_instances = $instance->$field_name;
+                }
+            }
+
+            foreach($relation_instances as $relation_instance) {
+                if ($relation_instance->isNew() || $relation_instance->isModified()) {
+                    $this->save($relation_instance->getModelName(),$relation_instance);
+
+                    $this->addRelation($instance,$relation_instance);
+                }
+            }
+        }
+
         $query = new Query();
         $query->setType(Query::TYPE_INSERT);
 
@@ -196,6 +220,16 @@ abstract class Storage
     public function loadRelation(Model $model, $name)
     {
         return NULL;
+    }
+
+    public function addRelation(Model $model, Model $relation)
+    {
+
+    }
+
+    public function removeRelation(Model $model, Model $relation)
+    {
+
     }
 
     public function update($model, Query $query = NULL, array $data = array())
