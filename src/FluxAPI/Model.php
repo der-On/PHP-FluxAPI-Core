@@ -73,7 +73,7 @@ abstract class Model
     public static function getModelName()
     {
         $parts = explode('\\',self::getClassName());
-        return strtolower($parts[count($parts)-1]);
+        return $parts[count($parts)-1];
     }
 
     public function __get($name)

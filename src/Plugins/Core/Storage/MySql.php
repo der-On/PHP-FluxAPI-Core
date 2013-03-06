@@ -175,9 +175,24 @@ class MySql extends \FluxAPI\Storage
         return $this->_api->app['db'];
     }
 
-    public function getTableName($model)
+    public function getTableName($name)
     {
-        return $this->config['table_prefix'].$this->getCollectionName($model);
+        return $this->config['table_prefix'].strtolower($name);
+    }
+
+    public function getTableNameFromModelClass($model)
+    {
+        return $this->getTableName($this->getCollectionName($model));
+    }
+
+    public function getRelationTableNameFromModelClass($model)
+    {
+        return $this->getRelationTableName($this->getCollectionName($model));
+    }
+
+    public function getRelationTableName($name)
+    {
+        return $this->config['table_prefix'].strtolower($name).'_rel';
     }
 
     public function executeQuery($query)
@@ -188,7 +203,7 @@ class MySql extends \FluxAPI\Storage
 
         $modelClass = $this->_api->getPluginClass('Model',$model);
 
-        $tableName = $this->getTableName($modelClass);
+        $tableName = $this->getTableNameFromModelClass($modelClass);
 
         $connection = $this->getConnection();
         $qb = $connection->createQueryBuilder();
@@ -288,6 +303,39 @@ class MySql extends \FluxAPI\Storage
         return NULL;
     }
 
+    public function getFieldType(\FluxAPI\Field $field)
+    {
+        switch($field->type) {
+            case Field::TYPE_LONGSTRING:
+                $type = 'text';
+                break;
+
+            default:
+                $type = $field->type;
+        }
+
+        return $type;
+    }
+
+    public function getFieldConfig(\FluxAPI\Field $field)
+    {
+        $config = array();
+
+        if (!empty($field->length)) {
+            $config['length'] = $field->length;
+        }
+
+        if ($field->unsigned) {
+            $config['unsigned'] = $field->unsigned;
+        }
+
+        if ($field->autoIncrement) {
+            $config['autoincrement'] = $field->autoIncrement;
+        }
+
+        return $config;
+    }
+
     public function migrate($model = NULL)
     {
         if (!$this->isConnected()) {
@@ -304,42 +352,55 @@ class MySql extends \FluxAPI\Storage
 
         foreach($models as $model => $modelClass) {
             $model = new $modelClass();
-            $table = $toSchema->createTable($this->getTableName($modelClass));
+            $table_name = $this->getTableNameFromModelClass($modelClass);
+            $table = $toSchema->createTable($table_name);
             $primary = array();
             $unique = array();
+
+            // create relation table for this model
+            $relation_table = $toSchema->createTable($this->getRelationTableNameFromModelClass($modelClass));
+            $relation_primary = array();
 
             // TODO: split this into multiple methods
 
             foreach($model->getFields() as $field) {
                 if (!empty($field->name) && !empty($field->type) && $field->type != Field::TYPE_RELATION) {
 
-                    switch($field->type) {
-                        case Field::TYPE_LONGSTRING:
-                            $type = 'text';
-                            break;
-
-                        default:
-                            $type = $field->type;
-                    }
-
-                    $config = array();
-
-                    if (!empty($field->length)) {
-                        $config['length'] = $field->length;
-                    }
-
-                    if ($field->unsigned) {
-                        $config['unsigned'] = $field->unsigned;
-                    }
-
-                    if ($field->autoIncrement) {
-                        $config['autoincrement'] = $field->autoIncrement;
-                    }
+                    $type = $this->getFieldType($field);
+                    $config = $this->getFieldConfig($field);
 
                     $table->addColumn($field->name,$type,$config);
 
+                    // add model id field to relation table
+                    if ($field->name == 'id') {
+                        $relation_field_name = $this->getCollectionName($modelClass).'_id';
+                        unset($config['autoincrement']);
+                        $relation_table->addColumn($relation_field_name, $type, $config);
+                        $relation_primary[] = $relation_field_name;
+                    }
+
                     if ($field->primary) {
                         $primary[] = $field->name;
+                    }
+                } elseif($field->type == Field::TYPE_RELATION && !empty($field->relationModel)) {
+                    $rel_model_instance = $this->_api->createModel($field->relationModel);
+
+                    if (!empty($rel_model_instance)) {
+                        $rel_id_field = $rel_model_instance->getField('id');
+
+                        if (!empty($rel_id_field)) {
+                            $relation_field_name = $field->name.'_id';
+
+                            $rel_field_type = $this->getFieldType($rel_id_field);
+                            $rel_field_config = $this->getFieldConfig($rel_id_field);
+
+                            if (isset($rel_field_config['autoincrement'])) {
+                                unset($rel_field_config['autoincrement']);
+                            }
+
+                            $relation_table->addColumn($relation_field_name, $rel_field_type, $rel_field_config);
+                            $relation_primary[] = $relation_field_name;
+                        }
                     }
                 }
 
@@ -349,6 +410,11 @@ class MySql extends \FluxAPI\Storage
 
                 if (count($unique) > 0) {
                     $table->addUniqueIndex($unique);
+                }
+
+                // add primary keys to relation table
+                if (count($relation_primary)) {
+                    $relation_table->setPrimaryKey($relation_primary);
                 }
             }
         }

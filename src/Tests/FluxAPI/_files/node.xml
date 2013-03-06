@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<node>
+<Node>
     <id>1</id>
     <body>Node body
 on multiple lines</body>
     <title>Node title</title>
-</node>
+</Node>

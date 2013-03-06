@@ -19,7 +19,7 @@ abstract class Storage
 
     public static function getCollectionName($model)
     {
-        return $model::getModelName();
+        return strtolower($model::getModelName());
     }
 
     public function addFilters()

@@ -176,12 +176,12 @@ class Api
                     break;
 
                 case Api::DATA_FORMAT_XML:
-                    $xml = '<?xml version="1.0"?>'."\n"."<".strtolower($model)."s>\n";
+                    $xml = '<?xml version="1.0"?>'."\n"."<".$model."s>\n";
 
                     foreach($models as $_model) {
                         $xml .= trim(str_replace('<?xml version="1.0"?>','',$_model->toXml()))."\n";
                     }
-                    $xml .= "</".strtolower($model)."s>";
+                    $xml .= "</".$model."s>";
                     return $xml;
                     break;
 
