@@ -9,14 +9,11 @@ class ModelTest extends FluxApi_Database_TestCase
             'id' => '1',
             'title' => 'Node title',
             'body' => "Node body\non multiple lines",
-            'parent' => NULL,
         );
     }
 
     public function testToArray()
     {
-        $this->migrate();
-
         $data = $this->getNodeData();
         $node = new \Plugins\Core\Model\Node($data);
 
@@ -26,8 +23,6 @@ class ModelTest extends FluxApi_Database_TestCase
 
     public function textToString()
     {
-        $this->migrate();
-
         $data = $this->getNodeData();
         $node = new \Plugins\Core\Model\Node($data);
 
@@ -37,8 +32,6 @@ class ModelTest extends FluxApi_Database_TestCase
 
     public function testToJson()
     {
-        $this->migrate();
-
         $data = $this->getNodeData();
         $node = new \Plugins\Core\Model\Node($data);
 
@@ -48,8 +41,6 @@ class ModelTest extends FluxApi_Database_TestCase
 
     public function testToYaml()
     {
-        $this->migrate();
-
         $data = $this->getNodeData();
         $node = new \Plugins\Core\Model\Node($data);
 
@@ -73,8 +64,6 @@ class ModelTest extends FluxApi_Database_TestCase
 
     public function testFromArray()
     {
-        $this->migrate();
-
         $data = $this->getNodeData();
 
         $node = \Plugins\Core\Model\Node::fromArray($data);
@@ -88,8 +77,6 @@ class ModelTest extends FluxApi_Database_TestCase
 
     public function testFromJson()
     {
-        $this->migrate();
-
         $data = $this->getNodeData();
         $json = json_encode($data,4);
 
@@ -104,8 +91,6 @@ class ModelTest extends FluxApi_Database_TestCase
 
     public function testFromXml()
     {
-        $this->migrate();
-
         $data = $this->getNodeData();
         $xml = file_get_contents(__DIR__ . '/_files/node.xml');
 
@@ -120,8 +105,6 @@ class ModelTest extends FluxApi_Database_TestCase
 
     public function testFromYaml()
     {
-        $this->migrate();
-
         $data = $this->getNodeData();
         $yaml = file_get_contents(__DIR__ . '/_files/node.yml');
 

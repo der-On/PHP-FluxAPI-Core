@@ -124,7 +124,13 @@ abstract class Model
 
     public function toArray()
     {
-        return $this->_data;
+        $array = array();
+        foreach($this->_fields as $name => $field) {
+            if ($field->type != Field::TYPE_RELATION) {
+                $array[$name] = $this->_data[$name];
+            }
+        }
+        return $array;
     }
 
     public function toString()
