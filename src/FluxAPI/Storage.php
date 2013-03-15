@@ -172,13 +172,16 @@ abstract class Storage
     public function save($model, Model $instance)
     {
         // save relations
-        $relation_fields = $instance->getRelationFields();
+
+        $relation_fields = $instance->getRelationFields(); // collect all field representing a relation to another model
 
         foreach($relation_fields as $relation_field) {
             $relation_instances = array();
 
             $field_name = $relation_field->name;
-            if (isset($instance->$field_name)) {
+
+            if (isset($instance->$field_name)) { // check if the instance has one or multiple related models
+
                 if (in_array($relation_field->relationType,array(Field::BELONGS_TO_ONE,Field::HAS_ONE))) {
                     $relation_instances[] = $instance->$field_name;
                 } else {
@@ -186,12 +189,13 @@ abstract class Storage
                 }
             }
 
+            // after all related models have been collected we need to store the relation
             foreach($relation_instances as $relation_instance) {
-                if ($relation_instance->isNew() || $relation_instance->isModified()) {
+                if ($relation_instance->isNew() || $relation_instance->isModified()) { // if the related model instance is new, it needs to be saved first
                     $this->save($relation_instance->getModelName(),$relation_instance);
-
-                    $this->addRelation($instance,$relation_instance);
                 }
+
+                $this->addRelation($instance, $relation_instance, $relation_field); // now we can store the relation to this model
             }
         }
 

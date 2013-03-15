@@ -209,14 +209,47 @@ class MySql extends \FluxAPI\Storage
         return NULL;
     }
 
-    public function addRelation(\FluxAPI\Model $model, \FluxAPI\Model $relation)
+    public function addRelation(\FluxAPI\Model $model, \FluxAPI\Model $relation, \FluxAPI\Field $field)
     {
+        $rel_table = $this->getRelationTableNameFromModelClass($model->getClassName()); // get the table name of the relations table
+        $model_field_name = $this->getCollectionName($model).'_id';
+        $rel_field_name = $field->name.'_id';
 
+        $connection = $this->getConnection();
+
+        // before a new record is inserted we need to check if it's not related already
+        $sql = 'SELECT COUNT('.$rel_field_name.') FROM '.$rel_table.' WHERE '.$model_field_name.'='.$model->id.' AND '.$rel_field_name.'='.$relation->id;
+
+        $result = $connection->query($sql)->fetch();
+
+        $count = intval($result['COUNT('.$rel_field_name.')']);
+
+        if ($count == 0) {
+            $sql = 'INSERT INTO '.$rel_table.' ('.$model_field_name.','.$rel_field_name.') VALUES('.$model->id.','.$relation->id.')';
+
+            if ($this->config['debug_sql']) {
+                print("\nSQL: ".$sql."\n");
+            }
+
+            $connection->query($sql);
+        }
     }
 
-    public function removeRelation(\FluxAPI\Model $model, \FluxAPI\Model $relation)
+    public function removeRelation(\FluxAPI\Model $model, \FluxAPI\Model $relation, \FluxAPI\Field $field)
     {
+        $rel_table = $this->getRelationTableNameFromModelClass($model->getClassName()); // get the table name of the relations table
+        $model_field_name = $this->getCollectionName($model).'_id';
+        $rel_field_name = $field->name.'_id';
 
+        $connection = $this->getConnection();
+
+        $sql = 'DELETE FROM '.$rel_table.' WHERE '.$model_field_name.'='.$model->id.' AND '.$rel_field_name.'='.$relation->id;
+
+        if ($this->config['debug_sql']) {
+            print("\nSQL: ".$sql."\n");
+        }
+
+        $connection->query($sql);
     }
 
     public function getTableName($name)
@@ -419,7 +452,6 @@ class MySql extends \FluxAPI\Storage
 
             // create relation table for this model
             $relation_table = $toSchema->createTable($this->getRelationTableNameFromModelClass($modelClass));
-            $relation_primary = array();
 
             // TODO: split this into multiple methods
 
@@ -443,7 +475,6 @@ class MySql extends \FluxAPI\Storage
                             }
 
                             $relation_table->addColumn($relation_field_name, $type, $config);
-                            $relation_primary[] = $relation_field_name;
                         }
 
                         if ($field->primary) {
@@ -465,7 +496,6 @@ class MySql extends \FluxAPI\Storage
                             }
 
                             $relation_table->addColumn($relation_field_name, $rel_field_type, $rel_field_config);
-                            //$relation_primary[] = $relation_field_name;
                         }
                     }
                 }
@@ -476,11 +506,6 @@ class MySql extends \FluxAPI\Storage
 
                 if (count($unique) > 0) {
                     $table->addUniqueIndex($unique);
-                }
-
-                // add primary keys to relation table
-                if (count($relation_primary)) {
-                    $relation_table->setPrimaryKey($relation_primary);
                 }
             }
         }

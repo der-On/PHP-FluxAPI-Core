@@ -22,6 +22,12 @@ class Node extends \FluxAPI\Model
             'type' => Field::TYPE_RELATION,
             'relationType' => Field::BELONGS_TO_ONE,
             'relationModel' => 'Node'
+        )))
+        ->addField(new Field(array(
+            'name' => 'children',
+            'type' => Field::TYPE_RELATION,
+            'relationType' => Field::HAS_MANY,
+            'relationModel' => 'Node'
         )));
     }
 }

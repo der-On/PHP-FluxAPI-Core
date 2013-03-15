@@ -107,7 +107,8 @@ abstract class Model
     public function __get($name)
     {
         if ($this->hasField($name) && $this->getField($name)->type == Field::TYPE_RELATION && empty($this->_data[$name])) {
-            return $this->_api->getStorage($this->getModelName())->loadRelation($this,$name);
+            $this->_data[$name] = $this->_api->getStorage($this->getModelName())->loadRelation($this,$name);
+            return $this->_data[$name];
         } else {
             return $this->_data[$name];
         }
