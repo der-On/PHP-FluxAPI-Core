@@ -77,67 +77,67 @@ abstract class Storage
         return call_user_func_array(array($this,$callback),$params);
     }
 
-    public function filterSelect()
+    public function filterSelect(&$qb, array $params)
     {
 
     }
 
-    public function filterEqual()
+    public function filterEqual(&$qb, array $params)
     {
 
     }
 
-    public function filterNotEqual()
+    public function filterNotEqual(&$qb, array $params)
     {
 
     }
 
-    public function filterGreaterThen()
+    public function filterGreaterThen(&$qb, array $params)
     {
 
     }
 
-    public function filterGreaterThenOrEqual()
+    public function filterGreaterThenOrEqual(&$qb, array $params)
     {
 
     }
 
-    public function filterLessThen()
+    public function filterLessThen(&$qb, array $params)
     {
 
     }
 
-    public function filterLessThenOrEqual()
+    public function filterLessThenOrEqual(&$qb, array $params)
     {
 
     }
 
-    public function filterRange()
+    public function filterRange(&$qb, array $params)
     {
 
     }
 
-    public function filterOrder()
+    public function filterOrder(&$qb, array $params)
     {
 
     }
 
-    public function filterLimit()
+    public function filterLimit(&$qb, array $params)
     {
 
     }
 
-    public function filterCount()
+    public function filterCount(&$qb, array $params)
     {
 
     }
 
-    public function filterLike()
+    public function filterLike(&$qb, array $params)
     {
 
     }
 
-    public function filterIn()
+    public function filterIn(&$qb, array $params)
     {
 
     }
@@ -226,12 +226,12 @@ abstract class Storage
         return NULL;
     }
 
-    public function addRelation(Model $model, Model $relation)
+    public function addRelation(\FluxAPI\Model $model, \FluxAPI\Model $relation, \FluxAPI\Field $field)
     {
 
     }
 
-    public function removeRelation(Model $model, Model $relation)
+    public function removeRelation(\FluxAPI\Model $model, \FluxAPI\Model $relation, \FluxAPI\Field $field)
     {
 
     }

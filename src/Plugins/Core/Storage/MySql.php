@@ -16,13 +16,13 @@ class MySql extends \FluxAPI\Storage
         $this->addFilter('join','filterJoin');
     }
 
-    public function filterSelect(QueryBuilder &$qb, array $params)
+    public function filterSelect(&$qb, array $params)
     {
         $qb->select($params);
         return $qb;
     }
 
-    public function filterEqual(QueryBuilder &$qb, array $params)
+    public function filterEqual(&$qb, array $params)
     {
         $type = (isset($params[2]))?$params[2]:'string';
 
@@ -30,37 +30,37 @@ class MySql extends \FluxAPI\Storage
         return $qb;
     }
 
-    public function filterNotEqual(QueryBuilder &$qb, array $params)
+    public function filterNotEqual(&$qb, array $params)
     {
         $qb->andWhere($qb->expr()->neq($params[0],$params[1]));
         return $qb;
     }
 
-    public function filterGreaterThen(QueryBuilder &$qb, array $params)
+    public function filterGreaterThen(&$qb, array $params)
     {
         $qb->andWhere($qb->expr()->gt($params[0],$params[1]));
         return $qb;
     }
 
-    public function filterGreaterThenOrEqual(QueryBuilder &$qb, array $params)
+    public function filterGreaterThenOrEqual(&$qb, array $params)
     {
         $qb->andWhere($qb->expr()->gte($params[0],$params[1]));
         return $qb;
     }
 
-    public function filterLessThen(QueryBuilder &$qb, array $params)
+    public function filterLessThen(&$qb, array $params)
     {
         $qb->andWhere($qb->expr()->lt($params[0],$params[1]));
         return $qb;
     }
 
-    public function filterLessThenOrEqual(QueryBuilder &$qb, array $params)
+    public function filterLessThenOrEqual(&$qb, array $params)
     {
         $qb->andWhere($qb->expr()->lte($params[0],$params[1]));
         return $qb;
     }
 
-    public function filterRange(QueryBuilder &$qb, array $params)
+    public function filterRange(&$qb, array $params)
     {
         $qb->andWhere($qb->expr()->andX(
             $qb->expr()->gte($params[0],$params[1]),
@@ -69,32 +69,32 @@ class MySql extends \FluxAPI\Storage
         return $qb;
     }
 
-    public function filterOrder(QueryBuilder &$qb, array $params)
+    public function filterOrder(&$qb, array $params)
     {
         $qb->orderBy($params[0],isset($params[1])?$params[1]:'ASC');
         return $qb;
     }
 
-    public function filterLimit(QueryBuilder &$qb, array $params)
+    public function filterLimit(&$qb, array $params)
     {
         $qb->setFirstResult(intval($params[0]));
         $qb->setMaxResults(intval($params[1]));
         return $qb;
     }
 
-    public function filterCount(QueryBuilder &$qb, array $params)
+    public function filterCount(&$qb, array $params)
     {
         $qb->select('COUNT('.$params[0].')');
         return $qb;
     }
 
-    public function filterLike(QueryBuilder &$qb, array $params)
+    public function filterLike(&$qb, array $params)
     {
         $qb->andWhere($qb->expr()->like($params[0],$params[1]));
         return $qb;
     }
 
-    public function filterIn(QueryBuilder &$qb, array $params)
+    public function filterIn(&$qb, array $params)
     {
         $values = $params[1];
 
@@ -116,7 +116,7 @@ class MySql extends \FluxAPI\Storage
         return $qb;
     }
 
-    public function filterJoin(QueryBuilder &$qb, array $params)
+    public function filterJoin(&$qb, array $params)
     {
         $_params = $params;
         array_shift($_params);
@@ -135,12 +135,12 @@ class MySql extends \FluxAPI\Storage
         }
     }
 
-    public function filterInnerJoin(QueryBuilder &$qb, array $params)
+    public function filterInnerJoin(&$qb, array $params)
     {
         return $qb;
     }
 
-    public function filterLeftJoin(QueryBuilder &$qb, array $params)
+    public function filterLeftJoin(&$qb, array $params)
     {
         $qb->leftJoin($params[0],$params[1], $params[1], $params[2]);
         return $qb;
@@ -272,7 +272,7 @@ class MySql extends \FluxAPI\Storage
         return $this->config['table_prefix'].strtolower($name).'_rel';
     }
 
-    public function executeQuery($query)
+    public function executeQuery(\FluxAPI\Query $query)
     {
         parent::executeQuery($query);
 

@@ -80,8 +80,9 @@ class ApiTest extends FluxApi_Database_TestCase
     {
         $this->migrate();
         $this->createNodes();
-        $this->addRelatedNode();
-        $this->removeRelationNode();
+        $this->addRelatedNodes();
+        $this->addNewRelatedNodes();
+        $this->removeRelatedNodes();
     }
 
     public function createSingleNode()
@@ -189,7 +190,7 @@ class ApiTest extends FluxApi_Database_TestCase
         $this->assertCount(0,$nodes);
     }
 
-    public function addRelatedNode()
+    public function addRelatedNodes()
     {
         $node = self::$fluxApi->loadNode('1');
         $parent_node = self::$fluxApi->loadNode('2');
@@ -215,5 +216,19 @@ class ApiTest extends FluxApi_Database_TestCase
         foreach($node->children as $child_node) {
             $this->assertContains($child_node->id,$ids);
         }
+    }
+
+    public function addNewRelatedNodes()
+    {
+        $node = self::$fluxApi->loadNode('1');
+
+
+    }
+
+    public function removeRelatedNodes()
+    {
+        $node = self::$fluxApi->loadNode('1');
+
+        $node->parent = NULL;
     }
 }
