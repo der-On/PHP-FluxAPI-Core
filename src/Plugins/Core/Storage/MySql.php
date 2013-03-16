@@ -170,6 +170,22 @@ class MySql extends \FluxAPI\Storage
         return $this->_api->app['db'];
     }
 
+    public function getLastId($model)
+    {
+        $connection = $this->getConnection();
+        $table_name = $this->getTableName($model);
+
+        $sql = 'SELECT LAST_INSERT_ID() FROM '.$table_name;
+
+        if ($this->config['debug_sql']) {
+            print("\nSQL: ".$sql."\n");
+        }
+
+        $result = $connection->query($sql)->fetch();
+
+        return $result['LAST_INSERT_ID()'];
+    }
+
     public function loadRelation(\FluxAPI\Model $model, $name)
     {
         if (!$model->hasField($name)) {

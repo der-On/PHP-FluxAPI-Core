@@ -142,6 +142,11 @@ abstract class Storage
 
     }
 
+    public function getLastId($model)
+    {
+        return NULL;
+    }
+
     public function count($model, Query $query = NULL)
     {
         if (empty($query)) {
@@ -171,6 +176,23 @@ abstract class Storage
 
     public function save($model, Model $instance)
     {
+        $query = new Query();
+        $query->setType(Query::TYPE_INSERT);
+
+        if ($this->exists($model, $instance)) {
+            $query->setType(Query::TYPE_UPDATE);
+        }
+
+        $query->setModel($model);
+        $query->setData($instance->toArray());
+
+        $success = $this->executeQuery($query);
+
+        // if the model was new we have to set it's ID
+        if ($instance->isNew()) {
+            $instance->id = $this->getLastId($model);
+        }
+
         // save relations
 
         $relation_fields = $instance->getRelationFields(); // collect all field representing a relation to another model
@@ -199,16 +221,7 @@ abstract class Storage
             }
         }
 
-        $query = new Query();
-        $query->setType(Query::TYPE_INSERT);
-
-        if ($this->exists($model, $instance)) {
-            $query->setType(Query::TYPE_UPDATE);
-        }
-
-        $query->setModel($model);
-        $query->setData($instance->toArray());
-        return $this->executeQuery($query);
+        return $success;
     }
 
     public function load($model, Query $query = NULL)

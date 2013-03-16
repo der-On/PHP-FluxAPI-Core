@@ -220,9 +220,29 @@ class ApiTest extends FluxApi_Database_TestCase
 
     public function addNewRelatedNodes()
     {
-        $node = self::$fluxApi->loadNode('1');
+        $node = self::$fluxApi->createNode(array('title'=>'new Node'));
 
+        $node->parent = self::$fluxApi->createNode(array('title'=>'new parent Node'));
 
+        $node->children = array(
+            self::$fluxApi->createNode(array('title'=>'new child Node 1')),
+            self::$fluxApi->createNode(array('title'=>'new child Node 2')),
+        );
+
+        self::$fluxApi->saveNode($node);
+
+        // reload the node
+        $query = new \FluxAPI\Query();
+        $query->filter('equal',array('title','new Node'));
+        $node = self::$fluxApi->loadNode($query);
+
+        $this->assertNotEmpty($node->parent);
+        $this->assertEquals($node->parent->title,'new parent Node');
+
+        $this->assertNotEmpty($node->children);
+        $this->assertCount(2,$node->children);
+        $this->assertEquals($node->children[0]->title,'new child Node 1');
+        $this->assertEquals($node->children[1]->title,'new child Node 2');
     }
 
     public function removeRelatedNodes()
