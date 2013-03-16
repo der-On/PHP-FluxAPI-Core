@@ -5,6 +5,8 @@ abstract class Model
 {
     private $_data = array();
 
+    private $_loaded_relations = array();
+
     private $_fields = array();
     private $_modified = false;
 
@@ -106,11 +108,20 @@ abstract class Model
 
     public function __get($name)
     {
-        if ($this->hasField($name) && $this->getField($name)->type == Field::TYPE_RELATION && empty($this->_data[$name])) {
-            $this->_data[$name] = $this->_api->getStorage($this->getModelName())->loadRelation($this,$name);
-            return $this->_data[$name];
+        // lazy loading of relations
+        if ($this->hasField($name) && $this->getField($name)->type == Field::TYPE_RELATION) {
+
+            // relation has already been loaded so return it
+            if (in_array($name, $this->_loaded_relations)) {
+                return isset($this->_data[$name]) ? $this->_data[$name] : NULL;
+            } else { // relations needs to be loaded
+                $this->_data[$name] = $this->_api->getStorage($this->getModelName())->loadRelation($this,$name);
+                $this->_loaded_relations[] = $name;
+
+                return isset($this->_data[$name]) ? $this->_data[$name] : NULL;
+            }
         } else {
-            return $this->_data[$name];
+            return isset($this->_data[$name]) ? $this->_data[$name] : NULL;
         }
     }
 
@@ -119,8 +130,12 @@ abstract class Model
         if ($this->_data[$name] != $value) {
             $this->_modified = TRUE;
         }
+
         $this->_data[$name] = $value;
 
+        if ($this->hasField($name) && $this->getField($name)->type == Field::TYPE_RELATION && !in_array($name,$this->_loaded_relations)) {
+            $this->_loaded_relations[] = $name;
+        }
     }
 
     public function __isset($name)

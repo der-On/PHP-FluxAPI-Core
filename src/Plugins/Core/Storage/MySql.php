@@ -268,6 +268,27 @@ class MySql extends \FluxAPI\Storage
         $connection->query($sql);
     }
 
+    public function removeAllRelations(\FluxAPI\Model $model, \FluxAPI\Field $field, array $exclude_ids = array())
+    {
+        $rel_table = $this->getRelationTableNameFromModelClass($model->getClassName()); // get the table name of the relations table
+        $model_field_name = $this->getCollectionName($model).'_id';
+        $rel_field_name = $field->name.'_id';
+
+        $connection = $this->getConnection();
+
+        $sql = 'DELETE FROM '.$rel_table.' WHERE '.$model_field_name.'='.$model->id.' AND '.$rel_field_name.'!=""';
+
+        if (count($exclude_ids) > 0) {
+            $sql .= ' AND '.$rel_field_name.' NOT IN ('.implode(',',$exclude_ids).')';
+        }
+
+        if ($this->config['debug_sql']) {
+            print("\nSQL: ".$sql."\n");
+        }
+
+        $connection->query($sql);
+    }
+
     public function getTableName($name)
     {
         return $this->config['table_prefix'].strtolower($name);

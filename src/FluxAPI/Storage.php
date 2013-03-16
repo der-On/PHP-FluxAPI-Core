@@ -199,12 +199,13 @@ abstract class Storage
 
         foreach($relation_fields as $relation_field) {
             $relation_instances = array();
+            $added_relation_ids = array();
 
             $field_name = $relation_field->name;
 
             if (isset($instance->$field_name)) { // check if the instance has one or multiple related models
 
-                if (in_array($relation_field->relationType,array(Field::BELONGS_TO_ONE,Field::HAS_ONE))) {
+                if (in_array($relation_field->relationType, array(Field::BELONGS_TO_ONE,Field::HAS_ONE))) {
                     $relation_instances[] = $instance->$field_name;
                 } else {
                     $relation_instances = $instance->$field_name;
@@ -212,13 +213,20 @@ abstract class Storage
             }
 
             // after all related models have been collected we need to store the relation
-            foreach($relation_instances as $relation_instance) {
-                if ($relation_instance->isNew() || $relation_instance->isModified()) { // if the related model instance is new, it needs to be saved first
-                    $this->save($relation_instance->getModelName(),$relation_instance);
-                }
+            foreach($relation_instances as $i => $relation_instance) {
+                if (!empty($relation_instance)) {
+                    if ($relation_instance->isNew() || $relation_instance->isModified()) { // if the related model instance is new, it needs to be saved first
+                        $this->save($relation_instance->getModelName(),$relation_instance);
+                    }
 
-                $this->addRelation($instance, $relation_instance, $relation_field); // now we can store the relation to this model
+                    $added_relation_ids[] = $relation_instance->id;
+
+                    $this->addRelation($instance, $relation_instance, $relation_field); // now we can store the relation to this model
+                }
             }
+
+            // remove relations that have been there before and have not been added now
+            $this->removeAllRelations($instance,$relation_field,$added_relation_ids);
         }
 
         return $success;
@@ -245,6 +253,11 @@ abstract class Storage
     }
 
     public function removeRelation(\FluxAPI\Model $model, \FluxAPI\Model $relation, \FluxAPI\Field $field)
+    {
+
+    }
+
+    public function removeAllRelations(\FluxAPI\Model $model, \FluxAPI\Field $field, array $exclude_ids = array())
     {
 
     }

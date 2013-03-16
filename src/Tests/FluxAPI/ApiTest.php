@@ -201,6 +201,7 @@ class ApiTest extends FluxApi_Database_TestCase
 
         $node->parent = $parent_node;
         $node->children = $child_nodes;
+
         self::$fluxApi->saveNode($node);
 
         $node = self::$fluxApi->loadNode('1');
@@ -249,6 +250,20 @@ class ApiTest extends FluxApi_Database_TestCase
     {
         $node = self::$fluxApi->loadNode('1');
 
-        $node->parent = NULL;
+        $this->assertNotEmpty($node->parent);
+
+        $this->assertNotEmpty($node->children);
+        $this->assertCount(8,$node->children);
+
+        unset($node->parent);
+
+        $node->children = array();
+
+        self::$fluxApi->saveNode($node);
+
+        $node = self::$fluxApi->loadNode('1');
+
+        $this->assertEmpty($node->parent);
+        $this->assertEmpty($node->children);
     }
 }
