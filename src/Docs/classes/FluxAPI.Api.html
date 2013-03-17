@@ -1,0 +1,620 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>PHP-FluxAPI » \FluxAPI\Api</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">PHP-FluxAPI</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Namespaces</a></li>
+<li><a href="../namespaces/FluxAPI.html"><i class="icon-th"></i> FluxAPI</a></li>
+<li><a href="../namespaces/Plugins.html"><i class="icon-th"></i> Plugins</a></li>
+<li><a>Packages</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+<li><a href="../packages/FluxAPI.html"><i class="icon-folder-open"></i> FluxAPI</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">100</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method___call" title="__call :: Calls the magic methods"><span class="description">Calls the magic methods</span><pre>__call()</pre></a></li>
+<li class="method public "><a href="#method___construct" title="__construct :: Constructor"><span class="description">Constructor</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#method_createModel" title="createModel :: Creates a new instance of a model"><span class="description">Creates a new instance of a model</span><pre>createModel()</pre></a></li>
+<li class="method public "><a href="#method_create_Model_" title="create_Model_ :: Creates and returns a new instance of _Model_. If $data is given the model will contain that initial data."><span class="description">Creates and returns a new instance of _Model_. If $data is given the model will contain that initial data.</span><pre>create_Model_()</pre></a></li>
+<li class="method public "><a href="#method_deleteModels" title="deleteModels :: Deletes models by a query"><span class="description">Deletes models by a query</span><pre>deleteModels()</pre></a></li>
+<li class="method public "><a href="#method_delete_Model_" title="delete_Model_ :: Deletes a single _Model_ by id or by a given query"><span class="description">Deletes a single _Model_ by id or by a given query</span><pre>delete_Model_()</pre></a></li>
+<li class="method public "><a href="#method_delete_Model_s" title="delete_Model_s :: Deletes a list of _Model_s by a given query"><span class="description">Deletes a list of _Model_s by a given query</span><pre>delete_Model_s()</pre></a></li>
+<li class="method public "><a href="#method_getInstance" title="getInstance :: Returns the singleton of the Api"><span class="description">Returns the singleton of the Api</span><pre>getInstance()</pre></a></li>
+<li class="method public "><a href="#method_getPluginClass" title="getPluginClass :: Returns fully class name of a plugin by a given type and name"><span class="description">Returns fully class name of a plugin by a given type and name</span><pre>getPluginClass()</pre></a></li>
+<li class="method public "><a href="#method_getPlugins" title="getPlugins :: Returns all registered plugins (of a given type)"><span class="description">Returns all registered plugins (of a given type)</span><pre>getPlugins()</pre></a></li>
+<li class="method public "><a href="#method_getStorage" title="getStorage :: Returns an instance of the storage for a given model"><span class="description">Returns an instance of the storage for a given model</span><pre>getStorage()</pre></a></li>
+<li class="method public "><a href="#method_loadModels" title="loadModels :: Loads and returns a list of Model instances"><span class="description">Loads and returns a list of Model instances</span><pre>loadModels()</pre></a></li>
+<li class="method public "><a href="#method_load_Model_" title="load_Model_ :: Loads a _Model_ by id or with a given query. If $format is given the model will be returned in the given format."><span class="description">Loads a _Model_ by id or with a given query. If $format is given the model will be returned in the given format.</span><pre>load_Model_()</pre></a></li>
+<li class="method public "><a href="#method_load_Model_s" title="load_Model_s :: Loads a list of _Model_s with a given query. If $format is given the models will be returned in the given format."><span class="description">Loads a list of _Model_s with a given query. If $format is given the models will be returned in the given format.</span><pre>load_Model_s()</pre></a></li>
+<li class="method public "><a href="#method_migrate" title="migrate :: Migrates the storage dabase(s) (for a given model)"><span class="description">Migrates the storage dabase(s) (for a given model)</span><pre>migrate()</pre></a></li>
+<li class="method public "><a href="#method_registerMethod" title="registerMethod :: Registers a magic method"><span class="description">Registers a magic method</span><pre>registerMethod()</pre></a></li>
+<li class="method public "><a href="#method_registerModelMethods" title="registerModelMethods :: Registers all magic methods for all registered models"><span class="description">Registers all magic methods for all registered models</span><pre>registerModelMethods()</pre></a></li>
+<li class="method public "><a href="#method_registerPluginMethods" title="registerPluginMethods :: Registers all magic methods of all registered plugins"><span class="description">Registers all magic methods of all registered plugins</span><pre>registerPluginMethods()</pre></a></li>
+<li class="method public "><a href="#method_registerPlugins" title="registerPlugins :: Registers all available plugins found within the Plugins/ directory"><span class="description">Registers all available plugins found within the Plugins/ directory</span><pre>registerPlugins()</pre></a></li>
+<li class="method public "><a href="#method_saveModel" title="saveModel :: Saves a list of or a single model instance"><span class="description">Saves a list of or a single model instance</span><pre>saveModel()</pre></a></li>
+<li class="method public "><a href="#method_save_Model_" title="save_Model_ :: Saves a _Model_"><span class="description">Saves a _Model_</span><pre>save_Model_()</pre></a></li>
+<li class="method public "><a href="#method_updateModels" title="updateModels :: Updates models with certain data"><span class="description">Updates models with certain data</span><pre>updateModels()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties
+                    <ul>
+<li class="property public "><a href="#property_app" title="$app :: "><span class="description">The silex app</span><pre>$app</pre></a></li>
+<li class="property public "><a href="#property_config" title="$config :: "><span class="description">FluxAPI configuration</span><pre>$config</pre></a></li>
+</ul>
+</li>
+<li class="nav-header private">» Private
+                    <ul>
+<li class="property private "><a href="#property__base_plugins" title="$_base_plugins :: "><span class="description">Internal lookup for base plugins</span><pre>$_base_plugins</pre></a></li>
+<li class="property private "><a href="#property__methods" title="$_methods :: "><span class="description">Internal lookup for magic methods</span><pre>$_methods</pre></a></li>
+<li class="property private "><a href="#property__plugins" title="$_plugins :: "><span class="description">Internal lookup for plugins</span><pre>$_plugins</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-constant"></i> Constants
+                    <ul>
+<li class="constant  "><a href="#constant_DATA_FORMAT_ARRAY" title="DATA_FORMAT_ARRAY :: "><span class="description">DATA_FORMAT_ARRAY</span><pre>DATA_FORMAT_ARRAY</pre></a></li>
+<li class="constant  "><a href="#constant_DATA_FORMAT_JSON" title="DATA_FORMAT_JSON :: "><span class="description">DATA_FORMAT_JSON</span><pre>DATA_FORMAT_JSON</pre></a></li>
+<li class="constant  "><a href="#constant_DATA_FORMAT_XML" title="DATA_FORMAT_XML :: "><span class="description">DATA_FORMAT_XML</span><pre>DATA_FORMAT_XML</pre></a></li>
+<li class="constant  "><a href="#constant_DATA_FORMAT_YAML" title="DATA_FORMAT_YAML :: "><span class="description">DATA_FORMAT_YAML</span><pre>DATA_FORMAT_YAML</pre></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="span8">
+<a id="\FluxAPI\Api"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/FluxAPI.html">FluxAPI</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/FluxAPI.Api.html">Api</a>
+</li>
+</ul>
+<div class="element class">
+<p class="short_description">This is the entry point for all API calls.</p>
+<div class="details">
+<div class="long_description"><p>It contains magic methods to operate on all ressources and controllers.</p></div>
+<table class="table table-bordered"><tr>
+<th>package</th>
+<td><a href="../packages/FluxAPI.html">FluxAPI</a></td>
+</tr></table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a id="method___call"></a><div class="element clickable method public method___call" data-toggle="collapse" data-target=".method___call .collapse">
+<h2>Calls the magic methods</h2>
+<pre>__call($method, array $arguments) : mixed | null</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$method</h4></div>
+<div class="subelement argument">
+<h4>$arguments</h4>
+<code>array</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>mixed</code><code>null</code>
+</div>
+</div></div>
+</div>
+<a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
+<h2>Constructor</h2>
+<pre>__construct(\Silex\Application $app, array $config) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$app</h4>
+<code>\Silex\Application</code>
+</div>
+<div class="subelement argument">
+<h4>$config</h4>
+<code>array</code>
+</div>
+</div></div>
+</div>
+<a id="method_createModel"></a><div class="element clickable method public method_createModel" data-toggle="collapse" data-target=".method_createModel .collapse">
+<h2>Creates a new instance of a model</h2>
+<pre>createModel(string $model, array $data, $format) : null | <a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$model</h4>
+<code>string</code>
+</div>
+<div class="subelement argument"><h4>$data</h4></div>
+<div class="subelement argument"><h4>$format</h4></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>null</code><code><a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></code>
+</div>
+</div></div>
+</div>
+<a id="method_create_Model_"></a><div class="element clickable method public method_create_Model_" data-toggle="collapse" data-target=".method_create_Model_ .collapse">
+<h2>Creates and returns a new instance of _Model_. If $data is given the model will contain that initial data.</h2>
+<pre>create_Model_([array $data]) : <a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>magic</th>
+<td></td>
+</tr>
+<tr>
+<th>method</th>
+<td>Creates and returns a new instance of _Model_. If $data is given the model will contain that initial data.</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$data]</h4>
+<code>[array</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code><a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></code></div>
+</div></div>
+</div>
+<a id="method_deleteModels"></a><div class="element clickable method public method_deleteModels" data-toggle="collapse" data-target=".method_deleteModels .collapse">
+<h2>Deletes models by a query</h2>
+<pre>deleteModels(string $model, \FluxAPI\Query $query) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$model</h4>
+<code>string</code>
+</div>
+<div class="subelement argument"><h4>$query</h4></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a id="method_delete_Model_"></a><div class="element clickable method public method_delete_Model_" data-toggle="collapse" data-target=".method_delete_Model_ .collapse">
+<h2>Deletes a single _Model_ by id or by a given query</h2>
+<pre>delete_Model_(string|Query $query) : <a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>magic</th>
+<td></td>
+</tr>
+<tr>
+<th>method</th>
+<td>Deletes a single _Model_ by id or by a given query</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$query</h4>
+<code>string</code><code>Query</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code><a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></code></div>
+</div></div>
+</div>
+<a id="method_delete_Model_s"></a><div class="element clickable method public method_delete_Model_s" data-toggle="collapse" data-target=".method_delete_Model_s .collapse">
+<h2>Deletes a list of _Model_s by a given query</h2>
+<pre>delete_Model_s([Query $query]) : <a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>magic</th>
+<td></td>
+</tr>
+<tr>
+<th>method</th>
+<td>Deletes a list of _Model_s by a given query</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$query]</h4>
+<code>[Query</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code><a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></code></div>
+</div></div>
+</div>
+<a id="method_getInstance"></a><div class="element clickable method public method_getInstance" data-toggle="collapse" data-target=".method_getInstance .collapse">
+<h2>Returns the singleton of the Api</h2>
+<pre>getInstance(\Silex\Application $app, array $config) : mixed</pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>If no Api instance exists yet it will create one and return it.</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$app</h4>
+<code>\Silex\Application</code>
+</div>
+<div class="subelement argument">
+<h4>$config</h4>
+<code>array</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>mixed</code></div>
+</div></div>
+</div>
+<a id="method_getPluginClass"></a><div class="element clickable method public method_getPluginClass" data-toggle="collapse" data-target=".method_getPluginClass .collapse">
+<h2>Returns fully class name of a plugin by a given type and name</h2>
+<pre>getPluginClass(string $type, string $name) : null | array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$type</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>null</code><code>array</code>
+</div>
+</div></div>
+</div>
+<a id="method_getPlugins"></a><div class="element clickable method public method_getPlugins" data-toggle="collapse" data-target=".method_getPlugins .collapse">
+<h2>Returns all registered plugins (of a given type)</h2>
+<pre>getPlugins(string $type) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$type</h4>
+<code>string</code><p>if set, only plugins of that type will be returned</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a id="method_getStorage"></a><div class="element clickable method public method_getStorage" data-toggle="collapse" data-target=".method_getStorage .collapse">
+<h2>Returns an instance of the storage for a given model</h2>
+<pre>getStorage($model) : <a href="../classes/FluxAPI.Storage.html">\FluxAPI\Storage</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$model</h4></div>
+<h3>Returns</h3>
+<div class="subelement response"><code><a href="../classes/FluxAPI.Storage.html">\FluxAPI\Storage</a></code></div>
+</div></div>
+</div>
+<a id="method_loadModels"></a><div class="element clickable method public method_loadModels" data-toggle="collapse" data-target=".method_loadModels .collapse">
+<h2>Loads and returns a list of Model instances</h2>
+<pre>loadModels(string $model, \FluxAPI\Query $query) : array | null</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$model</h4>
+<code>string</code>
+</div>
+<div class="subelement argument"><h4>$query</h4></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code><code>null</code>
+</div>
+</div></div>
+</div>
+<a id="method_load_Model_"></a><div class="element clickable method public method_load_Model_" data-toggle="collapse" data-target=".method_load_Model_ .collapse">
+<h2>Loads a _Model_ by id or with a given query. If $format is given the model will be returned in the given format.</h2>
+<pre>load_Model_(string|Query $query, [string $format]) : <a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>magic</th>
+<td></td>
+</tr>
+<tr>
+<th>method</th>
+<td>Loads a _Model_ by id or with a given query. If $format is given the model will be returned in the given format.</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$query</h4>
+<code>string</code><code>Query</code>
+</div>
+<div class="subelement argument">
+<h4>$format]</h4>
+<code>[string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code><a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></code></div>
+</div></div>
+</div>
+<a id="method_load_Model_s"></a><div class="element clickable method public method_load_Model_s" data-toggle="collapse" data-target=".method_load_Model_s .collapse">
+<h2>Loads a list of _Model_s with a given query. If $format is given the models will be returned in the given format.</h2>
+<pre>load_Model_s([Query $query], [string $format]) : <a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>magic</th>
+<td></td>
+</tr>
+<tr>
+<th>method</th>
+<td>Loads a list of _Model_s with a given query. If $format is given the models will be returned in the given format.</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$query]</h4>
+<code>[Query</code>
+</div>
+<div class="subelement argument">
+<h4>$format]</h4>
+<code>[string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code><a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></code></div>
+</div></div>
+</div>
+<a id="method_migrate"></a><div class="element clickable method public method_migrate" data-toggle="collapse" data-target=".method_migrate .collapse">
+<h2>Migrates the storage dabase(s) (for a given model)</h2>
+<pre>migrate($model) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$model</h4></div>
+</div></div>
+</div>
+<a id="method_registerMethod"></a><div class="element clickable method public method_registerMethod" data-toggle="collapse" data-target=".method_registerMethod .collapse">
+<h2>Registers a magic method</h2>
+<pre>registerMethod(string $method, \FluxAPI\function $callback) : <a href="../classes/FluxAPI.Api.html">\FluxAPI\Api</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$method</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$callback</h4>
+<code>\FluxAPI\function</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/FluxAPI.Api.html">\FluxAPI\Api</a></code>$this</div>
+</div></div>
+</div>
+<a id="method_registerModelMethods"></a><div class="element clickable method public method_registerModelMethods" data-toggle="collapse" data-target=".method_registerModelMethods .collapse">
+<h2>Registers all magic methods for all registered models</h2>
+<pre>registerModelMethods(string $model) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$model</h4>
+<code>string</code>
+</div>
+</div></div>
+</div>
+<a id="method_registerPluginMethods"></a><div class="element clickable method public method_registerPluginMethods" data-toggle="collapse" data-target=".method_registerPluginMethods .collapse">
+<h2>Registers all magic methods of all registered plugins</h2>
+<pre>registerPluginMethods(string $type, string $name) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$type</h4>
+<code>string</code><p>the plugin type</p></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code><p>the plugin name</p></div>
+</div></div>
+</div>
+<a id="method_registerPlugins"></a><div class="element clickable method public method_registerPlugins" data-toggle="collapse" data-target=".method_registerPlugins .collapse">
+<h2>Registers all available plugins found within the Plugins/ directory</h2>
+<pre>registerPlugins() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_saveModel"></a><div class="element clickable method public method_saveModel" data-toggle="collapse" data-target=".method_saveModel .collapse">
+<h2>Saves a list of or a single model instance</h2>
+<pre>saveModel(string $model, array | <a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a> $instances) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$model</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$instances</h4>
+<code>array</code><code><a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a id="method_save_Model_"></a><div class="element clickable method public method_save_Model_" data-toggle="collapse" data-target=".method_save_Model_ .collapse">
+<h2>Saves a _Model_</h2>
+<pre>save_Model_(Model $model) : <a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered">
+<tr>
+<th>magic</th>
+<td></td>
+</tr>
+<tr>
+<th>method</th>
+<td>Saves a _Model_</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$model</h4>
+<code>Model</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code><a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></code></div>
+</div></div>
+</div>
+<a id="method_updateModels"></a><div class="element clickable method public method_updateModels" data-toggle="collapse" data-target=".method_updateModels .collapse">
+<h2>Updates models with certain data</h2>
+<pre>updateModels(string $model, \FluxAPI\Query $query, array $data) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$model</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$query</h4>
+<code><a href="../classes/FluxAPI.Query.html">\FluxAPI\Query</a></code>
+</div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_app"> </a><div class="element clickable property public property_app" data-toggle="collapse" data-target=".property_app .collapse">
+<h2>The silex app</h2>
+<pre>$app : \Silex\Application</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property_config"> </a><div class="element clickable property public property_config" data-toggle="collapse" data-target=".property_config .collapse">
+<h2>FluxAPI configuration</h2>
+<pre>$config : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property__base_plugins"> </a><div class="element clickable property private property__base_plugins" data-toggle="collapse" data-target=".property__base_plugins .collapse">
+<h2>Internal lookup for base plugins</h2>
+<pre>$_base_plugins : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property__methods"> </a><div class="element clickable property private property__methods" data-toggle="collapse" data-target=".property__methods .collapse">
+<h2>Internal lookup for magic methods</h2>
+<pre>$_methods : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property__plugins"> </a><div class="element clickable property private property__plugins" data-toggle="collapse" data-target=".property__plugins .collapse">
+<h2>Internal lookup for plugins</h2>
+<pre>$_plugins : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<h3>
+<i class="icon-custom icon-constant"></i> Constants</h3>
+<a id="constant_DATA_FORMAT_ARRAY"> </a><div class="element clickable constant  constant_DATA_FORMAT_ARRAY" data-toggle="collapse" data-target=".constant_DATA_FORMAT_ARRAY .collapse">
+<h2>DATA_FORMAT_ARRAY</h2>
+<pre>DATA_FORMAT_ARRAY </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_DATA_FORMAT_JSON"> </a><div class="element clickable constant  constant_DATA_FORMAT_JSON" data-toggle="collapse" data-target=".constant_DATA_FORMAT_JSON .collapse">
+<h2>DATA_FORMAT_JSON</h2>
+<pre>DATA_FORMAT_JSON </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_DATA_FORMAT_XML"> </a><div class="element clickable constant  constant_DATA_FORMAT_XML" data-toggle="collapse" data-target=".constant_DATA_FORMAT_XML .collapse">
+<h2>DATA_FORMAT_XML</h2>
+<pre>DATA_FORMAT_XML </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="constant_DATA_FORMAT_YAML"> </a><div class="element clickable constant  constant_DATA_FORMAT_YAML" data-toggle="collapse" data-target=".constant_DATA_FORMAT_YAML .collapse">
+<h2>DATA_FORMAT_YAML</h2>
+<pre>DATA_FORMAT_YAML </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
+            generated on 2013-03-17T21:45:51+01:00.<br></footer></div>
+</div>
+</body>
+</html>

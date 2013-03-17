@@ -23,3 +23,6 @@ src/Plugins/*
 
 # Test reports
 src/Tests/reports/
+
+# PHPDoc config
+phpdoc.dist.xml

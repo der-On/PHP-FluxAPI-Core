@@ -1,17 +1,45 @@
 <?php
 namespace FluxAPI;
 
+/**
+ * A Model definition plugin
+ *
+ * All your model plugins must inherit form this class.
+ *
+ * @package FluxAPI
+ */
 abstract class Model
 {
+    /**
+     * @var array Internal data
+     */
     private $_data = array();
 
+    /**
+     * @var array Internal lookup of already (lazy) loaded relation fields
+     */
     private $_loaded_relations = array();
 
+    /**
+     * @var array Internal list of field definitions
+     */
     private $_fields = array();
+
+    /**
+     * @var bool Internal flag that's true if the model instance was modified since it was loaded
+     */
     private $_modified = false;
 
+    /**
+     * @var Api Api instance
+     */
     protected $_api;
 
+    /**
+     * Constructor
+     *
+     * @param [array $data] if set the model will contain that initial data
+     */
     public function  __construct($data = array())
     {
         $this->_api = \FluxApi\Api::getInstance();
@@ -21,6 +49,13 @@ abstract class Model
         $this->populate($data);
     }
 
+    /**
+     * Adds a new field definition to the model
+     *
+     * @chainable
+     * @param Field $field
+     * @return Model $this
+     */
     public function addField(Field $field)
     {
         $this->_fields[$field->name] = $field;
@@ -28,6 +63,12 @@ abstract class Model
         return $this; // make it chainable
     }
 
+    /**
+     * Returns a field definition by it's name
+     *
+     * @param string $name
+     * @return null|Field
+     */
     public function getField($name)
     {
         if ($this->hasField($name)) {
@@ -37,11 +78,21 @@ abstract class Model
         }
     }
 
+    /**
+     * Returns all field definitions of this model
+     *
+     * @return array
+     */
     public function getFields()
     {
         return $this->_fields;
     }
 
+    /**
+     * Returns all relation fields of this model
+     *
+     * @return array
+     */
     public function getRelationFields()
     {
         $fields = array();
@@ -54,11 +105,20 @@ abstract class Model
         return $fields;
     }
 
+    /**
+     * Checks if a field exists in the model
+     *
+     * @param string $name
+     * @return bool true if field exists, else false
+     */
     public function hasField($name)
     {
         return isset($this->_fields[$name]);
     }
 
+    /**
+     * Defines field definitions of this model. Extend this method in child classes while calling parent::defineFields()
+     */
     public function defineFields()
     {
         $this->addField(new Field(array(
@@ -70,6 +130,9 @@ abstract class Model
         )));
     }
 
+    /**
+     * Internal method to set default field values. Called automatically in the constructor.
+     */
     private function _setDefaults()
     {
         foreach($this->_fields as $name => $field) {
@@ -77,6 +140,11 @@ abstract class Model
         }
     }
 
+    /**
+     * Populates the model instance with the given data.
+     *
+     * @param [array $data]
+     */
     public function populate(Array $data = array())
     {
         foreach($data as $name =>  $value)
@@ -85,27 +153,51 @@ abstract class Model
         }
     }
 
+    /**
+     * Returns the full class name of the model
+     *
+     * @return string
+     */
     public static function getClassName()
     {
         return get_called_class();
     }
 
+    /**
+     * Returns the model name which is basically the last part of the full class name.
+     *
+     * @return string
+     */
     public static function getModelName()
     {
         $parts = explode('\\',self::getClassName());
         return $parts[count($parts)-1];
     }
 
+    /**
+     * Checks if the model instance is new or already existing in the storage
+     * @return bool true if the model instance is new, else false
+     */
     public function isNew()
     {
         return (empty($this->id));
     }
 
+    /**
+     * Checks if the model instance was modified since it was loaded
+     * @return bool
+     */
     public function isModified()
     {
         return $this->_modified;
     }
 
+    /**
+     * Returns a magic property (a fields value)
+     *
+     * @param string $name
+     * @return null|mixed
+     */
     public function __get($name)
     {
         // lazy loading of relations
@@ -125,6 +217,12 @@ abstract class Model
         }
     }
 
+    /**
+     * Sets a magic property (a fields value)
+     *
+     * @param string $name
+     * @param mixed $value
+     */
     public function __set($name,$value)
     {
         if ($this->_data[$name] != $value) {
@@ -138,21 +236,41 @@ abstract class Model
         }
     }
 
+    /**
+     * Checks if a magic property (a fields value) isset
+     *
+     * @param string $name
+     * @return bool
+     */
     public function __isset($name)
     {
         return isset($this->_data[$name]);
     }
 
+    /**
+     * Unsets a magic property (a fields value)
+     * @param string $name
+     */
     public function __unset($name)
     {
         unset($this->_data[$name]);
     }
 
+    /**
+     * Magic method to return a string represantation of the model
+     *
+     * @return string
+     */
     public function __toString()
     {
         return $this->toString();
     }
 
+    /**
+     * Returns an array represantation of the model
+     *
+     * @return array
+     */
     public function toArray()
     {
         $array = array();
@@ -164,17 +282,32 @@ abstract class Model
         return $array;
     }
 
+    /**
+     * Returns a string represantation of the model
+     *
+     * @return string
+     */
     public function toString()
     {
         return json_encode($this->toArray(),4);
     }
 
+    /**
+     * Returns a JSON string represantation of the model
+     *
+     * @return string
+     */
     public function toJson()
     {
         $array = $this->toArray();
         return $this->_api->app['serializer']->serialize($array,'json');
     }
 
+    /**
+     * Returns a XML string represantation of the model
+     *
+     * @return string
+     */
     public function toXml()
     {
         $array = $this->toArray();
@@ -182,6 +315,11 @@ abstract class Model
         return $this->_api->app['serializer']->serialize($array,'xml');
     }
 
+    /**
+     * Returns a YAML string represantation of the model
+     *
+     * @return string
+     */
     public function toYaml()
     {
         $array = $this->toArray();
@@ -191,12 +329,24 @@ abstract class Model
         return $dumper->dump($array,2);
     }
 
+    /**
+     * Returns a new instance with data from an array
+     *
+     * @param [array $data]
+     * @return Model
+     */
     public static function fromArray(array $data = array())
     {
         $className = self::getClassName();
         return new $className($data);
     }
 
+    /**
+     * Returns a new instance with data form an object
+     *
+     * @param object $object
+     * @return Model
+     */
     public static function fromObject($object)
     {
         $data = array();
@@ -209,6 +359,12 @@ abstract class Model
         return self::fromArray($data);
     }
 
+    /**
+     * Returns a new instance with data from a JSON string
+     *
+     * @param string $json
+     * @return Model|null
+     */
     public static function fromJson($json)
     {
         $data = array();
@@ -224,6 +380,12 @@ abstract class Model
         return NULL;
     }
 
+    /**
+     * Returns a new instance with data from a XML string
+     *
+     * @param string $xml
+     * @return Model|null
+     */
     public static function fromXml($xml)
     {
         $data = array();
@@ -240,6 +402,12 @@ abstract class Model
         return NULL;
     }
 
+    /**
+     * Returns a new instance with data from a YAML string
+     *
+     * @param string $yaml
+     * @return Model|null
+     */
     public static function fromYaml($yaml)
     {
         $data = array();

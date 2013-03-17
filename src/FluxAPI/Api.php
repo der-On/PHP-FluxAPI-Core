@@ -1,6 +1,17 @@
 <?php
 namespace FluxAPI;
 
+/**
+ * This is the entry point for all API calls. It contains magic methods to operate on all ressources and controllers.
+ * @package FluxAPI
+ *
+ * @method Model create_Model_([array $data]) Creates and returns a new instance of _Model_. If $data is given the model will contain that initial data.
+ * @method Model load_Model_(string|Query $query, [string $format]) Loads a _Model_ by id or with a given query. If $format is given the model will be returned in the given format.
+ * @method Model load_Model_s([Query $query], [string $format]) Loads a list of _Model_s with a given query. If $format is given the models will be returned in the given format.
+ * @method Model save_Model_(Model $model) Saves a _Model_
+ * @method Model delete_Model_(string|Query $query) Deletes a single _Model_ by id or by a given query
+ * @method Model delete_Model_s([Query $query]) Deletes a list of _Model_s by a given query
+ */
 class Api
 {
     const DATA_FORMAT_ARRAY = 'array';
@@ -8,6 +19,9 @@ class Api
     const DATA_FORMAT_XML = 'xml';
     const DATA_FORMAT_YAML = 'yaml';
 
+    /**
+     * @var array Internal lookup for plugins
+     */
     private $_plugins = array(
         'Model' => array(),
         'Controller' => array(),
@@ -15,14 +29,33 @@ class Api
         'Cache' => array(),
         'Permission' => array(),
     );
+
+    /**
+     * @var array Internal lookup for base plugins
+     */
     private $_base_plugins = array();
 
+    /**
+     * @var array Internal lookup for magic methods
+     */
     private $_methods = array();
 
+    /**
+     * @var \Silex\Application The silex app
+     */
     public $app = NULL;
 
+    /**
+     * @var array FluxAPI configuration
+     */
     public $config = array();
 
+    /**
+     * Constructor
+     *
+     * @param \Silex\Application $app
+     * @param array $config
+     */
     public function __construct(\Silex\Application $app, array $config = array())
     {
         $GLOBALS['fluxApi'] = $this;
@@ -55,6 +88,15 @@ class Api
         $this->registerPlugins();
     }
 
+    /**
+     * Returns the singleton of the Api
+     *
+     * If no Api instance exists yet it will create one and return it.
+     *
+     * @param \Silex\Application $app
+     * @param array $config
+     * @return mixed
+     */
     public static function getInstance(\Silex\Application $app = NULL, array $config = array())
     {
         if (!isset($GLOBALS['fluxApi']) && !empty($app)) {
@@ -64,6 +106,13 @@ class Api
         }
     }
 
+    /**
+     * Calls the magic methods
+     *
+     * @param $method
+     * @param array $arguments
+     * @return mixed|null
+     */
     public function __call($method, array $arguments)
     {
         if (isset($this->_methods[$method])) {
@@ -75,6 +124,9 @@ class Api
         return NULL;
     }
 
+    /**
+     * Registers all available plugins found within the Plugins/ directory
+     */
     public function registerPlugins()
     {
         $plugins = scandir($this->config['plugins_path']);
@@ -128,6 +180,13 @@ class Api
         }
     }
 
+    /**
+     * Registers a magic method
+     *
+     * @param string $method
+     * @param function $callback
+     * @return Api $this
+     */
     public function registerMethod($method, $callback)
     {
         if (!isset($this->_methods[$method]) && is_callable($callback)) {
@@ -137,6 +196,12 @@ class Api
         return $this; // make it chainable
     }
 
+    /**
+     * Registers all magic methods of all registered plugins
+     *
+     * @param string $type the plugin type
+     * @param string $name the plugin name
+     */
     public function registerPluginMethods($type, $name)
     {
         switch (ucfirst($type)) {
@@ -146,6 +211,11 @@ class Api
         }
     }
 
+    /**
+     * Registers all magic methods for all registered models
+     *
+     * @param string $model
+     */
     public function registerModelMethods($model)
     {
         $self = $this;
@@ -281,26 +351,44 @@ class Api
         };
     }
 
-    public function getPlugins($namespace = NULL)
+    /**
+     * Returns all registered plugins (of a given type)
+     * @param string $type if set, only plugins of that type will be returned
+     * @return array
+     */
+    public function getPlugins($type = NULL)
     {
-        if (empty($namespace)) {
+        if (empty($type)) {
             return $this->_plugins;
-        } elseif (isset($this->_plugins[$namespace])) {
-            return $this->_plugins[$namespace];
+        } elseif (isset($this->_plugins[$type])) {
+            return $this->_plugins[$type];
         } else {
             return array();
         }
     }
 
-    public function getPluginClass($namespace, $name)
+    /**
+     * Returns fully class name of a plugin by a given type and name
+     *
+     * @param string $type
+     * @param string $name
+     * @return null|array
+     */
+    public function getPluginClass($type, $name)
     {
-        if (!empty($namespace) && isset($this->_plugins[$namespace]) && isset($this->_plugins[$namespace][$name])) {
-            return $this->_plugins[$namespace][$name];
+        if (!empty($type) && isset($this->_plugins[$type]) && isset($this->_plugins[$type][$name])) {
+            return $this->_plugins[$type][$name];
         } else {
             return NULL;
         }
     }
 
+    /**
+     * Returns an instance of the storage for a given model
+     *
+     * @param [string $model] if not set the default storage will be returned
+     * @return Storage
+     */
     public function getStorage($model = NULL)
     {
         $storagePlugins = $this->getPlugins('Storage');
@@ -311,6 +399,13 @@ class Api
         return new $storageClass($this,$this->config['storage.options']);
     }
 
+    /**
+     * Loads and returns a list of Model instances
+     *
+     * @param string $model
+     * @param [Query $query] if not set all instances of the model are loaded
+     * @return array|null
+     */
     public function loadModels($model, Query $query = NULL)
     {
         $models = $this->getPlugins('Model');
@@ -322,6 +417,13 @@ class Api
         return array();
     }
 
+    /**
+     * Saves a list of or a single model instance
+     *
+     * @param string $model
+     * @param array|Model $instances
+     * @return bool
+     */
     public function saveModel($model, $instances)
     {
         $models = $this->getPlugins('Model');
@@ -346,7 +448,15 @@ class Api
         return FALSE;
     }
 
-    public function updateModels($model, Query $query, array $data = array())
+    /**
+     * Updates models with certain data
+     *
+     * @param string $model
+     * @param Query $query
+     * @param array $data
+     * @return bool
+     */
+    public function updateModels($model, Query $query, array $data)
     {
 
         $storage = $this->getStorage($model);
@@ -354,6 +464,14 @@ class Api
         return $storage->update($model, $query, $data);
     }
 
+    /**
+     * Creates a new instance of a model
+     *
+     * @param string $model
+     * @param [array $data] if set the model will contain that initial data
+     * @param [string $format] the format of the given $data
+     * @return null|Model
+     */
     public function createModel($model, array $data = array(), $format = Api::DATA_FORMAT_ARRAY)
     {
         $models = $this->getPlugins('Model');
@@ -383,9 +501,16 @@ class Api
             }
         }
 
-        return FALSE;
+        return NULL;
     }
 
+    /**
+     * Deletes models by a query
+     *
+     * @param string $model
+     * @param [Query $query] if not set all instances of the model will be deleted
+     * @return bool
+     */
     public function deleteModels($model, Query $query = NULL)
     {
         $models = $this->getPlugins('Model');
@@ -398,6 +523,10 @@ class Api
         return FALSE;
     }
 
+    /**
+     * Migrates the storage dabase(s) (for a given model)
+     * @param [string $model]
+     */
     public function migrate($model = NULL)
     {
         $storage = $this->getStorage($model);
