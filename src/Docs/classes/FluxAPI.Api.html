@@ -35,10 +35,10 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">100</span></a></li>
+                <span class="label label-info">106</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul><li>todo 
-                <span class="label label-info">1</span>
+                <span class="label label-info">3</span>
 </li></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
                 <span class="label label-info">0</span></a></li>
@@ -69,6 +69,9 @@
 <li class="method public "><a href="#method_deleteModels" title="deleteModels :: Deletes models by a query"><span class="description">Deletes models by a query</span><pre>deleteModels()</pre></a></li>
 <li class="method public "><a href="#method_delete_Model_" title="delete_Model_ :: Deletes a single _Model_ by id or by a given query"><span class="description">Deletes a single _Model_ by id or by a given query</span><pre>delete_Model_()</pre></a></li>
 <li class="method public "><a href="#method_delete_Model_s" title="delete_Model_s :: Deletes a list of _Model_s by a given query"><span class="description">Deletes a list of _Model_s by a given query</span><pre>delete_Model_s()</pre></a></li>
+<li class="method public "><a href="#method_extendModel" title="extendModel :: Extends a model with new fields."><span class="description">Extends a model with new fields.</span><pre>extendModel()</pre></a></li>
+<li class="method public "><a href="#method_getExtends" title="getExtends :: "><span class="description">getExtends()
+        </span><pre>getExtends()</pre></a></li>
 <li class="method public "><a href="#method_getInstance" title="getInstance :: Returns the singleton of the Api"><span class="description">Returns the singleton of the Api</span><pre>getInstance()</pre></a></li>
 <li class="method public "><a href="#method_getPluginClass" title="getPluginClass :: Returns fully class name of a plugin by a given type and name"><span class="description">Returns fully class name of a plugin by a given type and name</span><pre>getPluginClass()</pre></a></li>
 <li class="method public "><a href="#method_getPlugins" title="getPlugins :: Returns all registered plugins (of a given type)"><span class="description">Returns all registered plugins (of a given type)</span><pre>getPlugins()</pre></a></li>
@@ -77,8 +80,15 @@
 <li class="method public "><a href="#method_load_Model_" title="load_Model_ :: Loads a _Model_ by id or with a given query. If $format is given the model will be returned in the given format."><span class="description">Loads a _Model_ by id or with a given query. If $format is given the model will be returned in the given format.</span><pre>load_Model_()</pre></a></li>
 <li class="method public "><a href="#method_load_Model_s" title="load_Model_s :: Loads a list of _Model_s with a given query. If $format is given the models will be returned in the given format."><span class="description">Loads a list of _Model_s with a given query. If $format is given the models will be returned in the given format.</span><pre>load_Model_s()</pre></a></li>
 <li class="method public "><a href="#method_migrate" title="migrate :: Migrates the storage dabase(s) (for a given model)"><span class="description">Migrates the storage dabase(s) (for a given model)</span><pre>migrate()</pre></a></li>
+<li class="method public "><a href="#method_modelFromArray" title="modelFromArray :: Returns a new model instance with data from an array"><span class="description">Returns a new model instance with data from an array</span><pre>modelFromArray()</pre></a></li>
+<li class="method public "><a href="#method_modelFromJson" title="modelFromJson :: Returns a new model instance with data from a JSON string"><span class="description">Returns a new model instance with data from a JSON string</span><pre>modelFromJson()</pre></a></li>
+<li class="method public "><a href="#method_modelFromObject" title="modelFromObject :: Returns a new model instance with data form an object"><span class="description">Returns a new model instance with data form an object</span><pre>modelFromObject()</pre></a></li>
+<li class="method public "><a href="#method_modelFromXml" title="modelFromXml :: Returns a new model instance with data from a XML string"><span class="description">Returns a new model instance with data from a XML string</span><pre>modelFromXml()</pre></a></li>
+<li class="method public "><a href="#method_modelFromYaml" title="modelFromYaml :: Returns a new model instance with data from a YAML string"><span class="description">Returns a new model instance with data from a YAML string</span><pre>modelFromYaml()</pre></a></li>
+<li class="method public "><a href="#method_registerExtend" title="registerExtend :: Registers a single extension"><span class="description">Registers a single extension</span><pre>registerExtend()</pre></a></li>
+<li class="method public "><a href="#method_registerExtends" title="registerExtends :: Registers all extensions found in the extends directory"><span class="description">Registers all extensions found in the extends directory</span><pre>registerExtends()</pre></a></li>
 <li class="method public "><a href="#method_registerMethod" title="registerMethod :: Registers a magic method"><span class="description">Registers a magic method</span><pre>registerMethod()</pre></a></li>
-<li class="method public "><a href="#method_registerModelMethods" title="registerModelMethods :: Registers all magic methods for all registered models"><span class="description">Registers all magic methods for all registered models</span><pre>registerModelMethods()</pre></a></li>
+<li class="method public "><a href="#method_registerModelMethods" title="registerModelMethods :: Registers all magic methods for a registered model"><span class="description">Registers all magic methods for a registered model</span><pre>registerModelMethods()</pre></a></li>
 <li class="method public "><a href="#method_registerPluginMethods" title="registerPluginMethods :: Registers all magic methods of all registered plugins"><span class="description">Registers all magic methods of all registered plugins</span><pre>registerPluginMethods()</pre></a></li>
 <li class="method public "><a href="#method_registerPlugins" title="registerPlugins :: Registers all available plugins found within the Plugins/ directory"><span class="description">Registers all available plugins found within the Plugins/ directory</span><pre>registerPlugins()</pre></a></li>
 <li class="method public "><a href="#method_saveModel" title="saveModel :: Saves a list of or a single model instance"><span class="description">Saves a list of or a single model instance</span><pre>saveModel()</pre></a></li>
@@ -96,6 +106,7 @@
 <li class="nav-header private">» Private
                     <ul>
 <li class="property private "><a href="#property__base_plugins" title="$_base_plugins :: "><span class="description">Internal lookup for base plugins</span><pre>$_base_plugins</pre></a></li>
+<li class="property private "><a href="#property__extends" title="$_extends :: "><span class="description">Internal extensions</span><pre>$_extends</pre></a></li>
 <li class="property private "><a href="#property__methods" title="$_methods :: "><span class="description">Internal lookup for magic methods</span><pre>$_methods</pre></a></li>
 <li class="property private "><a href="#property__plugins" title="$_plugins :: "><span class="description">Internal lookup for plugins</span><pre>$_plugins</pre></a></li>
 </ul>
@@ -168,13 +179,13 @@
 </div>
 <a id="method_createModel"></a><div class="element clickable method public method_createModel" data-toggle="collapse" data-target=".method_createModel .collapse">
 <h2>Creates a new instance of a model</h2>
-<pre>createModel(string $model, array $data, $format) : null | <a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></pre>
+<pre>createModel(string $model_name, array $data, $format) : null | <a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$model</h4>
+<h4>$model_name</h4>
 <code>string</code>
 </div>
 <div class="subelement argument"><h4>$data</h4></div>
@@ -212,13 +223,13 @@
 </div>
 <a id="method_deleteModels"></a><div class="element clickable method public method_deleteModels" data-toggle="collapse" data-target=".method_deleteModels .collapse">
 <h2>Deletes models by a query</h2>
-<pre>deleteModels(string $model, \FluxAPI\Query $query) : bool</pre>
+<pre>deleteModels(string $model_name, \FluxAPI\Query $query) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$model</h4>
+<h4>$model_name</h4>
 <code>string</code>
 </div>
 <div class="subelement argument"><h4>$query</h4></div>
@@ -274,6 +285,36 @@
 </div>
 <h3>Returns</h3>
 <div class="subelement response"><code><a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></code></div>
+</div></div>
+</div>
+<a id="method_extendModel"></a><div class="element clickable method public method_extendModel" data-toggle="collapse" data-target=".method_extendModel .collapse">
+<h2>Extends a model with new fields.</h2>
+<pre>extendModel(string $model_name, array $fields, $format) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>If the model does not exists, it will be created.</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$model_name</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$fields</h4>
+<code>array</code><p>Field definitions. Either containing real Field instances or key => value pairs</p>
+</div>
+<div class="subelement argument"><h4>$format</h4></div>
+</div></div>
+</div>
+<a id="method_getExtends"></a><div class="element clickable method public method_getExtends" data-toggle="collapse" data-target=".method_getExtends .collapse">
+<h2>getExtends()
+        </h2>
+<pre>getExtends($type, $name) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$type</h4></div>
+<div class="subelement argument"><h4>$name</h4></div>
 </div></div>
 </div>
 <a id="method_getInstance"></a><div class="element clickable method public method_getInstance" data-toggle="collapse" data-target=".method_getInstance .collapse">
@@ -332,25 +373,25 @@
 </div>
 <a id="method_getStorage"></a><div class="element clickable method public method_getStorage" data-toggle="collapse" data-target=".method_getStorage .collapse">
 <h2>Returns an instance of the storage for a given model</h2>
-<pre>getStorage($model) : <a href="../classes/FluxAPI.Storage.html">\FluxAPI\Storage</a></pre>
+<pre>getStorage($model_name) : <a href="../classes/FluxAPI.Storage.html">\FluxAPI\Storage</a></pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$model</h4></div>
+<div class="subelement argument"><h4>$model_name</h4></div>
 <h3>Returns</h3>
 <div class="subelement response"><code><a href="../classes/FluxAPI.Storage.html">\FluxAPI\Storage</a></code></div>
 </div></div>
 </div>
 <a id="method_loadModels"></a><div class="element clickable method public method_loadModels" data-toggle="collapse" data-target=".method_loadModels .collapse">
 <h2>Loads and returns a list of Model instances</h2>
-<pre>loadModels(string $model, \FluxAPI\Query $query) : array | null</pre>
+<pre>loadModels(string $model_name, \FluxAPI\Query $query) : array | null</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$model</h4>
+<h4>$model_name</h4>
 <code>string</code>
 </div>
 <div class="subelement argument"><h4>$query</h4></div>
@@ -420,13 +461,130 @@
 </div>
 <a id="method_migrate"></a><div class="element clickable method public method_migrate" data-toggle="collapse" data-target=".method_migrate .collapse">
 <h2>Migrates the storage dabase(s) (for a given model)</h2>
-<pre>migrate($model) </pre>
+<pre>migrate($model_name) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$model</h4></div>
+<div class="subelement argument"><h4>$model_name</h4></div>
 </div></div>
+</div>
+<a id="method_modelFromArray"></a><div class="element clickable method public method_modelFromArray" data-toggle="collapse" data-target=".method_modelFromArray .collapse">
+<h2>Returns a new model instance with data from an array</h2>
+<pre>modelFromArray(string $model_name, array $data) : <a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$model_name</h4>
+<code>string</code>
+</div>
+<div class="subelement argument"><h4>$data</h4></div>
+<h3>Returns</h3>
+<div class="subelement response"><code><a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></code></div>
+</div></div>
+</div>
+<a id="method_modelFromJson"></a><div class="element clickable method public method_modelFromJson" data-toggle="collapse" data-target=".method_modelFromJson .collapse">
+<h2>Returns a new model instance with data from a JSON string</h2>
+<pre>modelFromJson(string $model_name, string $json) : <a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a> | null</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$model_name</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$json</h4>
+<code>string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></code><code>null</code>
+</div>
+</div></div>
+</div>
+<a id="method_modelFromObject"></a><div class="element clickable method public method_modelFromObject" data-toggle="collapse" data-target=".method_modelFromObject .collapse">
+<h2>Returns a new model instance with data form an object</h2>
+<pre>modelFromObject(string $model_name, object $object) : <a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$model_name</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$object</h4>
+<code>object</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code><a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></code></div>
+</div></div>
+</div>
+<a id="method_modelFromXml"></a><div class="element clickable method public method_modelFromXml" data-toggle="collapse" data-target=".method_modelFromXml .collapse">
+<h2>Returns a new model instance with data from a XML string</h2>
+<pre>modelFromXml(string $model_name, string $xml) : <a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a> | null</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$model_name</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$xml</h4>
+<code>string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></code><code>null</code>
+</div>
+</div></div>
+</div>
+<a id="method_modelFromYaml"></a><div class="element clickable method public method_modelFromYaml" data-toggle="collapse" data-target=".method_modelFromYaml .collapse">
+<h2>Returns a new model instance with data from a YAML string</h2>
+<pre>modelFromYaml(string $model_name, string $yaml) : <a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a> | null</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$model_name</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$yaml</h4>
+<code>string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code><a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></code><code>null</code>
+</div>
+</div></div>
+</div>
+<a id="method_registerExtend"></a><div class="element clickable method public method_registerExtend" data-toggle="collapse" data-target=".method_registerExtend .collapse">
+<h2>Registers a single extension</h2>
+<pre>registerExtend($type, $name) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>Will add dynamic models to the model plugins to make them available</p>
+
+<p>TODO: currently it will read in the json file but maybe it's better to only read those files on demand?</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$type</h4></div>
+<div class="subelement argument"><h4>$name</h4></div>
+</div></div>
+</div>
+<a id="method_registerExtends"></a><div class="element clickable method public method_registerExtends" data-toggle="collapse" data-target=".method_registerExtends .collapse">
+<h2>Registers all extensions found in the extends directory</h2>
+<pre>registerExtends() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="method_registerMethod"></a><div class="element clickable method public method_registerMethod" data-toggle="collapse" data-target=".method_registerMethod .collapse">
 <h2>Registers a magic method</h2>
@@ -449,14 +607,14 @@
 </div></div>
 </div>
 <a id="method_registerModelMethods"></a><div class="element clickable method public method_registerModelMethods" data-toggle="collapse" data-target=".method_registerModelMethods .collapse">
-<h2>Registers all magic methods for all registered models</h2>
-<pre>registerModelMethods(string $model) </pre>
+<h2>Registers all magic methods for a registered model</h2>
+<pre>registerModelMethods(string $model_name) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$model</h4>
+<h4>$model_name</h4>
 <code>string</code>
 </div>
 </div></div>
@@ -484,13 +642,13 @@
 </div>
 <a id="method_saveModel"></a><div class="element clickable method public method_saveModel" data-toggle="collapse" data-target=".method_saveModel .collapse">
 <h2>Saves a list of or a single model instance</h2>
-<pre>saveModel(string $model, array | <a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a> $instances) : bool</pre>
+<pre>saveModel(string $model_name, array | <a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a> $instances) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$model</h4>
+<h4>$model_name</h4>
 <code>string</code>
 </div>
 <div class="subelement argument">
@@ -528,13 +686,13 @@
 </div>
 <a id="method_updateModels"></a><div class="element clickable method public method_updateModels" data-toggle="collapse" data-target=".method_updateModels .collapse">
 <h2>Updates models with certain data</h2>
-<pre>updateModels(string $model, \FluxAPI\Query $query, array $data) : bool</pre>
+<pre>updateModels(string $model_name, \FluxAPI\Query $query, array $data) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$model</h4>
+<h4>$model_name</h4>
 <code>string</code>
 </div>
 <div class="subelement argument">
@@ -566,6 +724,12 @@
 <a id="property__base_plugins"> </a><div class="element clickable property private property__base_plugins" data-toggle="collapse" data-target=".property__base_plugins .collapse">
 <h2>Internal lookup for base plugins</h2>
 <pre>$_base_plugins : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property__extends"> </a><div class="element clickable property private property__extends" data-toggle="collapse" data-target=".property__extends .collapse">
+<h2>Internal extensions</h2>
+<pre>$_extends : array</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
@@ -614,7 +778,7 @@
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2013-03-17T21:45:51+01:00.<br></footer></div>
+            generated on 2013-03-19T22:02:45+01:00.<br></footer></div>
 </div>
 </body>
 </html>

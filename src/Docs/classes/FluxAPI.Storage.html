@@ -35,10 +35,10 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">100</span></a></li>
+                <span class="label label-info">106</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul><li>todo 
-                <span class="label label-info">1</span>
+                <span class="label label-info">3</span>
 </li></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
                 <span class="label label-info">0</span></a></li>
@@ -231,13 +231,13 @@
 </div>
 <a id="method_count"></a><div class="element clickable method public method_count" data-toggle="collapse" data-target=".method_count .collapse">
 <h2>Returns the total count of a model (or the model by a query)</h2>
-<pre>count(string $model, \FluxAPI\Query $query) : int</pre>
+<pre>count(string $model_name, \FluxAPI\Query $query) : int</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$model</h4>
+<h4>$model_name</h4>
 <code>string</code>
 </div>
 <div class="subelement argument"><h4>$query</h4></div>
@@ -247,13 +247,13 @@
 </div>
 <a id="method_delete"></a><div class="element clickable method public method_delete" data-toggle="collapse" data-target=".method_delete .collapse">
 <h2>Deletes a list of models from the storage</h2>
-<pre>delete(string $model, \FluxAPI\Query $query) : bool</pre>
+<pre>delete(string $model_name, \FluxAPI\Query $query) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$model</h4>
+<h4>$model_name</h4>
 <code>string</code>
 </div>
 <div class="subelement argument"><h4>$query</h4></div>
@@ -297,13 +297,13 @@
 </div>
 <a id="method_exists"></a><div class="element clickable method public method_exists" data-toggle="collapse" data-target=".method_exists .collapse">
 <h2>Checks if a given model instance already exists in the storage</h2>
-<pre>exists(string $model, \FluxAPI\Model $instance) : bool</pre>
+<pre>exists(string $model_name, \FluxAPI\Model $instance) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$model</h4>
+<h4>$model_name</h4>
 <code>string</code>
 </div>
 <div class="subelement argument">
@@ -511,14 +511,14 @@
 </div>
 <a id="method_getCollectionName"></a><div class="element clickable method public method_getCollectionName" data-toggle="collapse" data-target=".method_getCollectionName .collapse">
 <h2>Returns the collection name from a given model instance</h2>
-<pre>getCollectionName(<a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a> $model) : string</pre>
+<pre>getCollectionName(string $model_name) : string</pre>
 <div class="labels"><span class="label">Static</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$model</h4>
-<code><a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></code>
+<h4>$model_name</h4>
+<code>string</code>
 </div>
 <h3>Returns</h3>
 <div class="subelement response"><code>string</code></div>
@@ -564,13 +564,13 @@
 </div>
 <a id="method_getLastId"></a><div class="element clickable method public method_getLastId" data-toggle="collapse" data-target=".method_getLastId .collapse">
 <h2>Returns last inserted ID of a given model type</h2>
-<pre>getLastId(string $model) : mixed</pre>
+<pre>getLastId(string $model_name) : mixed</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"><p>Override this in your storage plugin.</p></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$model</h4>
+<h4>$model_name</h4>
 <code>string</code>
 </div>
 <h3>Returns</h3>
@@ -606,13 +606,13 @@
 </div>
 <a id="method_load"></a><div class="element clickable method public method_load" data-toggle="collapse" data-target=".method_load .collapse">
 <h2>Loads instances of a model from the storage</h2>
-<pre>load(string $model, \FluxAPI\Query $query) : array</pre>
+<pre>load(string $model_name, \FluxAPI\Query $query) : array</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$model</h4>
+<h4>$model_name</h4>
 <code>string</code>
 </div>
 <div class="subelement argument"><h4>$query</h4></div>
@@ -642,12 +642,12 @@
 </div>
 <a id="method_migrate"></a><div class="element clickable method public method_migrate" data-toggle="collapse" data-target=".method_migrate .collapse">
 <h2>Migrates the storage structure to all or a single model definition</h2>
-<pre>migrate($model) </pre>
+<pre>migrate($model_name) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"><p>Override this in your storage plugin.</p></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$model</h4></div>
+<div class="subelement argument"><h4>$model_name</h4></div>
 </div></div>
 </div>
 <a id="method_removeAllRelations"></a><div class="element clickable method public method_removeAllRelations" data-toggle="collapse" data-target=".method_removeAllRelations .collapse">
@@ -691,13 +691,13 @@
 </div>
 <a id="method_save"></a><div class="element clickable method public method_save" data-toggle="collapse" data-target=".method_save .collapse">
 <h2>Saves/updates a given model instance to the storage</h2>
-<pre>save(string $model, \FluxAPI\Model $instance) : bool</pre>
+<pre>save(string $model_name, \FluxAPI\Model $instance) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$model</h4>
+<h4>$model_name</h4>
 <code>string</code>
 </div>
 <div class="subelement argument">
@@ -710,13 +710,13 @@
 </div>
 <a id="method_update"></a><div class="element clickable method public method_update" data-toggle="collapse" data-target=".method_update .collapse">
 <h2>Updates a list of models in the storage with given data</h2>
-<pre>update(string $model, \FluxAPI\Query $query, array $data) : bool</pre>
+<pre>update(string $model_name, \FluxAPI\Query $query, array $data) : bool</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$model</h4>
+<h4>$model_name</h4>
 <code>string</code>
 </div>
 <div class="subelement argument"><h4>$query</h4></div>
@@ -755,7 +755,7 @@
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2013-03-17T21:45:51+01:00.<br></footer></div>
+            generated on 2013-03-19T22:02:45+01:00.<br></footer></div>
 </div>
 </body>
 </html>

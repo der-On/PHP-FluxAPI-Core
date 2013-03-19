@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project version="2.0.0a12" title="PHP-FluxAPI">
-  <file path="FluxAPI/Api.php" hash="e1e08fe3920f1f4bafbf6a22ebf5a5ee" package="Default">
+  <file path="FluxAPI/Api.php" hash="1ce68de3aeb2a3edc390ad84bc2a7b94" package="Default">
     <class final="false" abstract="false" namespace="FluxAPI" line="15" package="FluxAPI">
       <extends/>
       <name>Api</name>
@@ -92,466 +92,701 @@
         <name>$_plugins</name>
         <default>array('Model' =&gt; array(), 'Controller' =&gt; array(), 'Storage' =&gt; array(), 'Cache' =&gt; array(), 'Permission' =&gt; array())</default>
         <docblock line="22">
-          <description/>
-          <long-description/>
+          <description></description>
+          <long-description></long-description>
           <tag line="22" name="var" description="Internal lookup for plugins" type="array">
             <type by_reference="false">array</type>
           </tag>
         </docblock>
       </property>
       <property final="false" static="false" visibility="private" line="36" namespace="FluxAPI" package="Default">
+        <name>$_extends</name>
+        <default>array('Model' =&gt; array())</default>
+        <docblock line="33">
+          <description></description>
+          <long-description></long-description>
+          <tag line="33" name="var" description="Internal extensions" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="private" line="43" namespace="FluxAPI" package="Default">
         <name>$_base_plugins</name>
         <default>array()</default>
-        <docblock line="33">
-          <description/>
-          <long-description/>
-          <tag line="33" name="var" description="Internal lookup for base plugins" type="array">
+        <docblock line="40">
+          <description></description>
+          <long-description></long-description>
+          <tag line="40" name="var" description="Internal lookup for base plugins" type="array">
             <type by_reference="false">array</type>
           </tag>
         </docblock>
       </property>
-      <property final="false" static="false" visibility="private" line="41" namespace="FluxAPI" package="Default">
+      <property final="false" static="false" visibility="private" line="48" namespace="FluxAPI" package="Default">
         <name>$_methods</name>
         <default>array()</default>
-        <docblock line="38">
-          <description/>
-          <long-description/>
-          <tag line="38" name="var" description="Internal lookup for magic methods" type="array">
+        <docblock line="45">
+          <description></description>
+          <long-description></long-description>
+          <tag line="45" name="var" description="Internal lookup for magic methods" type="array">
             <type by_reference="false">array</type>
           </tag>
         </docblock>
       </property>
-      <property final="false" static="false" visibility="public" line="46" namespace="FluxAPI" package="Default">
+      <property final="false" static="false" visibility="public" line="53" namespace="FluxAPI" package="Default">
         <name>$app</name>
         <default>NULL</default>
-        <docblock line="43">
-          <description/>
-          <long-description/>
-          <tag line="43" name="var" description="The silex app" type="\Silex\Application">
+        <docblock line="50">
+          <description></description>
+          <long-description></long-description>
+          <tag line="50" name="var" description="The silex app" type="\Silex\Application">
             <type by_reference="false">\Silex\Application</type>
           </tag>
         </docblock>
       </property>
-      <property final="false" static="false" visibility="public" line="51" namespace="FluxAPI" package="Default">
+      <property final="false" static="false" visibility="public" line="58" namespace="FluxAPI" package="Default">
         <name>$config</name>
         <default>array()</default>
-        <docblock line="48">
-          <description/>
-          <long-description/>
-          <tag line="48" name="var" description="FluxAPI configuration" type="array">
+        <docblock line="55">
+          <description></description>
+          <long-description></long-description>
+          <tag line="55" name="var" description="FluxAPI configuration" type="array">
             <type by_reference="false">array</type>
           </tag>
         </docblock>
       </property>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="59" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="66" package="FluxAPI">
         <name>__construct</name>
         <full_name>__construct</full_name>
-        <docblock line="53">
+        <docblock line="60">
           <description>Constructor</description>
-          <long-description/>
-          <tag line="53" name="param" description="" type="\Silex\Application" variable="$app">
+          <long-description></long-description>
+          <tag line="60" name="param" description="" type="\Silex\Application" variable="$app">
             <type by_reference="false">\Silex\Application</type>
           </tag>
-          <tag line="53" name="param" description="" type="array" variable="$config">
+          <tag line="60" name="param" description="" type="array" variable="$config">
             <type by_reference="false">array</type>
           </tag>
         </docblock>
-        <argument line="59">
+        <argument line="66">
           <name>$app</name>
-          <default/>
+          <default></default>
           <type>\Silex\Application</type>
         </argument>
-        <argument line="59">
+        <argument line="66">
           <name>$config</name>
           <default>array()</default>
           <type>array</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="FluxAPI" line="100" package="FluxAPI">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="FluxAPI" line="109" package="FluxAPI">
         <name>getInstance</name>
         <full_name>getInstance</full_name>
-        <docblock line="91">
+        <docblock line="100">
           <description>Returns the singleton of the Api</description>
           <long-description>&lt;p&gt;If no Api instance exists yet it will create one and return it.&lt;/p&gt;</long-description>
-          <tag line="91" name="param" description="" type="\Silex\Application" variable="$app">
+          <tag line="100" name="param" description="" type="\Silex\Application" variable="$app">
             <type by_reference="false">\Silex\Application</type>
           </tag>
-          <tag line="91" name="param" description="" type="array" variable="$config">
+          <tag line="100" name="param" description="" type="array" variable="$config">
             <type by_reference="false">array</type>
           </tag>
-          <tag line="91" name="return" description="" type="mixed">
+          <tag line="100" name="return" description="" type="mixed">
             <type by_reference="false">mixed</type>
           </tag>
         </docblock>
-        <argument line="100">
+        <argument line="109">
           <name>$app</name>
           <default>NULL</default>
           <type>\Silex\Application</type>
         </argument>
-        <argument line="100">
+        <argument line="109">
           <name>$config</name>
           <default>array()</default>
           <type>array</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="116" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="125" package="FluxAPI">
         <name>__call</name>
         <full_name>__call</full_name>
-        <docblock line="109">
+        <docblock line="118">
           <description>Calls the magic methods</description>
-          <long-description/>
-          <tag line="109" name="param" description="" type="\FluxAPI\" variable="$method"/>
-          <tag line="109" name="param" description="" type="array" variable="$arguments">
+          <long-description></long-description>
+          <tag line="118" name="param" description="" type="\FluxAPI\" variable="$method"/>
+          <tag line="118" name="param" description="" type="array" variable="$arguments">
             <type by_reference="false">array</type>
           </tag>
-          <tag line="109" name="return" description="" type="mixed|null">
+          <tag line="118" name="return" description="" type="mixed|null">
             <type by_reference="false">mixed</type>
             <type by_reference="false">null</type>
           </tag>
         </docblock>
-        <argument line="116">
+        <argument line="125">
           <name>$method</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
-        <argument line="116">
+        <argument line="125">
           <name>$arguments</name>
-          <default/>
+          <default></default>
           <type>array</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="130" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="139" package="FluxAPI">
         <name>registerPlugins</name>
         <full_name>registerPlugins</full_name>
-        <docblock line="127">
+        <docblock line="136">
           <description>Registers all available plugins found within the Plugins/ directory</description>
-          <long-description/>
+          <long-description></long-description>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="190" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="195" package="FluxAPI">
+        <name>registerExtends</name>
+        <full_name>registerExtends</full_name>
+        <docblock line="192">
+          <description>Registers all extensions found in the extends directory</description>
+          <long-description></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="225" package="FluxAPI">
+        <name>registerExtend</name>
+        <full_name>registerExtend</full_name>
+        <docblock line="215">
+          <description>Registers a single extension</description>
+          <long-description>&lt;p&gt;Will add dynamic models to the model plugins to make them available&lt;/p&gt;
+
+&lt;p&gt;TODO: currently it will read in the json file but maybe it's better to only read those files on demand?&lt;/p&gt;</long-description>
+          <tag line="215" name="param" description="" type="\FluxAPI\" variable="$type"/>
+          <tag line="215" name="param" description="" type="\FluxAPI\" variable="$name"/>
+        </docblock>
+        <argument line="225">
+          <name>$type</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="225">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="251" package="FluxAPI">
         <name>registerMethod</name>
         <full_name>registerMethod</full_name>
-        <docblock line="183">
+        <docblock line="244">
           <description>Registers a magic method</description>
-          <long-description/>
-          <tag line="183" name="param" description="" type="string" variable="$method">
+          <long-description></long-description>
+          <tag line="244" name="param" description="" type="string" variable="$method">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="183" name="param" description="" type="\FluxAPI\function" variable="$callback">
+          <tag line="244" name="param" description="" type="\FluxAPI\function" variable="$callback">
             <type by_reference="false">\FluxAPI\function</type>
           </tag>
-          <tag line="183" name="return" description="$this" type="\FluxAPI\Api">
+          <tag line="244" name="return" description="$this" type="\FluxAPI\Api">
             <type by_reference="false">\FluxAPI\Api</type>
           </tag>
         </docblock>
-        <argument line="190">
+        <argument line="251">
           <name>$method</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
-        <argument line="190">
+        <argument line="251">
           <name>$callback</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="205" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="266" package="FluxAPI">
         <name>registerPluginMethods</name>
         <full_name>registerPluginMethods</full_name>
-        <docblock line="199">
+        <docblock line="260">
           <description>Registers all magic methods of all registered plugins</description>
-          <long-description/>
-          <tag line="199" name="param" description="the plugin type" type="string" variable="$type">
+          <long-description></long-description>
+          <tag line="260" name="param" description="the plugin type" type="string" variable="$type">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="199" name="param" description="the plugin name" type="string" variable="$name">
+          <tag line="260" name="param" description="the plugin name" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
-        <argument line="205">
+        <argument line="266">
           <name>$type</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
-        <argument line="205">
+        <argument line="266">
           <name>$name</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="219" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="280" package="FluxAPI">
         <name>registerModelMethods</name>
         <full_name>registerModelMethods</full_name>
-        <docblock line="214">
-          <description>Registers all magic methods for all registered models</description>
-          <long-description/>
-          <tag line="214" name="param" description="" type="string" variable="$model">
+        <docblock line="275">
+          <description>Registers all magic methods for a registered model</description>
+          <long-description></long-description>
+          <tag line="275" name="param" description="" type="string" variable="$model_name">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
-        <argument line="219">
-          <name>$model</name>
-          <default/>
+        <argument line="280">
+          <name>$model_name</name>
+          <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="359" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="421" package="FluxAPI">
         <name>getPlugins</name>
         <full_name>getPlugins</full_name>
-        <docblock line="354">
+        <docblock line="416">
           <description>Returns all registered plugins (of a given type)</description>
-          <long-description/>
-          <tag line="354" name="param" description="if set, only plugins of that type will be returned" type="string" variable="$type">
+          <long-description></long-description>
+          <tag line="416" name="param" description="if set, only plugins of that type will be returned" type="string" variable="$type">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="354" name="return" description="" type="array">
+          <tag line="416" name="return" description="" type="array">
             <type by_reference="false">array</type>
           </tag>
         </docblock>
-        <argument line="359">
+        <argument line="421">
           <name>$type</name>
           <default>NULL</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="377" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="439" package="FluxAPI">
         <name>getPluginClass</name>
         <full_name>getPluginClass</full_name>
-        <docblock line="370">
+        <docblock line="432">
           <description>Returns fully class name of a plugin by a given type and name</description>
-          <long-description/>
-          <tag line="370" name="param" description="" type="string" variable="$type">
+          <long-description></long-description>
+          <tag line="432" name="param" description="" type="string" variable="$type">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="370" name="param" description="" type="string" variable="$name">
+          <tag line="432" name="param" description="" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="370" name="return" description="" type="null|array">
+          <tag line="432" name="return" description="" type="null|array">
             <type by_reference="false">null</type>
             <type by_reference="false">array</type>
           </tag>
         </docblock>
-        <argument line="377">
+        <argument line="439">
           <name>$type</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
-        <argument line="377">
+        <argument line="439">
           <name>$name</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="392" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="454" package="FluxAPI">
         <name>getStorage</name>
         <full_name>getStorage</full_name>
-        <docblock line="386">
+        <docblock line="448">
           <description>Returns an instance of the storage for a given model</description>
-          <long-description/>
-          <tag line="386" name="param" description="if not set the default storage will be returned" type="\FluxAPI\[string" variable="$model]">
+          <long-description></long-description>
+          <tag line="448" name="param" description="if not set the default storage will be returned" type="\FluxAPI\[string" variable="$model_name]">
             <type by_reference="false">\FluxAPI\[string</type>
           </tag>
-          <tag line="386" name="return" description="" type="\FluxAPI\Storage">
+          <tag line="448" name="return" description="" type="\FluxAPI\Storage">
             <type by_reference="false">\FluxAPI\Storage</type>
           </tag>
         </docblock>
-        <argument line="392">
-          <name>$model</name>
+        <argument line="454">
+          <name>$model_name</name>
           <default>NULL</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="409" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="471" package="FluxAPI">
         <name>loadModels</name>
         <full_name>loadModels</full_name>
-        <docblock line="402">
+        <docblock line="464">
           <description>Loads and returns a list of Model instances</description>
-          <long-description/>
-          <tag line="402" name="param" description="" type="string" variable="$model">
+          <long-description></long-description>
+          <tag line="464" name="param" description="" type="string" variable="$model_name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="402" name="param" description="if not set all instances of the model are loaded" type="\FluxAPI\[Query" variable="$query]">
+          <tag line="464" name="param" description="if not set all instances of the model are loaded" type="\FluxAPI\[Query" variable="$query]">
             <type by_reference="false">\FluxAPI\[Query</type>
           </tag>
-          <tag line="402" name="return" description="" type="array|null">
+          <tag line="464" name="return" description="" type="array|null">
             <type by_reference="false">array</type>
             <type by_reference="false">null</type>
           </tag>
         </docblock>
-        <argument line="409">
-          <name>$model</name>
-          <default/>
+        <argument line="471">
+          <name>$model_name</name>
+          <default></default>
           <type/>
         </argument>
-        <argument line="409">
+        <argument line="471">
           <name>$query</name>
           <default>NULL</default>
           <type>\FluxAPI\Query</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="427" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="489" package="FluxAPI">
         <name>saveModel</name>
         <full_name>saveModel</full_name>
-        <docblock line="420">
+        <docblock line="482">
           <description>Saves a list of or a single model instance</description>
-          <long-description/>
-          <tag line="420" name="param" description="" type="string" variable="$model">
+          <long-description></long-description>
+          <tag line="482" name="param" description="" type="string" variable="$model_name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="420" name="param" description="" type="array|\FluxAPI\Model" variable="$instances">
+          <tag line="482" name="param" description="" type="array|\FluxAPI\Model" variable="$instances">
             <type by_reference="false">array</type>
             <type by_reference="false">\FluxAPI\Model</type>
           </tag>
-          <tag line="420" name="return" description="" type="bool">
+          <tag line="482" name="return" description="" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="427">
-          <name>$model</name>
-          <default/>
+        <argument line="489">
+          <name>$model_name</name>
+          <default></default>
           <type/>
         </argument>
-        <argument line="427">
+        <argument line="489">
           <name>$instances</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="459" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="521" package="FluxAPI">
         <name>updateModels</name>
         <full_name>updateModels</full_name>
-        <docblock line="451">
+        <docblock line="513">
           <description>Updates models with certain data</description>
-          <long-description/>
-          <tag line="451" name="param" description="" type="string" variable="$model">
+          <long-description></long-description>
+          <tag line="513" name="param" description="" type="string" variable="$model_name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="451" name="param" description="" type="\FluxAPI\Query" variable="$query">
+          <tag line="513" name="param" description="" type="\FluxAPI\Query" variable="$query">
             <type by_reference="false">\FluxAPI\Query</type>
           </tag>
-          <tag line="451" name="param" description="" type="array" variable="$data">
+          <tag line="513" name="param" description="" type="array" variable="$data">
             <type by_reference="false">array</type>
           </tag>
-          <tag line="451" name="return" description="" type="bool">
+          <tag line="513" name="return" description="" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="459">
-          <name>$model</name>
-          <default/>
+        <argument line="521">
+          <name>$model_name</name>
+          <default></default>
           <type/>
         </argument>
-        <argument line="459">
+        <argument line="521">
           <name>$query</name>
-          <default/>
+          <default></default>
           <type>\FluxAPI\Query</type>
         </argument>
-        <argument line="459">
+        <argument line="521">
           <name>$data</name>
-          <default/>
+          <default></default>
           <type>array</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="475" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="537" package="FluxAPI">
         <name>createModel</name>
         <full_name>createModel</full_name>
-        <docblock line="467">
+        <docblock line="529">
           <description>Creates a new instance of a model</description>
-          <long-description/>
-          <tag line="467" name="param" description="" type="string" variable="$model">
+          <long-description></long-description>
+          <tag line="529" name="param" description="" type="string" variable="$model_name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="467" name="param" description="if set the model will contain that initial data" type="\FluxAPI\[array" variable="$data]">
+          <tag line="529" name="param" description="if set the model will contain that initial data" type="\FluxAPI\[array" variable="$data]">
             <type by_reference="false">\FluxAPI\[array</type>
           </tag>
-          <tag line="467" name="param" description="the format of the given $data" type="\FluxAPI\[string" variable="$format]">
+          <tag line="529" name="param" description="the format of the given $data" type="\FluxAPI\[string" variable="$format]">
             <type by_reference="false">\FluxAPI\[string</type>
           </tag>
-          <tag line="467" name="return" description="" type="null|\FluxAPI\Model">
+          <tag line="529" name="return" description="" type="null|\FluxAPI\Model">
             <type by_reference="false">null</type>
             <type by_reference="false">\FluxAPI\Model</type>
           </tag>
         </docblock>
-        <argument line="475">
-          <name>$model</name>
-          <default/>
+        <argument line="537">
+          <name>$model_name</name>
+          <default></default>
           <type/>
         </argument>
-        <argument line="475">
+        <argument line="537">
           <name>$data</name>
           <default>array()</default>
           <type>array</type>
         </argument>
-        <argument line="475">
+        <argument line="537">
           <name>$format</name>
           <default>\FluxAPI\Api::DATA_FORMAT_ARRAY</default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="514" package="FluxAPI">
-        <name>deleteModels</name>
-        <full_name>deleteModels</full_name>
-        <docblock line="507">
-          <description>Deletes models by a query</description>
-          <long-description/>
-          <tag line="507" name="param" description="" type="string" variable="$model">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="583" package="FluxAPI">
+        <name>modelFromArray</name>
+        <full_name>modelFromArray</full_name>
+        <docblock line="576">
+          <description>Returns a new model instance with data from an array</description>
+          <long-description></long-description>
+          <tag line="576" name="param" description="" type="string" variable="$model_name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="507" name="param" description="if not set all instances of the model will be deleted" type="\FluxAPI\[Query" variable="$query]">
+          <tag line="576" name="param" description="" type="\FluxAPI\[array" variable="$data]">
+            <type by_reference="false">\FluxAPI\[array</type>
+          </tag>
+          <tag line="576" name="return" description="" type="\FluxAPI\Model">
+            <type by_reference="false">\FluxAPI\Model</type>
+          </tag>
+        </docblock>
+        <argument line="583">
+          <name>$model_name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="583">
+          <name>$data</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="601" package="FluxAPI">
+        <name>modelFromObject</name>
+        <full_name>modelFromObject</full_name>
+        <docblock line="594">
+          <description>Returns a new model instance with data form an object</description>
+          <long-description></long-description>
+          <tag line="594" name="param" description="" type="string" variable="$model_name">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="594" name="param" description="" type="object" variable="$object">
+            <type by_reference="false">object</type>
+          </tag>
+          <tag line="594" name="return" description="" type="\FluxAPI\Model">
+            <type by_reference="false">\FluxAPI\Model</type>
+          </tag>
+        </docblock>
+        <argument line="601">
+          <name>$model_name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="601">
+          <name>$object</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="621" package="FluxAPI">
+        <name>modelFromJson</name>
+        <full_name>modelFromJson</full_name>
+        <docblock line="614">
+          <description>Returns a new model instance with data from a JSON string</description>
+          <long-description></long-description>
+          <tag line="614" name="param" description="" type="string" variable="$model_name">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="614" name="param" description="" type="string" variable="$json">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="614" name="return" description="" type="\FluxAPI\Model|null">
+            <type by_reference="false">\FluxAPI\Model</type>
+            <type by_reference="false">null</type>
+          </tag>
+        </docblock>
+        <argument line="621">
+          <name>$model_name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="621">
+          <name>$json</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="639" package="FluxAPI">
+        <name>modelFromXml</name>
+        <full_name>modelFromXml</full_name>
+        <docblock line="632">
+          <description>Returns a new model instance with data from a XML string</description>
+          <long-description></long-description>
+          <tag line="632" name="param" description="" type="string" variable="$model_name">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="632" name="param" description="" type="string" variable="$xml">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="632" name="return" description="" type="\FluxAPI\Model|null">
+            <type by_reference="false">\FluxAPI\Model</type>
+            <type by_reference="false">null</type>
+          </tag>
+        </docblock>
+        <argument line="639">
+          <name>$model_name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="639">
+          <name>$xml</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="660" package="FluxAPI">
+        <name>modelFromYaml</name>
+        <full_name>modelFromYaml</full_name>
+        <docblock line="653">
+          <description>Returns a new model instance with data from a YAML string</description>
+          <long-description></long-description>
+          <tag line="653" name="param" description="" type="string" variable="$model_name">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="653" name="param" description="" type="string" variable="$yaml">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="653" name="return" description="" type="\FluxAPI\Model|null">
+            <type by_reference="false">\FluxAPI\Model</type>
+            <type by_reference="false">null</type>
+          </tag>
+        </docblock>
+        <argument line="660">
+          <name>$model_name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="660">
+          <name>$yaml</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="679" package="FluxAPI">
+        <name>deleteModels</name>
+        <full_name>deleteModels</full_name>
+        <docblock line="672">
+          <description>Deletes models by a query</description>
+          <long-description></long-description>
+          <tag line="672" name="param" description="" type="string" variable="$model_name">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="672" name="param" description="if not set all instances of the model will be deleted" type="\FluxAPI\[Query" variable="$query]">
             <type by_reference="false">\FluxAPI\[Query</type>
           </tag>
-          <tag line="507" name="return" description="" type="bool">
+          <tag line="672" name="return" description="" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="514">
-          <name>$model</name>
-          <default/>
+        <argument line="679">
+          <name>$model_name</name>
+          <default></default>
           <type/>
         </argument>
-        <argument line="514">
+        <argument line="679">
           <name>$query</name>
           <default>NULL</default>
           <type>\FluxAPI\Query</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="530" package="FluxAPI">
-        <name>migrate</name>
-        <full_name>migrate</full_name>
-        <docblock line="526">
-          <description>Migrates the storage dabase(s) (for a given model)</description>
-          <long-description/>
-          <tag line="526" name="param" description="" type="\FluxAPI\[string" variable="$model]">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="698" package="FluxAPI">
+        <name>extendModel</name>
+        <full_name>extendModel</full_name>
+        <docblock line="691">
+          <description>Extends a model with new fields.</description>
+          <long-description>&lt;p&gt;If the model does not exists, it will be created.&lt;/p&gt;</long-description>
+          <tag line="691" name="param" description="" type="string" variable="$model_name">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="691" name="param" description="Field definitions. Either containing real Field instances or key =&gt; value pairs" type="array" variable="$fields">
+            <type by_reference="false">array</type>
+          </tag>
+          <tag line="691" name="param" description="the format of the $fields. Default is Api::DATA_FORMAT_ARRAY." type="\FluxAPI\[string" variable="$format]">
             <type by_reference="false">\FluxAPI\[string</type>
           </tag>
         </docblock>
-        <argument line="530">
-          <name>$model</name>
+        <argument line="698">
+          <name>$model_name</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="698">
+          <name>$fields</name>
+          <default></default>
+          <type>array</type>
+        </argument>
+        <argument line="698">
+          <name>$format</name>
+          <default>self::DATA_FORMAT_ARRAY</default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="753" package="FluxAPI">
+        <name>getExtends</name>
+        <full_name>getExtends</full_name>
+        <argument line="753">
+          <name>$type</name>
+          <default></default>
+          <type/>
+        </argument>
+        <argument line="753">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="766" package="FluxAPI">
+        <name>migrate</name>
+        <full_name>migrate</full_name>
+        <docblock line="762">
+          <description>Migrates the storage dabase(s) (for a given model)</description>
+          <long-description></long-description>
+          <tag line="762" name="param" description="" type="\FluxAPI\[string" variable="$model_name]">
+            <type by_reference="false">\FluxAPI\[string</type>
+          </tag>
+        </docblock>
+        <argument line="766">
+          <name>$model_name</name>
           <default>NULL</default>
           <type/>
         </argument>
       </method>
     </class>
+    <markers>
+      <todo line="708">throw an exception</todo>
+      <todo line="749">throw an exception</todo>
+    </markers>
     <parse_markers>
       <error line="0" code="50007">No page-level DocBlock was found in file FluxAPI/Api.php</error>
-      <error line="386" code="50014">Name of argument $model does not match with the DocBlock's name $model] in getStorage()</error>
-      <notice line="386" code="50013">Parameter $model] could not be found in getStorage()</notice>
-      <error line="402" code="50014">Name of argument $query does not match with the DocBlock's name $query] in loadModels()</error>
-      <error line="402" code="50016">The type hint of the argument is incorrect for the type definition of the @param tag with argument $query in loadModels()</error>
-      <notice line="402" code="50013">Parameter $query] could not be found in loadModels()</notice>
-      <error line="467" code="50014">Name of argument $data does not match with the DocBlock's name $data] in createModel()</error>
-      <error line="467" code="50016">The type hint of the argument is incorrect for the type definition of the @param tag with argument $data in createModel()</error>
-      <error line="467" code="50014">Name of argument $format does not match with the DocBlock's name $format] in createModel()</error>
-      <notice line="467" code="50013">Parameter $data] could not be found in createModel()</notice>
-      <notice line="467" code="50013">Parameter $format] could not be found in createModel()</notice>
-      <error line="507" code="50014">Name of argument $query does not match with the DocBlock's name $query] in deleteModels()</error>
-      <error line="507" code="50016">The type hint of the argument is incorrect for the type definition of the @param tag with argument $query in deleteModels()</error>
-      <notice line="507" code="50013">Parameter $query] could not be found in deleteModels()</notice>
-      <error line="526" code="50014">Name of argument $model does not match with the DocBlock's name $model] in migrate()</error>
-      <notice line="526" code="50013">Parameter $model] could not be found in migrate()</notice>
+      <error line="448" code="50014">Name of argument $model_name does not match with the DocBlock's name $model_name] in getStorage()</error>
+      <notice line="448" code="50013">Parameter $model_name] could not be found in getStorage()</notice>
+      <error line="464" code="50014">Name of argument $query does not match with the DocBlock's name $query] in loadModels()</error>
+      <error line="464" code="50016">The type hint of the argument is incorrect for the type definition of the @param tag with argument $query in loadModels()</error>
+      <notice line="464" code="50013">Parameter $query] could not be found in loadModels()</notice>
+      <error line="529" code="50014">Name of argument $data does not match with the DocBlock's name $data] in createModel()</error>
+      <error line="529" code="50016">The type hint of the argument is incorrect for the type definition of the @param tag with argument $data in createModel()</error>
+      <error line="529" code="50014">Name of argument $format does not match with the DocBlock's name $format] in createModel()</error>
+      <notice line="529" code="50013">Parameter $data] could not be found in createModel()</notice>
+      <notice line="529" code="50013">Parameter $format] could not be found in createModel()</notice>
+      <error line="576" code="50014">Name of argument $data does not match with the DocBlock's name $data] in modelFromArray()</error>
+      <error line="576" code="50016">The type hint of the argument is incorrect for the type definition of the @param tag with argument $data in modelFromArray()</error>
+      <notice line="576" code="50013">Parameter $data] could not be found in modelFromArray()</notice>
+      <error line="672" code="50014">Name of argument $query does not match with the DocBlock's name $query] in deleteModels()</error>
+      <error line="672" code="50016">The type hint of the argument is incorrect for the type definition of the @param tag with argument $query in deleteModels()</error>
+      <notice line="672" code="50013">Parameter $query] could not be found in deleteModels()</notice>
+      <error line="691" code="50014">Name of argument $format does not match with the DocBlock's name $format] in extendModel()</error>
+      <notice line="691" code="50013">Parameter $format] could not be found in extendModel()</notice>
+      <error line="753" code="50010">No DocBlock was found for method getExtends()</error>
+      <error line="762" code="50014">Name of argument $model_name does not match with the DocBlock's name $model_name] in migrate()</error>
+      <notice line="762" code="50013">Parameter $model_name] could not be found in migrate()</notice>
     </parse_markers>
   </file>
-  <file path="FluxAPI/Model.php" hash="ff472e03f2c3a28e654f7c3c21987304" package="Default">
+  <file path="FluxAPI/Model.php" hash="cda1b448d8ed5decda491ef6411feec5" package="Default">
     <class final="false" abstract="true" namespace="FluxAPI" line="11" package="FluxAPI">
       <extends/>
       <name>Model</name>
@@ -632,420 +867,327 @@
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="59" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="60" package="FluxAPI">
         <name>addField</name>
         <full_name>addField</full_name>
-        <docblock line="52">
+        <docblock line="53">
           <description>Adds a new field definition to the model</description>
           <long-description></long-description>
-          <tag line="52" name="chainable" description=""/>
-          <tag line="52" name="param" description="" type="\FluxAPI\Field" variable="$field">
+          <tag line="53" name="chainable" description=""/>
+          <tag line="53" name="param" description="" type="\FluxAPI\Field" variable="$field">
             <type by_reference="false">\FluxAPI\Field</type>
           </tag>
-          <tag line="52" name="return" description="$this" type="\FluxAPI\Model">
+          <tag line="53" name="return" description="$this" type="\FluxAPI\Model">
             <type by_reference="false">\FluxAPI\Model</type>
           </tag>
         </docblock>
-        <argument line="59">
+        <argument line="60">
           <name>$field</name>
           <default></default>
           <type>\FluxAPI\Field</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="72" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="73" package="FluxAPI">
         <name>getField</name>
         <full_name>getField</full_name>
-        <docblock line="66">
+        <docblock line="67">
           <description>Returns a field definition by it's name</description>
           <long-description></long-description>
-          <tag line="66" name="param" description="" type="string" variable="$name">
+          <tag line="67" name="param" description="" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="66" name="return" description="" type="null|\FluxAPI\Field">
+          <tag line="67" name="return" description="" type="null|\FluxAPI\Field">
             <type by_reference="false">null</type>
             <type by_reference="false">\FluxAPI\Field</type>
           </tag>
         </docblock>
-        <argument line="72">
+        <argument line="73">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="86" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="87" package="FluxAPI">
         <name>getFields</name>
         <full_name>getFields</full_name>
-        <docblock line="81">
+        <docblock line="82">
           <description>Returns all field definitions of this model</description>
           <long-description></long-description>
-          <tag line="81" name="return" description="" type="array">
+          <tag line="82" name="return" description="" type="array">
             <type by_reference="false">array</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="96" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="97" package="FluxAPI">
         <name>getRelationFields</name>
         <full_name>getRelationFields</full_name>
-        <docblock line="91">
+        <docblock line="92">
           <description>Returns all relation fields of this model</description>
           <long-description></long-description>
-          <tag line="91" name="return" description="" type="array">
+          <tag line="92" name="return" description="" type="array">
             <type by_reference="false">array</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="114" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="115" package="FluxAPI">
         <name>hasField</name>
         <full_name>hasField</full_name>
-        <docblock line="108">
+        <docblock line="109">
           <description>Checks if a field exists in the model</description>
           <long-description></long-description>
-          <tag line="108" name="param" description="" type="string" variable="$name">
+          <tag line="109" name="param" description="" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="108" name="return" description="true if field exists, else false" type="bool">
+          <tag line="109" name="return" description="true if field exists, else false" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="114">
+        <argument line="115">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="122" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="123" package="FluxAPI">
         <name>defineFields</name>
         <full_name>defineFields</full_name>
-        <docblock line="119">
+        <docblock line="120">
           <description>Defines field definitions of this model.</description>
           <long-description>&lt;p&gt;Extend this method in child classes while calling parent::defineFields()&lt;/p&gt;</long-description>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="private" namespace="FluxAPI" line="136" package="FluxAPI">
-        <name>_setDefaults</name>
-        <full_name>_setDefaults</full_name>
-        <docblock line="133">
-          <description>Internal method to set default field values.</description>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="137" package="FluxAPI">
+        <name>setDefaults</name>
+        <full_name>setDefaults</full_name>
+        <docblock line="134">
+          <description>Sets default field values.</description>
           <long-description>&lt;p&gt;Called automatically in the constructor.&lt;/p&gt;</long-description>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="148" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="147" package="FluxAPI">
+        <name>addExtends</name>
+        <full_name>addExtends</full_name>
+        <docblock line="144">
+          <description>Adds dynamic extends (currently only fields)</description>
+          <long-description></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="163" package="FluxAPI">
         <name>populate</name>
         <full_name>populate</full_name>
-        <docblock line="143">
+        <docblock line="158">
           <description>Populates the model instance with the given data.</description>
           <long-description></long-description>
-          <tag line="143" name="param" description="" type="\FluxAPI\[array" variable="$data]">
+          <tag line="158" name="param" description="" type="\FluxAPI\[array" variable="$data]">
             <type by_reference="false">\FluxAPI\[array</type>
           </tag>
         </docblock>
-        <argument line="148">
+        <argument line="163">
           <name>$data</name>
           <default>array()</default>
           <type>array</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="FluxAPI" line="161" package="FluxAPI">
+      <method final="false" abstract="false" static="true" visibility="public" namespace="FluxAPI" line="176" package="FluxAPI">
         <name>getClassName</name>
         <full_name>getClassName</full_name>
-        <docblock line="156">
+        <docblock line="171">
           <description>Returns the full class name of the model</description>
           <long-description></long-description>
-          <tag line="156" name="return" description="" type="string">
+          <tag line="171" name="return" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="FluxAPI" line="171" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="186" package="FluxAPI">
         <name>getModelName</name>
         <full_name>getModelName</full_name>
-        <docblock line="166">
+        <docblock line="181">
           <description>Returns the model name which is basically the last part of the full class name.</description>
           <long-description></long-description>
-          <tag line="166" name="return" description="" type="string">
+          <tag line="181" name="return" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="181" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="196" package="FluxAPI">
         <name>isNew</name>
         <full_name>isNew</full_name>
-        <docblock line="177">
+        <docblock line="192">
           <description>Checks if the model instance is new or already existing in the storage</description>
           <long-description></long-description>
-          <tag line="177" name="return" description="true if the model instance is new, else false" type="bool">
+          <tag line="192" name="return" description="true if the model instance is new, else false" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="190" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="205" package="FluxAPI">
         <name>isModified</name>
         <full_name>isModified</full_name>
-        <docblock line="186">
+        <docblock line="201">
           <description>Checks if the model instance was modified since it was loaded</description>
           <long-description></long-description>
-          <tag line="186" name="return" description="" type="bool">
+          <tag line="201" name="return" description="" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="201" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="216" package="FluxAPI">
         <name>__get</name>
         <full_name>__get</full_name>
-        <docblock line="195">
+        <docblock line="210">
           <description>Returns a magic property (a fields value)</description>
           <long-description></long-description>
-          <tag line="195" name="param" description="" type="string" variable="$name">
+          <tag line="210" name="param" description="" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="195" name="return" description="" type="null|mixed">
+          <tag line="210" name="return" description="" type="null|mixed">
             <type by_reference="false">null</type>
             <type by_reference="false">mixed</type>
           </tag>
         </docblock>
-        <argument line="201">
+        <argument line="216">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="226" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="241" package="FluxAPI">
         <name>__set</name>
         <full_name>__set</full_name>
-        <docblock line="220">
+        <docblock line="235">
           <description>Sets a magic property (a fields value)</description>
           <long-description></long-description>
-          <tag line="220" name="param" description="" type="string" variable="$name">
+          <tag line="235" name="param" description="" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="220" name="param" description="" type="mixed" variable="$value">
+          <tag line="235" name="param" description="" type="mixed" variable="$value">
             <type by_reference="false">mixed</type>
           </tag>
         </docblock>
-        <argument line="226">
+        <argument line="241">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
-        <argument line="226">
+        <argument line="241">
           <name>$value</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="245" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="260" package="FluxAPI">
         <name>__isset</name>
         <full_name>__isset</full_name>
-        <docblock line="239">
+        <docblock line="254">
           <description>Checks if a magic property (a fields value) isset</description>
           <long-description></long-description>
-          <tag line="239" name="param" description="" type="string" variable="$name">
+          <tag line="254" name="param" description="" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
-          <tag line="239" name="return" description="" type="bool">
+          <tag line="254" name="return" description="" type="bool">
             <type by_reference="false">bool</type>
           </tag>
         </docblock>
-        <argument line="245">
+        <argument line="260">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="254" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="269" package="FluxAPI">
         <name>__unset</name>
         <full_name>__unset</full_name>
-        <docblock line="250">
+        <docblock line="265">
           <description>Unsets a magic property (a fields value)</description>
           <long-description></long-description>
-          <tag line="250" name="param" description="" type="string" variable="$name">
+          <tag line="265" name="param" description="" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
-        <argument line="254">
+        <argument line="269">
           <name>$name</name>
           <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="264" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="279" package="FluxAPI">
         <name>__toString</name>
         <full_name>__toString</full_name>
-        <docblock line="259">
+        <docblock line="274">
           <description>Magic method to return a string represantation of the model</description>
           <long-description></long-description>
-          <tag line="259" name="return" description="" type="string">
+          <tag line="274" name="return" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="274" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="289" package="FluxAPI">
         <name>toArray</name>
         <full_name>toArray</full_name>
-        <docblock line="269">
+        <docblock line="284">
           <description>Returns an array represantation of the model</description>
           <long-description></long-description>
-          <tag line="269" name="return" description="" type="array">
+          <tag line="284" name="return" description="" type="array">
             <type by_reference="false">array</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="290" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="305" package="FluxAPI">
         <name>toString</name>
         <full_name>toString</full_name>
-        <docblock line="285">
+        <docblock line="300">
           <description>Returns a string represantation of the model</description>
           <long-description></long-description>
-          <tag line="285" name="return" description="" type="string">
+          <tag line="300" name="return" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="300" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="315" package="FluxAPI">
         <name>toJson</name>
         <full_name>toJson</full_name>
-        <docblock line="295">
+        <docblock line="310">
           <description>Returns a JSON string represantation of the model</description>
           <long-description></long-description>
-          <tag line="295" name="return" description="" type="string">
+          <tag line="310" name="return" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="311" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="326" package="FluxAPI">
         <name>toXml</name>
         <full_name>toXml</full_name>
-        <docblock line="306">
+        <docblock line="321">
           <description>Returns a XML string represantation of the model</description>
           <long-description></long-description>
-          <tag line="306" name="return" description="" type="string">
+          <tag line="321" name="return" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="323" package="FluxAPI">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="338" package="FluxAPI">
         <name>toYaml</name>
         <full_name>toYaml</full_name>
-        <docblock line="318">
+        <docblock line="333">
           <description>Returns a YAML string represantation of the model</description>
           <long-description></long-description>
-          <tag line="318" name="return" description="" type="string">
+          <tag line="333" name="return" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
-      </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="FluxAPI" line="338" package="FluxAPI">
-        <name>fromArray</name>
-        <full_name>fromArray</full_name>
-        <docblock line="332">
-          <description>Returns a new instance with data from an array</description>
-          <long-description></long-description>
-          <tag line="332" name="param" description="" type="\FluxAPI\[array" variable="$data]">
-            <type by_reference="false">\FluxAPI\[array</type>
-          </tag>
-          <tag line="332" name="return" description="" type="\FluxAPI\Model">
-            <type by_reference="false">\FluxAPI\Model</type>
-          </tag>
-        </docblock>
-        <argument line="338">
-          <name>$data</name>
-          <default>array()</default>
-          <type>array</type>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="FluxAPI" line="350" package="FluxAPI">
-        <name>fromObject</name>
-        <full_name>fromObject</full_name>
-        <docblock line="344">
-          <description>Returns a new instance with data form an object</description>
-          <long-description></long-description>
-          <tag line="344" name="param" description="" type="object" variable="$object">
-            <type by_reference="false">object</type>
-          </tag>
-          <tag line="344" name="return" description="" type="\FluxAPI\Model">
-            <type by_reference="false">\FluxAPI\Model</type>
-          </tag>
-        </docblock>
-        <argument line="350">
-          <name>$object</name>
-          <default></default>
-          <type/>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="FluxAPI" line="368" package="FluxAPI">
-        <name>fromJson</name>
-        <full_name>fromJson</full_name>
-        <docblock line="362">
-          <description>Returns a new instance with data from a JSON string</description>
-          <long-description></long-description>
-          <tag line="362" name="param" description="" type="string" variable="$json">
-            <type by_reference="false">string</type>
-          </tag>
-          <tag line="362" name="return" description="" type="\FluxAPI\Model|null">
-            <type by_reference="false">\FluxAPI\Model</type>
-            <type by_reference="false">null</type>
-          </tag>
-        </docblock>
-        <argument line="368">
-          <name>$json</name>
-          <default></default>
-          <type/>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="FluxAPI" line="389" package="FluxAPI">
-        <name>fromXml</name>
-        <full_name>fromXml</full_name>
-        <docblock line="383">
-          <description>Returns a new instance with data from a XML string</description>
-          <long-description></long-description>
-          <tag line="383" name="param" description="" type="string" variable="$xml">
-            <type by_reference="false">string</type>
-          </tag>
-          <tag line="383" name="return" description="" type="\FluxAPI\Model|null">
-            <type by_reference="false">\FluxAPI\Model</type>
-            <type by_reference="false">null</type>
-          </tag>
-        </docblock>
-        <argument line="389">
-          <name>$xml</name>
-          <default></default>
-          <type/>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="true" visibility="public" namespace="FluxAPI" line="411" package="FluxAPI">
-        <name>fromYaml</name>
-        <full_name>fromYaml</full_name>
-        <docblock line="405">
-          <description>Returns a new instance with data from a YAML string</description>
-          <long-description></long-description>
-          <tag line="405" name="param" description="" type="string" variable="$yaml">
-            <type by_reference="false">string</type>
-          </tag>
-          <tag line="405" name="return" description="" type="\FluxAPI\Model|null">
-            <type by_reference="false">\FluxAPI\Model</type>
-            <type by_reference="false">null</type>
-          </tag>
-        </docblock>
-        <argument line="411">
-          <name>$yaml</name>
-          <default></default>
-          <type/>
-        </argument>
       </method>
     </class>
     <parse_markers>
       <error line="0" code="50007">No page-level DocBlock was found in file FluxAPI/Model.php</error>
       <error line="38" code="50014">Name of argument $data does not match with the DocBlock's name $data] in __construct()</error>
       <notice line="38" code="50013">Parameter $data] could not be found in __construct()</notice>
-      <error line="143" code="50014">Name of argument $data does not match with the DocBlock's name $data] in populate()</error>
-      <error line="143" code="50016">The type hint of the argument is incorrect for the type definition of the @param tag with argument $data in populate()</error>
-      <notice line="143" code="50013">Parameter $data] could not be found in populate()</notice>
-      <error line="332" code="50014">Name of argument $data does not match with the DocBlock's name $data] in fromArray()</error>
-      <error line="332" code="50016">The type hint of the argument is incorrect for the type definition of the @param tag with argument $data in fromArray()</error>
-      <notice line="332" code="50013">Parameter $data] could not be found in fromArray()</notice>
+      <error line="158" code="50014">Name of argument $data does not match with the DocBlock's name $data] in populate()</error>
+      <error line="158" code="50016">The type hint of the argument is incorrect for the type definition of the @param tag with argument $data in populate()</error>
+      <notice line="158" code="50013">Parameter $data] could not be found in populate()</notice>
     </parse_markers>
   </file>
-  <file path="FluxAPI/Storage.php" hash="49cc04433d2e9ef7f2b7e895d6fb7d03" package="Default">
+  <file path="FluxAPI/Storage.php" hash="d6169f003c47ebaea34bc252787c4a78" package="Default">
     <class final="false" abstract="true" namespace="FluxAPI" line="13" package="FluxAPI">
       <extends/>
       <name>Storage</name>
@@ -1118,15 +1260,15 @@
         <docblock line="44">
           <description>Returns the collection name from a given model instance</description>
           <long-description></long-description>
-          <tag line="44" name="param" description="" type="\FluxAPI\Model" variable="$model">
-            <type by_reference="false">\FluxAPI\Model</type>
+          <tag line="44" name="param" description="" type="string" variable="$model_name">
+            <type by_reference="false">string</type>
           </tag>
           <tag line="44" name="return" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
         <argument line="50">
-          <name>$model</name>
+          <name>$model_name</name>
           <default></default>
           <type/>
         </argument>
@@ -1556,7 +1698,7 @@
         <docblock line="334">
           <description>Returns last inserted ID of a given model type</description>
           <long-description>&lt;p&gt;Override this in your storage plugin.&lt;/p&gt;</long-description>
-          <tag line="334" name="param" description="" type="string" variable="$model">
+          <tag line="334" name="param" description="" type="string" variable="$model_name">
             <type by_reference="false">string</type>
           </tag>
           <tag line="334" name="return" description="" type="mixed">
@@ -1564,7 +1706,7 @@
           </tag>
         </docblock>
         <argument line="342">
-          <name>$model</name>
+          <name>$model_name</name>
           <default></default>
           <type/>
         </argument>
@@ -1575,7 +1717,7 @@
         <docblock line="347">
           <description>Returns the total count of a model (or the model by a query)</description>
           <long-description></long-description>
-          <tag line="347" name="param" description="" type="string" variable="$model">
+          <tag line="347" name="param" description="" type="string" variable="$model_name">
             <type by_reference="false">string</type>
           </tag>
           <tag line="347" name="param" description="" type="\FluxAPI\[Query" variable="$query]">
@@ -1586,7 +1728,7 @@
           </tag>
         </docblock>
         <argument line="354">
-          <name>$model</name>
+          <name>$model_name</name>
           <default></default>
           <type/>
         </argument>
@@ -1602,7 +1744,7 @@
         <docblock line="366">
           <description>Checks if a given model instance already exists in the storage</description>
           <long-description></long-description>
-          <tag line="366" name="param" description="" type="string" variable="$model">
+          <tag line="366" name="param" description="" type="string" variable="$model_name">
             <type by_reference="false">string</type>
           </tag>
           <tag line="366" name="param" description="" type="\FluxAPI\Model" variable="$instance">
@@ -1613,7 +1755,7 @@
           </tag>
         </docblock>
         <argument line="373">
-          <name>$model</name>
+          <name>$model_name</name>
           <default></default>
           <type/>
         </argument>
@@ -1629,7 +1771,7 @@
         <docblock line="388">
           <description>Saves/updates a given model instance to the storage</description>
           <long-description></long-description>
-          <tag line="388" name="param" description="" type="string" variable="$model">
+          <tag line="388" name="param" description="" type="string" variable="$model_name">
             <type by_reference="false">string</type>
           </tag>
           <tag line="388" name="param" description="" type="\FluxAPI\Model" variable="$instance">
@@ -1640,7 +1782,7 @@
           </tag>
         </docblock>
         <argument line="395">
-          <name>$model</name>
+          <name>$model_name</name>
           <default></default>
           <type/>
         </argument>
@@ -1656,7 +1798,7 @@
         <docblock line="453">
           <description>Loads instances of a model from the storage</description>
           <long-description></long-description>
-          <tag line="453" name="param" description="" type="string" variable="$model">
+          <tag line="453" name="param" description="" type="string" variable="$model_name">
             <type by_reference="false">string</type>
           </tag>
           <tag line="453" name="param" description="if not set all model instances will be loaded" type="\FluxAPI\[Query" variable="$query]">
@@ -1667,7 +1809,7 @@
           </tag>
         </docblock>
         <argument line="460">
-          <name>$model</name>
+          <name>$model_name</name>
           <default></default>
           <type/>
         </argument>
@@ -1807,7 +1949,7 @@
         <docblock line="524">
           <description>Updates a list of models in the storage with given data</description>
           <long-description></long-description>
-          <tag line="524" name="param" description="" type="string" variable="$model">
+          <tag line="524" name="param" description="" type="string" variable="$model_name">
             <type by_reference="false">string</type>
           </tag>
           <tag line="524" name="param" description="if null all models will be updated" type="\FluxAPI\[Query" variable="$query]">
@@ -1821,7 +1963,7 @@
           </tag>
         </docblock>
         <argument line="532">
-          <name>$model</name>
+          <name>$model_name</name>
           <default></default>
           <type/>
         </argument>
@@ -1842,7 +1984,7 @@
         <docblock line="543">
           <description>Deletes a list of models from the storage</description>
           <long-description></long-description>
-          <tag line="543" name="param" description="" type="string" variable="$model">
+          <tag line="543" name="param" description="" type="string" variable="$model_name">
             <type by_reference="false">string</type>
           </tag>
           <tag line="543" name="param" description="if null all models will be deleted" type="\FluxAPI\[Query" variable="$query]">
@@ -1853,7 +1995,7 @@
           </tag>
         </docblock>
         <argument line="550">
-          <name>$model</name>
+          <name>$model_name</name>
           <default></default>
           <type/>
         </argument>
@@ -1929,7 +2071,7 @@
           </tag>
         </docblock>
         <argument line="621">
-          <name>$model</name>
+          <name>$model_name</name>
           <default>NULL</default>
           <type/>
         </argument>
@@ -1952,7 +2094,7 @@
       <error line="543" code="50014">Name of argument $query does not match with the DocBlock's name $query] in delete()</error>
       <error line="543" code="50016">The type hint of the argument is incorrect for the type definition of the @param tag with argument $query in delete()</error>
       <notice line="543" code="50013">Parameter $query] could not be found in delete()</notice>
-      <error line="614" code="50014">Name of argument $model does not match with the DocBlock's name $model] in migrate()</error>
+      <error line="614" code="50014">Name of argument $model_name does not match with the DocBlock's name $model] in migrate()</error>
       <notice line="614" code="50013">Parameter $model] could not be found in migrate()</notice>
     </parse_markers>
   </file>
@@ -1980,7 +2122,7 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         </docblock>
         <argument line="22">
           <name>$api</name>
-          <default></default>
+          <default/>
           <type>\FluxAPI\Api</type>
         </argument>
       </method>
@@ -1989,14 +2131,14 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
       <error line="0" code="50007">No page-level DocBlock was found in file FluxAPI/Plugin.php</error>
     </parse_markers>
   </file>
-  <file path="FluxAPI/Query.php" hash="dc685eaf118eef5750b85d8d3eda73ff" package="Default">
+  <file path="FluxAPI/Query.php" hash="1f18633d225c3d8c105d9d0ae8079cbd" package="Default">
     <class final="false" abstract="false" namespace="FluxAPI" line="8" package="FluxAPI">
       <extends/>
       <name>Query</name>
       <full_name>\FluxAPI\Query</full_name>
       <docblock line="4">
         <description>A Storage Query</description>
-        <long-description/>
+        <long-description></long-description>
         <tag line="4" name="package" description="FluxAPI"/>
       </docblock>
       <constant namespace="FluxAPI" line="35" package="FluxAPI">
@@ -2028,19 +2170,19 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <name>$_filters</name>
         <default>array()</default>
         <docblock line="10">
-          <description/>
-          <long-description/>
+          <description></description>
+          <long-description></long-description>
           <tag line="10" name="var" description="Internal list of added filters" type="array">
             <type by_reference="false">array</type>
           </tag>
         </docblock>
       </property>
       <property final="false" static="false" visibility="private" line="18" namespace="FluxAPI" package="Default">
-        <name>$_model</name>
+        <name>$_modelName</name>
         <default>NULL</default>
         <docblock line="15">
-          <description/>
-          <long-description/>
+          <description></description>
+          <long-description></long-description>
           <tag line="15" name="var" description="Model this query is related to" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -2050,8 +2192,8 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <name>$_storage</name>
         <default>NULL</default>
         <docblock line="20">
-          <description/>
-          <long-description/>
+          <description></description>
+          <long-description></long-description>
           <tag line="20" name="var" description="the storage using this query" type="\FluxAPI\Storage">
             <type by_reference="false">\FluxAPI\Storage</type>
           </tag>
@@ -2061,8 +2203,8 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <name>$_type</name>
         <default>NULL</default>
         <docblock line="25">
-          <description/>
-          <long-description/>
+          <description></description>
+          <long-description></long-description>
           <tag line="25" name="var" description="The query type" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -2072,8 +2214,8 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <name>$_data</name>
         <default>array()</default>
         <docblock line="30">
-          <description/>
-          <long-description/>
+          <description></description>
+          <long-description></long-description>
           <tag line="30" name="var" description="Internal values for a INSERT or UPDATE query" type="array">
             <type by_reference="false">array</type>
           </tag>
@@ -2084,7 +2226,7 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>__construct</full_name>
         <docblock line="41">
           <description>Constructor</description>
-          <long-description/>
+          <long-description></long-description>
         </docblock>
       </method>
       <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="57" package="FluxAPI">
@@ -2092,7 +2234,7 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>filter</full_name>
         <docblock line="49">
           <description>Adds a new query filter</description>
-          <long-description/>
+          <long-description></long-description>
           <tag line="49" name="chainable" description=""/>
           <tag line="49" name="param" description="" type="string" variable="$name">
             <type by_reference="false">string</type>
@@ -2106,12 +2248,12 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         </docblock>
         <argument line="57">
           <name>$name</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
         <argument line="57">
           <name>$params</name>
-          <default/>
+          <default></default>
           <type>array</type>
         </argument>
       </method>
@@ -2120,7 +2262,7 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>execute</full_name>
         <docblock line="63">
           <description>Executes the query and returns the query results (if any)</description>
-          <long-description/>
+          <long-description></long-description>
           <tag line="63" name="return" description="" type="mixed">
             <type by_reference="false">mixed</type>
           </tag>
@@ -2131,7 +2273,7 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>getFilters</full_name>
         <docblock line="73">
           <description>Returns a list of query filters</description>
-          <long-description/>
+          <long-description></long-description>
           <tag line="73" name="param" description="if set it will return all filters of same name" type="\FluxAPI\[string" variable="$name]">
             <type by_reference="false">\FluxAPI\[string</type>
           </tag>
@@ -2150,7 +2292,7 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>hasFilter</full_name>
         <docblock line="96">
           <description>Checks if the query has filter(s) of a given name</description>
-          <long-description/>
+          <long-description></long-description>
           <tag line="96" name="param" description="" type="string" variable="$name">
             <type by_reference="false">string</type>
           </tag>
@@ -2160,7 +2302,7 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         </docblock>
         <argument line="102">
           <name>$name</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
       </method>
@@ -2169,14 +2311,14 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>setStorage</full_name>
         <docblock line="115">
           <description>Sets the storage this query belongs to</description>
-          <long-description/>
+          <long-description></long-description>
           <tag line="115" name="param" description="" type="\FluxAPI\Storage" variable="$storage">
             <type by_reference="false">\FluxAPI\Storage</type>
           </tag>
         </docblock>
         <argument line="120">
           <name>$storage</name>
-          <default/>
+          <default></default>
           <type>\FluxAPI\Storage</type>
         </argument>
       </method>
@@ -2185,34 +2327,34 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>getStorage</full_name>
         <docblock line="125">
           <description>Returns the storage this query belongs to</description>
-          <long-description/>
+          <long-description></long-description>
           <tag line="125" name="return" description="" type="\FluxAPI\Storage">
             <type by_reference="false">\FluxAPI\Storage</type>
           </tag>
         </docblock>
       </method>
       <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="140" package="FluxAPI">
-        <name>setModel</name>
-        <full_name>setModel</full_name>
+        <name>setModelName</name>
+        <full_name>setModelName</full_name>
         <docblock line="135">
           <description>Sets the model this query is related with</description>
-          <long-description/>
+          <long-description></long-description>
           <tag line="135" name="param" description="" type="string" variable="$model">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
         <argument line="140">
           <name>$model</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
       </method>
       <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="150" package="FluxAPI">
-        <name>getModel</name>
-        <full_name>getModel</full_name>
+        <name>getModelName</name>
+        <full_name>getModelName</full_name>
         <docblock line="145">
           <description>Returns the model this query is related with</description>
-          <long-description/>
+          <long-description></long-description>
           <tag line="145" name="return" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -2223,14 +2365,14 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>setType</full_name>
         <docblock line="155">
           <description>Sets the query type</description>
-          <long-description/>
+          <long-description></long-description>
           <tag line="155" name="param" description="Possible values are: Query::TYPE_INSERT, Query::TYPE_UPDATE, Query::TYPE_DELETE, Query::TYPE_SELECT, Query::TYPE_COUNT" type="string" variable="$type">
             <type by_reference="false">string</type>
           </tag>
         </docblock>
         <argument line="160">
           <name>$type</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
       </method>
@@ -2239,7 +2381,7 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>getType</full_name>
         <docblock line="167">
           <description>Returns the query type</description>
-          <long-description/>
+          <long-description></long-description>
           <tag line="167" name="return" description="" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -2250,14 +2392,14 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>setData</full_name>
         <docblock line="177">
           <description>Sets the values for insert and update queries</description>
-          <long-description/>
+          <long-description></long-description>
           <tag line="177" name="param" description="" type="array" variable="$data">
             <type by_reference="false">array</type>
           </tag>
         </docblock>
         <argument line="182">
           <name>$data</name>
-          <default/>
+          <default></default>
           <type>array</type>
         </argument>
       </method>
@@ -2266,7 +2408,7 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>hasData</full_name>
         <docblock line="187">
           <description>Checks if this query has values</description>
-          <long-description/>
+          <long-description></long-description>
           <tag line="187" name="param" description="if set it will check if a value for a given field name is present" type="\FluxAPI\[string" variable="$field]">
             <type by_reference="false">\FluxAPI\[string</type>
           </tag>
@@ -2285,7 +2427,7 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>getData</full_name>
         <docblock line="203">
           <description>Returns the values of this query</description>
-          <long-description/>
+          <long-description></long-description>
           <tag line="203" name="param" description="if set only the value of a given field name will be returned" type="\FluxAPI\[string" variable="$field]">
             <type by_reference="false">\FluxAPI\[string</type>
           </tag>
@@ -2312,14 +2454,49 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
       <notice line="203" code="50013">Parameter $field] could not be found in getData()</notice>
     </parse_markers>
   </file>
-  <file path="FluxAPI/Field.php" hash="829b7bf47b89238e958b22f7a7e6f349" package="Default">
+  <file path="FluxAPI/DynamicModel.php" hash="475ddcbbc37d69202375d16f63389b7f" package="Default">
+    <class final="false" abstract="false" namespace="FluxAPI" line="10" package="FluxAPI">
+      <extends>\FluxAPI\Model</extends>
+      <name>DynamicModel</name>
+      <full_name>\FluxAPI\DynamicModel</full_name>
+      <docblock line="4">
+        <description>A dynamic model definition.</description>
+        <long-description>&lt;p&gt;This class is used for all dynamically created models.&lt;/p&gt;</long-description>
+        <tag line="4" name="package" description="FluxAPI"/>
+      </docblock>
+      <property final="false" static="false" visibility="protected" line="12" namespace="FluxAPI" package="Default">
+        <name>$_modelName</name>
+        <default></default>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="14" package="FluxAPI">
+        <name>setModelName</name>
+        <full_name>setModelName</full_name>
+        <argument line="14">
+          <name>$name</name>
+          <default></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="19" package="FluxAPI">
+        <name>getModelName</name>
+        <full_name>getModelName</full_name>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file FluxAPI/DynamicModel.php</error>
+      <error line="12" code="50018">No DocBlock was found for property $_modelName</error>
+      <error line="14" code="50010">No DocBlock was found for method setModelName()</error>
+      <error line="19" code="50010">No DocBlock was found for method getModelName()</error>
+    </parse_markers>
+  </file>
+  <file path="FluxAPI/Field.php" hash="3c72d6ffe16dd3b3c4e63229d9ac3a37" package="Default">
     <class final="false" abstract="false" namespace="FluxAPI" line="8" package="FluxAPI">
       <extends/>
       <name>Field</name>
       <full_name>\FluxAPI\Field</full_name>
       <docblock line="4">
         <description>A Models field definition</description>
-        <long-description/>
+        <long-description></long-description>
         <tag line="4" name="package" description="FluxAPI"/>
       </docblock>
       <constant namespace="FluxAPI" line="56" package="FluxAPI">
@@ -2396,8 +2573,8 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <name>$name</name>
         <default>NULL</default>
         <docblock line="10">
-          <description/>
-          <long-description/>
+          <description></description>
+          <long-description></long-description>
           <tag line="10" name="var" description="Name of the field as stored in the storage" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -2407,8 +2584,8 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <name>$type</name>
         <default>NULL</default>
         <docblock line="15">
-          <description/>
-          <long-description/>
+          <description></description>
+          <long-description></long-description>
           <tag line="15" name="var" description="Datatype of the field" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -2418,8 +2595,8 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <name>$unsigned</name>
         <default>FALSE</default>
         <docblock line="20">
-          <description/>
-          <long-description/>
+          <description></description>
+          <long-description></long-description>
           <tag line="20" name="var" description="Signed or unsigned (used for integers and floats)" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -2429,8 +2606,8 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <name>$length</name>
         <default>NULL</default>
         <docblock line="25">
-          <description/>
-          <long-description/>
+          <description></description>
+          <long-description></long-description>
           <tag line="25" name="var" description="Maximum length of the fields value" type="int">
             <type by_reference="false">int</type>
           </tag>
@@ -2440,8 +2617,8 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <name>$default</name>
         <default>NULL</default>
         <docblock line="30">
-          <description/>
-          <long-description/>
+          <description></description>
+          <long-description></long-description>
           <tag line="30" name="var" description="Default field value" type="mixed">
             <type by_reference="false">mixed</type>
           </tag>
@@ -2451,8 +2628,8 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <name>$primary</name>
         <default>FALSE</default>
         <docblock line="35">
-          <description/>
-          <long-description/>
+          <description></description>
+          <long-description></long-description>
           <tag line="35" name="var" description="Flag if field is primary (mostly used for IDs)" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -2462,8 +2639,8 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <name>$unique</name>
         <default>FALSE</default>
         <docblock line="40">
-          <description/>
-          <long-description/>
+          <description></description>
+          <long-description></long-description>
           <tag line="40" name="var" description="Flag if field value must be unique" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -2473,8 +2650,8 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <name>$autoIncrement</name>
         <default>FALSE</default>
         <docblock line="45">
-          <description/>
-          <long-description/>
+          <description></description>
+          <long-description></long-description>
           <tag line="45" name="var" description="Flag to set field values to automaticly increase" type="bool">
             <type by_reference="false">bool</type>
           </tag>
@@ -2484,8 +2661,8 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <name>$relationType</name>
         <default>NULL</default>
         <docblock line="50">
-          <description/>
-          <long-description/>
+          <description></description>
+          <long-description></long-description>
           <tag line="50" name="var" description="If the $type is of Field::TYPE_RELATION this must be set to the relation type: Field::HAS_ONE, Field::BELONGS_TO_ONE, Field::HAS_MANY, Field::BELONGS_TO_MANY" type="string">
             <type by_reference="false">string</type>
           </tag>
@@ -2500,7 +2677,7 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>__construct</full_name>
         <docblock line="72">
           <description>Constructor</description>
-          <long-description/>
+          <long-description></long-description>
           <tag line="72" name="param" description="" type="array" variable="$config">
             <type by_reference="false">array</type>
           </tag>
@@ -2511,13 +2688,18 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
           <type>array</type>
         </argument>
       </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="FluxAPI" line="86" package="FluxAPI">
+        <name>toArray</name>
+        <full_name>toArray</full_name>
+      </method>
     </class>
     <parse_markers>
       <error line="0" code="50007">No page-level DocBlock was found in file FluxAPI/Field.php</error>
       <error line="54" code="50018">No DocBlock was found for property $relationModel</error>
+      <error line="86" code="50010">No DocBlock was found for method toArray()</error>
     </parse_markers>
   </file>
-  <file path="Plugins/Core/Storage/MySql.php" hash="6b37860725c65a567ee66e10964a73a9" package="Default">
+  <file path="Plugins/Core/Storage/MySql.php" hash="acf58cbecc07805e8ff27e8ee70f47a2" package="Default">
     <class final="false" abstract="false" namespace="Plugins\Core\Storage" line="10" package="Default">
       <extends>\FluxAPI\Storage</extends>
       <name>MySql</name>
@@ -2531,12 +2713,12 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>filterSelect</full_name>
         <argument line="19">
           <name>$qb</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
         <argument line="19">
           <name>$params</name>
-          <default/>
+          <default></default>
           <type>array</type>
         </argument>
       </method>
@@ -2545,12 +2727,12 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>filterEqual</full_name>
         <argument line="25">
           <name>$qb</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
         <argument line="25">
           <name>$params</name>
-          <default/>
+          <default></default>
           <type>array</type>
         </argument>
       </method>
@@ -2559,12 +2741,12 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>filterNotEqual</full_name>
         <argument line="33">
           <name>$qb</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
         <argument line="33">
           <name>$params</name>
-          <default/>
+          <default></default>
           <type>array</type>
         </argument>
       </method>
@@ -2573,12 +2755,12 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>filterGreaterThen</full_name>
         <argument line="39">
           <name>$qb</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
         <argument line="39">
           <name>$params</name>
-          <default/>
+          <default></default>
           <type>array</type>
         </argument>
       </method>
@@ -2587,12 +2769,12 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>filterGreaterThenOrEqual</full_name>
         <argument line="45">
           <name>$qb</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
         <argument line="45">
           <name>$params</name>
-          <default/>
+          <default></default>
           <type>array</type>
         </argument>
       </method>
@@ -2601,12 +2783,12 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>filterLessThen</full_name>
         <argument line="51">
           <name>$qb</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
         <argument line="51">
           <name>$params</name>
-          <default/>
+          <default></default>
           <type>array</type>
         </argument>
       </method>
@@ -2615,12 +2797,12 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>filterLessThenOrEqual</full_name>
         <argument line="57">
           <name>$qb</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
         <argument line="57">
           <name>$params</name>
-          <default/>
+          <default></default>
           <type>array</type>
         </argument>
       </method>
@@ -2629,12 +2811,12 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>filterRange</full_name>
         <argument line="63">
           <name>$qb</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
         <argument line="63">
           <name>$params</name>
-          <default/>
+          <default></default>
           <type>array</type>
         </argument>
       </method>
@@ -2643,12 +2825,12 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>filterOrder</full_name>
         <argument line="72">
           <name>$qb</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
         <argument line="72">
           <name>$params</name>
-          <default/>
+          <default></default>
           <type>array</type>
         </argument>
       </method>
@@ -2657,12 +2839,12 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>filterLimit</full_name>
         <argument line="78">
           <name>$qb</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
         <argument line="78">
           <name>$params</name>
-          <default/>
+          <default></default>
           <type>array</type>
         </argument>
       </method>
@@ -2671,12 +2853,12 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>filterCount</full_name>
         <argument line="85">
           <name>$qb</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
         <argument line="85">
           <name>$params</name>
-          <default/>
+          <default></default>
           <type>array</type>
         </argument>
       </method>
@@ -2685,12 +2867,12 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>filterLike</full_name>
         <argument line="91">
           <name>$qb</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
         <argument line="91">
           <name>$params</name>
-          <default/>
+          <default></default>
           <type>array</type>
         </argument>
       </method>
@@ -2699,12 +2881,12 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>filterIn</full_name>
         <argument line="97">
           <name>$qb</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
         <argument line="97">
           <name>$params</name>
-          <default/>
+          <default></default>
           <type>array</type>
         </argument>
       </method>
@@ -2713,12 +2895,12 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>filterJoin</full_name>
         <argument line="119">
           <name>$qb</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
         <argument line="119">
           <name>$params</name>
-          <default/>
+          <default></default>
           <type>array</type>
         </argument>
       </method>
@@ -2727,12 +2909,12 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>filterInnerJoin</full_name>
         <argument line="138">
           <name>$qb</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
         <argument line="138">
           <name>$params</name>
-          <default/>
+          <default></default>
           <type>array</type>
         </argument>
       </method>
@@ -2741,12 +2923,12 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>filterLeftJoin</full_name>
         <argument line="143">
           <name>$qb</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
         <argument line="143">
           <name>$params</name>
-          <default/>
+          <default></default>
           <type>array</type>
         </argument>
       </method>
@@ -2766,8 +2948,8 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <name>getLastId</name>
         <full_name>getLastId</full_name>
         <argument line="173">
-          <name>$model</name>
-          <default/>
+          <name>$model_name</name>
+          <default></default>
           <type/>
         </argument>
       </method>
@@ -2776,50 +2958,50 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>loadRelation</full_name>
         <argument line="189">
           <name>$model</name>
-          <default/>
+          <default></default>
           <type>\FluxAPI\Model</type>
         </argument>
         <argument line="189">
           <name>$name</name>
-          <default/>
+          <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Plugins\Core\Storage" line="228" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Plugins\Core\Storage" line="226" package="Default">
         <name>addRelation</name>
         <full_name>addRelation</full_name>
-        <argument line="228">
+        <argument line="226">
           <name>$model</name>
-          <default/>
+          <default></default>
           <type>\FluxAPI\Model</type>
         </argument>
-        <argument line="228">
+        <argument line="226">
           <name>$relation</name>
-          <default/>
+          <default></default>
           <type>\FluxAPI\Model</type>
         </argument>
-        <argument line="228">
+        <argument line="226">
           <name>$field</name>
-          <default/>
+          <default></default>
           <type>\FluxAPI\Field</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Plugins\Core\Storage" line="254" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Plugins\Core\Storage" line="253" package="Default">
         <name>removeRelation</name>
         <full_name>removeRelation</full_name>
-        <argument line="254">
+        <argument line="253">
           <name>$model</name>
-          <default/>
+          <default></default>
           <type>\FluxAPI\Model</type>
         </argument>
-        <argument line="254">
+        <argument line="253">
           <name>$relation</name>
-          <default/>
+          <default></default>
           <type>\FluxAPI\Model</type>
         </argument>
-        <argument line="254">
+        <argument line="253">
           <name>$field</name>
-          <default/>
+          <default></default>
           <type>\FluxAPI\Field</type>
         </argument>
       </method>
@@ -2828,12 +3010,12 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
         <full_name>removeAllRelations</full_name>
         <argument line="271">
           <name>$model</name>
-          <default/>
+          <default></default>
           <type>\FluxAPI\Model</type>
         </argument>
         <argument line="271">
           <name>$field</name>
-          <default/>
+          <default></default>
           <type>\FluxAPI\Field</type>
         </argument>
         <argument line="271">
@@ -2842,90 +3024,72 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
           <type>array</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Plugins\Core\Storage" line="292" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Plugins\Core\Storage" line="293" package="Default">
         <name>getTableName</name>
         <full_name>getTableName</full_name>
-        <argument line="292">
-          <name>$name</name>
-          <default/>
+        <argument line="293">
+          <name>$model_name</name>
+          <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Plugins\Core\Storage" line="297" package="Default">
-        <name>getTableNameFromModelClass</name>
-        <full_name>getTableNameFromModelClass</full_name>
-        <argument line="297">
-          <name>$model</name>
-          <default/>
-          <type/>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Plugins\Core\Storage" line="302" package="Default">
-        <name>getRelationTableNameFromModelClass</name>
-        <full_name>getRelationTableNameFromModelClass</full_name>
-        <argument line="302">
-          <name>$model</name>
-          <default/>
-          <type/>
-        </argument>
-      </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Plugins\Core\Storage" line="307" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Plugins\Core\Storage" line="298" package="Default">
         <name>getRelationTableName</name>
         <full_name>getRelationTableName</full_name>
-        <argument line="307">
-          <name>$name</name>
-          <default/>
+        <argument line="298">
+          <name>$model_name</name>
+          <default></default>
           <type/>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Plugins\Core\Storage" line="312" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Plugins\Core\Storage" line="303" package="Default">
         <name>executeQuery</name>
         <full_name>executeQuery</full_name>
-        <argument line="312">
+        <argument line="303">
           <name>$query</name>
-          <default/>
+          <default></default>
           <type>\FluxAPI\Query</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Plugins\Core\Storage" line="422" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Plugins\Core\Storage" line="412" package="Default">
         <name>getFieldType</name>
         <full_name>getFieldType</full_name>
-        <argument line="422">
+        <argument line="412">
           <name>$field</name>
-          <default/>
+          <default></default>
           <type>\FluxAPI\Field</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Plugins\Core\Storage" line="436" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Plugins\Core\Storage" line="426" package="Default">
         <name>getFieldConfig</name>
         <full_name>getFieldConfig</full_name>
-        <argument line="436">
+        <argument line="426">
           <name>$field</name>
-          <default/>
+          <default></default>
           <type>\FluxAPI\Field</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Plugins\Core\Storage" line="455" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Plugins\Core\Storage" line="445" package="Default">
         <name>getRelationField</name>
         <full_name>getRelationField</full_name>
-        <argument line="455">
+        <argument line="445">
           <name>$field</name>
-          <default/>
+          <default></default>
           <type>\FluxAPI\Field</type>
         </argument>
       </method>
-      <method final="false" abstract="false" static="false" visibility="public" namespace="Plugins\Core\Storage" line="469" package="Default">
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Plugins\Core\Storage" line="459" package="Default">
         <name>migrate</name>
         <full_name>migrate</full_name>
-        <argument line="469">
-          <name>$model</name>
+        <argument line="459">
+          <name>$model_name</name>
           <default>NULL</default>
           <type/>
         </argument>
       </method>
     </class>
     <markers>
-      <todo line="493">split this into multiple methods</todo>
+      <todo line="481">split this into multiple methods</todo>
     </markers>
     <parse_markers>
       <error line="0" code="50007">No page-level DocBlock was found in file Plugins/Core/Storage/MySql.php</error>
@@ -2952,18 +3116,16 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
       <error line="168" code="50010">No DocBlock was found for method getConnection()</error>
       <error line="173" code="50010">No DocBlock was found for method getLastId()</error>
       <error line="189" code="50010">No DocBlock was found for method loadRelation()</error>
-      <error line="228" code="50010">No DocBlock was found for method addRelation()</error>
-      <error line="254" code="50010">No DocBlock was found for method removeRelation()</error>
+      <error line="226" code="50010">No DocBlock was found for method addRelation()</error>
+      <error line="253" code="50010">No DocBlock was found for method removeRelation()</error>
       <error line="271" code="50010">No DocBlock was found for method removeAllRelations()</error>
-      <error line="292" code="50010">No DocBlock was found for method getTableName()</error>
-      <error line="297" code="50010">No DocBlock was found for method getTableNameFromModelClass()</error>
-      <error line="302" code="50010">No DocBlock was found for method getRelationTableNameFromModelClass()</error>
-      <error line="307" code="50010">No DocBlock was found for method getRelationTableName()</error>
-      <error line="312" code="50010">No DocBlock was found for method executeQuery()</error>
-      <error line="422" code="50010">No DocBlock was found for method getFieldType()</error>
-      <error line="436" code="50010">No DocBlock was found for method getFieldConfig()</error>
-      <error line="455" code="50010">No DocBlock was found for method getRelationField()</error>
-      <error line="469" code="50010">No DocBlock was found for method migrate()</error>
+      <error line="293" code="50010">No DocBlock was found for method getTableName()</error>
+      <error line="298" code="50010">No DocBlock was found for method getRelationTableName()</error>
+      <error line="303" code="50010">No DocBlock was found for method executeQuery()</error>
+      <error line="412" code="50010">No DocBlock was found for method getFieldType()</error>
+      <error line="426" code="50010">No DocBlock was found for method getFieldConfig()</error>
+      <error line="445" code="50010">No DocBlock was found for method getRelationField()</error>
+      <error line="459" code="50010">No DocBlock was found for method migrate()</error>
     </parse_markers>
   </file>
   <file path="Plugins/Core/Model/Node.php" hash="55cc9402fddade26bae26574dfcc41fd" package="Default">
@@ -3043,7 +3205,7 @@ For these categories special base classes exist.&lt;/p&gt;</long-description>
       <namespace name="Storage" full_name="Plugins\Core\Storage"/>
     </namespace>
   </namespace>
-  <marker count="1">todo</marker>
+  <marker count="3">todo</marker>
   <marker count="0">fixme</marker>
   <deprecated count="0"/>
 </project>

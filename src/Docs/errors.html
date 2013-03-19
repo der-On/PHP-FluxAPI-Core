@@ -35,10 +35,10 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">100</span></a></li>
+                <span class="label label-info">106</span></a></li>
 <li><a href="markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul><li>todo 
-                <span class="label label-info">1</span>
+                <span class="label label-info">3</span>
 </li></ul></a></li>
 <li><a href="deprecated.html"><i class="icon-stop"></i> Deprecated elements 
                 <span class="label label-info">0</span></a></li>
@@ -65,6 +65,7 @@
 <li><a href="#FluxAPI/Storage.php"><i class="icon-file"></i>FluxAPI/Storage.php</a></li>
 <li><a href="#FluxAPI/Plugin.php"><i class="icon-file"></i>FluxAPI/Plugin.php</a></li>
 <li><a href="#FluxAPI/Query.php"><i class="icon-file"></i>FluxAPI/Query.php</a></li>
+<li><a href="#FluxAPI/DynamicModel.php"><i class="icon-file"></i>FluxAPI/DynamicModel.php</a></li>
 <li><a href="#FluxAPI/Field.php"><i class="icon-file"></i>FluxAPI/Field.php</a></li>
 <li><a href="#Plugins/Core/Storage/MySql.php"><i class="icon-file"></i>Plugins/Core/Storage/MySql.php</a></li>
 <li><a href="#Plugins/Core/Model/Node.php"><i class="icon-file"></i>Plugins/Core/Model/Node.php</a></li>
@@ -80,7 +81,7 @@
 </ul>
 <div class="package-contents">
 <a name="FluxAPI/Api.php" id="FluxAPI/Api.php"></a><h3>
-<i class="icon-file"></i>FluxAPI/Api.php<small style="float: right;padding-right: 10px;">16</small>
+<i class="icon-file"></i>FluxAPI/Api.php<small style="float: right;padding-right: 10px;">22</small>
 </h3>
 <div><table class="table markers table-bordered">
 <thead><tr>
@@ -96,85 +97,115 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>386</td>
-<td>Name of argument $model does not match with the DocBlock's name $model] in getStorage()</td>
+<td>448</td>
+<td>Name of argument $model_name does not match with the DocBlock's name $model_name] in getStorage()</td>
 </tr>
 <tr class="notice">
 <td>notice</td>
-<td>386</td>
-<td>Parameter $model] could not be found in getStorage()</td>
+<td>448</td>
+<td>Parameter $model_name] could not be found in getStorage()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>402</td>
+<td>464</td>
 <td>Name of argument $query does not match with the DocBlock's name $query] in loadModels()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>402</td>
+<td>464</td>
 <td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $query in loadModels()</td>
 </tr>
 <tr class="notice">
 <td>notice</td>
-<td>402</td>
+<td>464</td>
 <td>Parameter $query] could not be found in loadModels()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>467</td>
+<td>529</td>
 <td>Name of argument $data does not match with the DocBlock's name $data] in createModel()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>467</td>
+<td>529</td>
 <td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $data in createModel()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>467</td>
+<td>529</td>
 <td>Name of argument $format does not match with the DocBlock's name $format] in createModel()</td>
 </tr>
 <tr class="notice">
 <td>notice</td>
-<td>467</td>
+<td>529</td>
 <td>Parameter $data] could not be found in createModel()</td>
 </tr>
 <tr class="notice">
 <td>notice</td>
-<td>467</td>
+<td>529</td>
 <td>Parameter $format] could not be found in createModel()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>507</td>
+<td>576</td>
+<td>Name of argument $data does not match with the DocBlock's name $data] in modelFromArray()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>576</td>
+<td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $data in modelFromArray()</td>
+</tr>
+<tr class="notice">
+<td>notice</td>
+<td>576</td>
+<td>Parameter $data] could not be found in modelFromArray()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>672</td>
 <td>Name of argument $query does not match with the DocBlock's name $query] in deleteModels()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>507</td>
+<td>672</td>
 <td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $query in deleteModels()</td>
 </tr>
 <tr class="notice">
 <td>notice</td>
-<td>507</td>
+<td>672</td>
 <td>Parameter $query] could not be found in deleteModels()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>526</td>
-<td>Name of argument $model does not match with the DocBlock's name $model] in migrate()</td>
+<td>691</td>
+<td>Name of argument $format does not match with the DocBlock's name $format] in extendModel()</td>
 </tr>
 <tr class="notice">
 <td>notice</td>
-<td>526</td>
-<td>Parameter $model] could not be found in migrate()</td>
+<td>691</td>
+<td>Parameter $format] could not be found in extendModel()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>753</td>
+<td>No DocBlock was found for method getExtends()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>762</td>
+<td>Name of argument $model_name does not match with the DocBlock's name $model_name] in migrate()</td>
+</tr>
+<tr class="notice">
+<td>notice</td>
+<td>762</td>
+<td>Parameter $model_name] could not be found in migrate()</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <div class="package-contents">
 <a name="FluxAPI/Model.php" id="FluxAPI/Model.php"></a><h3>
-<i class="icon-file"></i>FluxAPI/Model.php<small style="float: right;padding-right: 10px;">9</small>
+<i class="icon-file"></i>FluxAPI/Model.php<small style="float: right;padding-right: 10px;">6</small>
 </h3>
 <div><table class="table markers table-bordered">
 <thead><tr>
@@ -200,33 +231,18 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>143</td>
+<td>158</td>
 <td>Name of argument $data does not match with the DocBlock's name $data] in populate()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>143</td>
+<td>158</td>
 <td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $data in populate()</td>
 </tr>
 <tr class="notice">
 <td>notice</td>
-<td>143</td>
+<td>158</td>
 <td>Parameter $data] could not be found in populate()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>332</td>
-<td>Name of argument $data does not match with the DocBlock's name $data] in fromArray()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>332</td>
-<td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $data in fromArray()</td>
-</tr>
-<tr class="notice">
-<td>notice</td>
-<td>332</td>
-<td>Parameter $data] could not be found in fromArray()</td>
 </tr>
 </tbody>
 </table></div>
@@ -325,7 +341,7 @@
 <tr class="error">
 <td>error</td>
 <td>614</td>
-<td>Name of argument $model does not match with the DocBlock's name $model] in migrate()</td>
+<td>Name of argument $model_name does not match with the DocBlock's name $model] in migrate()</td>
 </tr>
 <tr class="notice">
 <td>notice</td>
@@ -402,8 +418,42 @@
 </table></div>
 </div>
 <div class="package-contents">
+<a name="FluxAPI/DynamicModel.php" id="FluxAPI/DynamicModel.php"></a><h3>
+<i class="icon-file"></i>FluxAPI/DynamicModel.php<small style="float: right;padding-right: 10px;">4</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>0</td>
+<td>No page-level DocBlock was found in file FluxAPI/DynamicModel.php</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>12</td>
+<td>No DocBlock was found for property $_modelName</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>14</td>
+<td>No DocBlock was found for method setModelName()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>19</td>
+<td>No DocBlock was found for method getModelName()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
 <a name="FluxAPI/Field.php" id="FluxAPI/Field.php"></a><h3>
-<i class="icon-file"></i>FluxAPI/Field.php<small style="float: right;padding-right: 10px;">2</small>
+<i class="icon-file"></i>FluxAPI/Field.php<small style="float: right;padding-right: 10px;">3</small>
 </h3>
 <div><table class="table markers table-bordered">
 <thead><tr>
@@ -422,12 +472,17 @@
 <td>54</td>
 <td>No DocBlock was found for property $relationModel</td>
 </tr>
+<tr class="error">
+<td>error</td>
+<td>86</td>
+<td>No DocBlock was found for method toArray()</td>
+</tr>
 </tbody>
 </table></div>
 </div>
 <div class="package-contents">
 <a name="Plugins/Core/Storage/MySql.php" id="Plugins/Core/Storage/MySql.php"></a><h3>
-<i class="icon-file"></i>Plugins/Core/Storage/MySql.php<small style="float: right;padding-right: 10px;">36</small>
+<i class="icon-file"></i>Plugins/Core/Storage/MySql.php<small style="float: right;padding-right: 10px;">34</small>
 </h3>
 <div><table class="table markers table-bordered">
 <thead><tr>
@@ -558,12 +613,12 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>228</td>
+<td>226</td>
 <td>No DocBlock was found for method addRelation()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>254</td>
+<td>253</td>
 <td>No DocBlock was found for method removeRelation()</td>
 </tr>
 <tr class="error">
@@ -573,47 +628,37 @@
 </tr>
 <tr class="error">
 <td>error</td>
-<td>292</td>
+<td>293</td>
 <td>No DocBlock was found for method getTableName()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>297</td>
-<td>No DocBlock was found for method getTableNameFromModelClass()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>302</td>
-<td>No DocBlock was found for method getRelationTableNameFromModelClass()</td>
-</tr>
-<tr class="error">
-<td>error</td>
-<td>307</td>
+<td>298</td>
 <td>No DocBlock was found for method getRelationTableName()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>312</td>
+<td>303</td>
 <td>No DocBlock was found for method executeQuery()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>422</td>
+<td>412</td>
 <td>No DocBlock was found for method getFieldType()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>436</td>
+<td>426</td>
 <td>No DocBlock was found for method getFieldConfig()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>455</td>
+<td>445</td>
 <td>No DocBlock was found for method getRelationField()</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>469</td>
+<td>459</td>
 <td>No DocBlock was found for method migrate()</td>
 </tr>
 </tbody>
@@ -721,7 +766,7 @@
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2013-03-17T21:45:51+01:00.<br></footer></div>
+            generated on 2013-03-19T22:02:45+01:00.<br></footer></div>
 </div>
 </body>
 </html>
