@@ -16,9 +16,18 @@ abstract class FluxApi_Database_TestCase extends PHPUnit_Extensions_Database_Tes
     {
         self::$config = $this->getConfig();
 
+        // remove all extends
+        foreach(scandir(__DIR__ .'/_extends/') as $file) {
+            $file_path = __DIR__ .'/_extends/'.$file;
+            if (!in_array($file,array('.','..')) && is_dir($file_path)) {
+                exec('rm -r '.$file_path);
+            }
+        }
+
         // clear the database
         $conn = $this->getConnection();
         self::$pdo->exec('DROP TABLE IF EXISTS node');
+        self::$pdo->exec('DROP TABLE IF EXISTS node_rel');
 
         $loader = require __DIR__ . '/../../../vendor/autoload.php';
 

@@ -217,6 +217,12 @@ class Api
         switch($type) {
             case 'Model':
                 $this->_extends[$type][$name] = json_decode(file_get_contents($extends_dir.'/'.$file),TRUE);
+
+                // if this is a dynamic model we have to register it as a model plugin
+                if (!isset($this->_plugins[$type][$name])) {
+                    $this->_plugins[$type][$name] = 'FluxAPI\DynamicModel';
+                }
+
                 $this->registerPluginMethods($type,$name);
                 break;
         }
@@ -254,21 +260,21 @@ class Api
     }
 
     /**
-     * Registers all magic methods for all registered models
+     * Registers all magic methods for a registered model
      *
-     * @param string $model
+     * @param string $model_name
      */
-    public function registerModelMethods($model)
+    public function registerModelMethods($model_name)
     {
         $self = $this;
 
-        $model = ucfirst($model);
+        $model_name = ucfirst($model_name);
 
-        $this->_methods['load'.$model.'s'] = function($query = NULL, $format = NULL) use ($model, $self) {
-            $models =  $self->loadModels($model,$query);
+        $this->_methods['load'.$model_name.'s'] = function($query = NULL, $format = NULL) use ($model_name, $self) {
+            $models =  $self->loadModels($model_name,$query);
 
             if (in_array($format,array(Api::DATA_FORMAT_ARRAY,Api::DATA_FORMAT_JSON,Api::DATA_FORMAT_YAML))) {
-                foreach($models as $i => $model) {
+                foreach($models as $i => $model_name) {
                     $models[$i] = $models[$i]->toArray();
                 }
             }
@@ -288,12 +294,12 @@ class Api
                     break;
 
                 case Api::DATA_FORMAT_XML:
-                    $xml = '<?xml version="1.0"?>'."\n"."<".$model."s>\n";
+                    $xml = '<?xml version="1.0"?>'."\n"."<".$model_name."s>\n";
 
                     foreach($models as $_model) {
                         $xml .= trim(str_replace('<?xml version="1.0"?>','',$_model->toXml()))."\n";
                     }
-                    $xml .= "</".$model."s>";
+                    $xml .= "</".$model_name."s>";
                     return $xml;
                     break;
 
@@ -302,7 +308,7 @@ class Api
             }
         };
 
-        $this->_methods['load'.$model] = function($query, $format = NULL) use ($model, $self) {
+        $this->_methods['load'.$model_name] = function($query, $format = NULL) use ($model_name, $self) {
 
             if (is_string($query)) {
                 $id = $query;
@@ -314,7 +320,7 @@ class Api
                 $query->filter('limit',array(0,1));
             }
 
-            $models = $self->loadModels($model,$query);
+            $models = $self->loadModels($model_name,$query);
 
             if (count($models)) {
                 switch($format) {
@@ -342,15 +348,15 @@ class Api
             }
         };
 
-        $this->_methods['save'.$model] = function($instance) use ($model, $self) {
-            return $self->saveModel($model,$instance);
+        $this->_methods['save'.$model_name] = function($instance) use ($model_name, $self) {
+            return $self->saveModel($model_name,$instance);
         };
 
-        $this->_methods['delete'.$model.'s'] = function($query = NULL) use ($model, $self) {
-            return $self->deleteModels($model, $query);
+        $this->_methods['delete'.$model_name.'s'] = function($query = NULL) use ($model_name, $self) {
+            return $self->deleteModels($model_name, $query);
         };
 
-        $this->_methods['delete'.$model] = function($query) use ($model, $self) {
+        $this->_methods['delete'.$model_name] = function($query) use ($model_name, $self) {
             if (is_string($query)) {
                 $id = $query;
                 $query = new Query();
@@ -368,29 +374,29 @@ class Api
             }
 
 
-            return $self->deleteModels($model, $query);
+            return $self->deleteModels($model_name, $query);
         };
 
-        $this->_methods['update'.$model.'s'] = function($query, array $data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model, $self) {
+        $this->_methods['update'.$model_name.'s'] = function($query, array $data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model_name, $self) {
             if (is_array($query)) {
                 $ids = $query;
 
                 $query = new Query();
                 $query->filter('in',array('id',$ids));
             }
-            return $self->updateModels($model, $query, $data, $format);
+            return $self->updateModels($model_name, $query, $data, $format);
         };
 
-        $this->_methods['update'.$model] = function($id, array $data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model, $self) {
+        $this->_methods['update'.$model_name] = function($id, array $data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model_name, $self) {
             $query = new Query();
             $query->filter('equal',array('id',$id));
             $query->filter('limit',array(0,1));
 
-            return $self->updateModels($model, $query, $data, $format);
+            return $self->updateModels($model_name, $query, $data, $format);
         };
 
-        $this->_methods['create'.$model] = function($data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model, $self) {
-            return $self->createModel($model, $data, $format);
+        $this->_methods['create'.$model_name] = function($data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model_name, $self) {
+            return $self->createModel($model_name, $data, $format);
         };
     }
 
@@ -510,41 +516,144 @@ class Api
     /**
      * Creates a new instance of a model
      *
-     * @param string $model
+     * @param string $model_name
      * @param [array $data] if set the model will contain that initial data
      * @param [string $format] the format of the given $data
      * @return null|Model
      */
-    public function createModel($model, array $data = array(), $format = Api::DATA_FORMAT_ARRAY)
+    public function createModel($model_name, array $data = array(), $format = Api::DATA_FORMAT_ARRAY)
     {
         $models = $this->getPlugins('Model');
+        $extends = $this->_extends['Model'];
 
-        if (isset($models[$model])) {
-            $class_name = $models[$model];
-
+        if (isset($models[$model_name])) {
             switch($format) {
                 case self::DATA_FORMAT_ARRAY:
-                    return $class_name::fromArray($data);
+                    $instance = $this->modelFromArray($model_name, $data);
                     break;
 
                 case self::DATA_FORMAT_JSON:
-                    return $class_name::fromJson($data);
+                    $instance = $this->modelFromJson($model_name, $data);
                     break;
 
                 case self::DATA_FORMAT_XML:
-                    return $class_name::fromXml($data);
+                    $instance = $this->modelFromXml($model_name, $data);
                     break;
 
                 case self::DATA_FORMAT_YAML:
-                    return $class_name::fromYaml($data);
+                    $instance = $this->modelFromYaml($model_name, $data);
                     break;
 
                 default:
-                    return $class_name::fromArray($data);
+                    $instance = $this->modelFromArray($model_name, $data);
             }
+
+            if (isset($extends[$model_name]) && $instance->getModelName() != $model_name) {
+                $instance->setModelName($model_name);
+                $instance->addExtends();
+                $instance->setDefaults();
+            }
+
+            return $instance;
         }
 
         return NULL;
+    }
+
+    /**
+     * Returns a new model instance with data from an array
+     *
+     * @param string $model_name
+     * @param [array $data]
+     * @return Model
+     */
+    public function modelFromArray($model_name, array $data = array())
+    {
+        $className = $this->getPluginClass('Model',$model_name);
+
+        if (!empty($className) && !empty($data)) {
+            return new $className($data);
+        } else {
+            return new $className();
+        }
+    }
+
+    /**
+     * Returns a new model instance with data form an object
+     *
+     * @param string $model_name
+     * @param object $object
+     * @return Model
+     */
+    public function modelFromObject($model_name, $object)
+    {
+        $data = array();
+
+        if (is_object($object)) {
+            foreach(get_object_vars($object) as $name => $value) {
+                $data[$name] = $value;
+            }
+        }
+
+        return $this->modelFromArray($model_name, $data);
+    }
+
+    /**
+     * Returns a new model instance with data from a JSON string
+     *
+     * @param string $model_name
+     * @param string $json
+     * @return Model|null
+     */
+    public function modelFromJson($model_name, $json)
+    {
+        $data = array();
+
+        if (!empty($json)) {
+            $data = json_decode($json,TRUE);
+        }
+
+        return $this->modelFromArray($model_name, $data);
+    }
+
+    /**
+     * Returns a new model instance with data from a XML string
+     *
+     * @param string $model_name
+     * @param string $xml
+     * @return Model|null
+     */
+    public function modelFromXml($model_name, $xml)
+    {
+        $data = array();
+
+        if (!empty($xml)) {
+            $api = \FluxAPI\Api::getInstance();
+
+            $parser = new \Symfony\Component\Serializer\Encoder\XmlEncoder($model_name);
+            $data = $parser->decode($xml,'xml');
+        }
+
+        return $this->modelFromArray($model_name, $data);
+    }
+
+    /**
+     * Returns a new model instance with data from a YAML string
+     *
+     * @param string $model_name
+     * @param string $yaml
+     * @return Model|null
+     */
+    public function modelFromYaml($model_name, $yaml)
+    {
+        $data = array();
+
+        if (!empty($yaml)) {
+            $parser = new \Symfony\Component\Yaml\Parser();
+            $data = $parser->parse($yaml);
+        }
+
+        return $this->modelFromArray($model_name, $data);
     }
 
     /**
@@ -569,14 +678,14 @@ class Api
     /**
      * Extends a model with new fields. If the model does not exists, it will be created.
      *
-     * @param string $model
+     * @param string $model_name
      * @param array $fields Field definitions. Either containing real Field instances or key => value pairs
      * @param [string $format] the format of the $fields. Default is Api::DATA_FORMAT_ARRAY.
      */
-    public function extendModel($model, array $fields, $format = self::DATA_FORMAT_ARRAY)
+    public function extendModel($model_name, array $fields, $format = self::DATA_FORMAT_ARRAY)
     {
         $extend_dir = $this->config['extends_path'].'/Model';
-        $file = $extend_dir.'/'.$model.'.json';
+        $file = $extend_dir.'/'.$model_name.'.json';
         $version = 1;
 
         if (!file_exists($extend_dir)) {
@@ -611,7 +720,7 @@ class Api
             }
 
             $config = array(
-                'name' => $model,
+                'name' => $model_name,
                 'updated' => date('c'),
                 'version' => $version,
                 'fields' => $_fields,
@@ -619,13 +728,9 @@ class Api
 
             file_put_contents($file, json_encode($config, JSON_PRETTY_PRINT));
 
-            // add model to model plugins
-            $instance = new DynamicModel();
-            $instance->setModelName($model);
+            $this->registerExtend('Model',$model_name);
 
-            $this->registerExtend('Model',$model);
-
-            $this->migrate($model);
+            $this->migrate($model_name);
 
         } else {
             // TODO: throw an exception

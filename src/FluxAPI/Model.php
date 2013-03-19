@@ -44,8 +44,8 @@ abstract class Model
     {
         $this->_api = \FluxApi\Api::getInstance();
         $this->defineFields();
-        $this->_addExtends();
-        $this->_setDefaults();
+        $this->addExtends();
+        $this->setDefaults();
 
         $this->populate($data);
     }
@@ -132,16 +132,19 @@ abstract class Model
     }
 
     /**
-     * Internal method to set default field values. Called automatically in the constructor.
+     * Sets default field values. Called automatically in the constructor.
      */
-    private function _setDefaults()
+    public function setDefaults()
     {
         foreach($this->_fields as $name => $field) {
-            $this->_data[$name] = $field->default;
+            if (!isset($this->_data[$name])) $this->_data[$name] = $field->default;
         }
     }
 
-    private function _addExtends()
+    /**
+     * Adds dynamic extends (currently only fields)
+     */
+    public function addExtends()
     {
         $extends = $this->_api->getExtends('Model',$this->getModelName());
 
@@ -180,7 +183,7 @@ abstract class Model
      *
      * @return string
      */
-    public static function getModelName()
+    public function getModelName()
     {
         $parts = explode('\\',self::getClassName());
         return $parts[count($parts)-1];
@@ -339,96 +342,5 @@ abstract class Model
         $dumper = new \Symfony\Component\Yaml\Dumper();
 
         return $dumper->dump($array,2);
-    }
-
-    /**
-     * Returns a new instance with data from an array
-     *
-     * @param [array $data]
-     * @return Model
-     */
-    public static function fromArray(array $data = array())
-    {
-        $className = self::getClassName();
-        return new $className($data);
-    }
-
-    /**
-     * Returns a new instance with data form an object
-     *
-     * @param object $object
-     * @return Model
-     */
-    public static function fromObject($object)
-    {
-        $data = array();
-
-        if (is_object($object)) {
-            foreach(get_object_vars($object) as $name => $value) {
-                $data[$name] = $value;
-            }
-        }
-        return self::fromArray($data);
-    }
-
-    /**
-     * Returns a new instance with data from a JSON string
-     *
-     * @param string $json
-     * @return Model|null
-     */
-    public static function fromJson($json)
-    {
-        $data = array();
-
-        if (!empty($json)) {
-            $data = json_decode($json,TRUE);
-
-            if (!empty($data)) {
-                return self::fromArray($data);
-            }
-        }
-
-        return NULL;
-    }
-
-    /**
-     * Returns a new instance with data from a XML string
-     *
-     * @param string $xml
-     * @return Model|null
-     */
-    public static function fromXml($xml)
-    {
-        $data = array();
-
-        if (!empty($xml)) {
-            $api = \FluxAPI\Api::getInstance();
-
-            $parser = new \Symfony\Component\Serializer\Encoder\XmlEncoder(self::getModelName());
-            $data = $parser->decode($xml,'xml');
-
-            return self::fromArray($data);
-        }
-
-        return NULL;
-    }
-
-    /**
-     * Returns a new instance with data from a YAML string
-     *
-     * @param string $yaml
-     * @return Model|null
-     */
-    public static function fromYaml($yaml)
-    {
-        $data = array();
-
-        if (!empty($yaml)) {
-            $parser = new \Symfony\Component\Yaml\Parser();
-            $data = $parser->parse($yaml);
-        }
-
-        return self::fromArray($data);
     }
 }

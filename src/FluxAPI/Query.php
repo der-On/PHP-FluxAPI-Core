@@ -15,7 +15,7 @@ class Query
     /**
      * @var string Model this query is related to
      */
-    private $_model = NULL;
+    private $_modelName = NULL;
 
     /**
      * @var Storage the storage using this query
@@ -137,9 +137,9 @@ class Query
      *
      * @param string $model
      */
-    public function setModel($model)
+    public function setModelName($model)
     {
-        $this->_model = $model;
+        $this->_modelName = $model;
     }
 
     /**
@@ -147,9 +147,9 @@ class Query
      *
      * @return string
      */
-    public function getModel()
+    public function getModelName()
     {
-        return $this->_model;
+        return $this->_modelName;
     }
 
     /**

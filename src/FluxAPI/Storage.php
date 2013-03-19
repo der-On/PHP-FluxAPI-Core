@@ -44,13 +44,12 @@ abstract class Storage
     /**
      * Returns the collection name from a given model instance
      *
-     * @param Model $model
+     * @param string $model_name
      * @return string
      */
-    public static function getCollectionName($model)
+    public static function getCollectionName($model_name)
     {
-        $instance = new $model();
-        return strtolower($instance->getModelName());
+        return strtolower($model_name);
     }
 
     /**
@@ -337,10 +336,10 @@ abstract class Storage
      *
      * Override this in your storage plugin.
      *
-     * @param string $model
+     * @param string $model_name
      * @return mixed
      */
-    public function getLastId($model)
+    public function getLastId($model_name)
     {
         return NULL;
     }
@@ -376,7 +375,7 @@ abstract class Storage
         if (isset($instance->id) && !empty($instance->id)) {
             $query = new Query();
             $query->setType(Query::TYPE_COUNT);
-            $query->setModel($model);
+            $query->setModelName($model);
             $query->filter('equal',array('id',$instance->id));
 
             $result = $this->executeQuery($query);
@@ -402,7 +401,7 @@ abstract class Storage
             $query->setType(Query::TYPE_UPDATE);
         }
 
-        $query->setModel($model);
+        $query->setModelName($model);
         $query->setData($instance->toArray());
 
         $success = $this->executeQuery($query);
@@ -464,7 +463,7 @@ abstract class Storage
             $query = new Query();
         }
         $query->setType(Query::TYPE_SELECT);
-        $query->setModel($model);
+        $query->setModelName($model);
         return $this->executeQuery($query);
     }
 
@@ -536,7 +535,7 @@ abstract class Storage
             $query = new Query();
         }
         $query->setType(Query::TYPE_UPDATE);
-        $query->setModel($model);
+        $query->setModelName($model);
         $query->setData($data);
         return $this->executeQuery($query);
     }
@@ -554,7 +553,7 @@ abstract class Storage
             $query = new Query();
         }
         $query->setType(Query::TYPE_DELETE);
-        $query->setModel($model);
+        $query->setModelName($model);
 
         return $this->executeQuery($query);
     }
@@ -619,7 +618,7 @@ abstract class Storage
      *
      * @param [string $model]
      */
-    public function migrate($model = NULL)
+    public function migrate($model_name = NULL)
     {
 
     }

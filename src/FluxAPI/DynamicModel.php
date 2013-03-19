@@ -15,4 +15,9 @@ class DynamicModel extends Model
     {
         $this->_modelName = $name;
     }
+
+    public function getModelName()
+    {
+        return $this->_modelName;
+    }
 }

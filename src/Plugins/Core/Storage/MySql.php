@@ -170,10 +170,10 @@ class MySql extends \FluxAPI\Storage
         return $this->_api->app['db'];
     }
 
-    public function getLastId($model)
+    public function getLastId($model_name)
     {
         $connection = $this->getConnection();
-        $table_name = $this->getTableName($model);
+        $table_name = $this->getTableName($model_name);
 
         $sql = 'SELECT LAST_INSERT_ID() FROM '.$table_name;
 
@@ -198,11 +198,9 @@ class MySql extends \FluxAPI\Storage
             $id = $model->id;
             $model_name = $model->getModelName();
             $id_field_name = strtolower($model_name).'_id';
-            $model_class = $model->getClassName();
 
-            $rel_id_field = $this->getRelationField($field);
-            $table_name = $this->getTableNameFromModelClass($model_class);
-            $relation_table = $this->getRelationTableNameFromModelClass($model_class);
+            $table_name = $this->getTableName($model_name);
+            $relation_table = $this->getRelationTableName($model_name);
 
             $rel_field_name = $field->name.'_id';
 
@@ -227,8 +225,9 @@ class MySql extends \FluxAPI\Storage
 
     public function addRelation(\FluxAPI\Model $model, \FluxAPI\Model $relation, \FluxAPI\Field $field)
     {
-        $rel_table = $this->getRelationTableNameFromModelClass($model->getClassName()); // get the table name of the relations table
-        $model_field_name = $this->getCollectionName($model).'_id';
+        $model_name = $model->getModelName();
+        $rel_table = $this->getRelationTableName($model_name); // get the table name of the relations table
+        $model_field_name = $this->getCollectionName($model_name).'_id';
         $rel_field_name = $field->name.'_id';
 
         $connection = $this->getConnection();
@@ -253,8 +252,9 @@ class MySql extends \FluxAPI\Storage
 
     public function removeRelation(\FluxAPI\Model $model, \FluxAPI\Model $relation, \FluxAPI\Field $field)
     {
-        $rel_table = $this->getRelationTableNameFromModelClass($model->getClassName()); // get the table name of the relations table
-        $model_field_name = $this->getCollectionName($model).'_id';
+        $model_name = $model->getModelName();
+        $rel_table = $this->getRelationTableName($model_name); // get the table name of the relations table
+        $model_field_name = $this->getCollectionName($model_name).'_id';
         $rel_field_name = $field->name.'_id';
 
         $connection = $this->getConnection();
@@ -270,8 +270,9 @@ class MySql extends \FluxAPI\Storage
 
     public function removeAllRelations(\FluxAPI\Model $model, \FluxAPI\Field $field, array $exclude_ids = array())
     {
-        $rel_table = $this->getRelationTableNameFromModelClass($model->getClassName()); // get the table name of the relations table
-        $model_field_name = $this->getCollectionName($model).'_id';
+        $model_name = $model->getModelName();
+        $rel_table = $this->getRelationTableName($model_name); // get the table name of the relations table
+        $model_field_name = $this->getCollectionName($model_name).'_id';
         $rel_field_name = $field->name.'_id';
 
         $connection = $this->getConnection();
@@ -289,33 +290,22 @@ class MySql extends \FluxAPI\Storage
         $connection->query($sql);
     }
 
-    public function getTableName($name)
+    public function getTableName($model_name)
     {
-        return $this->config['table_prefix'].strtolower($name);
+        return $this->config['table_prefix'].$this->getCollectionName($model_name);
     }
 
-    public function getTableNameFromModelClass($model)
+    public function getRelationTableName($model_name)
     {
-        return $this->getTableName($this->getCollectionName($model));
-    }
-
-    public function getRelationTableNameFromModelClass($model)
-    {
-        return $this->getRelationTableName($this->getCollectionName($model));
-    }
-
-    public function getRelationTableName($name)
-    {
-        return $this->config['table_prefix'].strtolower($name).'_rel';
+        return $this->config['table_prefix'].$this->getCollectionName($model_name).'_rel';
     }
 
     public function executeQuery(\FluxAPI\Query $query)
     {
         parent::executeQuery($query);
 
-        $model = $query->getModel();
-        $modelClass = $this->_api->getPluginClass('Model',$model);
-        $tableName = $this->getTableNameFromModelClass($modelClass);
+        $model_name = $query->getModelName();
+        $tableName = $this->getTableName($model_name);
 
         $connection = $this->getConnection();
         $qb = $connection->createQueryBuilder();
@@ -410,7 +400,7 @@ class MySql extends \FluxAPI\Storage
                 $instances = array();
 
                 foreach($result as $data) {
-                    $instances[] = new $modelClass($data);
+                    $instances[] = $this->_api->createModel($model_name, $data);
                 }
                 return $instances;
             }
@@ -466,7 +456,7 @@ class MySql extends \FluxAPI\Storage
         }
     }
 
-    public function migrate($model = NULL)
+    public function migrate($model_name = NULL)
     {
         if (!$this->isConnected()) {
             $this->connect();
@@ -474,21 +464,19 @@ class MySql extends \FluxAPI\Storage
 
         $connection = $this->getConnection();
 
-        $sm = $connection->getSchemaManager();
-
         $toSchema = new Schema();
 
         $models = $this->_api->getPlugins('Model');
 
-        foreach($models as $model => $modelClass) {
-            $model = new $modelClass();
-            $table_name = $this->getTableNameFromModelClass($modelClass);
+        foreach($models as $model_name => $modelClass) {
+            $model = $this->_api->createModel($model_name);
+            $table_name = $this->getTableName($model_name);
             $table = $toSchema->createTable($table_name);
             $primary = array();
             $unique = array();
 
             // create relation table for this model
-            $relation_table = $toSchema->createTable($this->getRelationTableNameFromModelClass($modelClass));
+            $relation_table = $toSchema->createTable($this->getRelationTableName($model_name));
 
             // TODO: split this into multiple methods
 
@@ -504,7 +492,7 @@ class MySql extends \FluxAPI\Storage
 
                         // add own model id field to relation table
                         if ($field->name == 'id') {
-                            $relation_field_name = $this->getCollectionName($modelClass).'_id';
+                            $relation_field_name = $this->getCollectionName($model_name).'_id';
 
                             // autoincrement must be removed
                             if (isset($config['autoincrement'])) {
@@ -546,8 +534,6 @@ class MySql extends \FluxAPI\Storage
                 }
             }
         }
-
-        $sql = array();
 
         $comparator = new Comparator();
         $sm = $connection->getSchemaManager();
