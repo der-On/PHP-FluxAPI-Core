@@ -143,8 +143,6 @@ class ApiTest extends FluxApi_Database_TestCase
 
         self::$fluxApi->extendModel($model,$fields);
 
-        var_dump(self::$fluxApi->getPlugins('Model'));
-
         $instance = self::$fluxApi->createTestModel(array('title'=>'new test model','description'=>'test description'));
 
         $this->assertNotEmpty($instance);

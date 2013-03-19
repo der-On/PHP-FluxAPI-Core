@@ -347,11 +347,11 @@ abstract class Storage
     /**
      * Returns the total count of a model (or the model by a query)
      *
-     * @param string $model
+     * @param string $model_name
      * @param [Query $query]
      * @return int
      */
-    public function count($model, Query $query = NULL)
+    public function count($model_name, Query $query = NULL)
     {
         if (empty($query)) {
             $query = new Query();
@@ -366,16 +366,16 @@ abstract class Storage
     /**
      * Checks if a given model instance already exists in the storage
      *
-     * @param string $model
+     * @param string $model_name
      * @param Model $instance
      * @return bool
      */
-    public function exists($model, Model $instance)
+    public function exists($model_name, Model $instance)
     {
         if (isset($instance->id) && !empty($instance->id)) {
             $query = new Query();
             $query->setType(Query::TYPE_COUNT);
-            $query->setModelName($model);
+            $query->setModelName($model_name);
             $query->filter('equal',array('id',$instance->id));
 
             $result = $this->executeQuery($query);
@@ -388,27 +388,27 @@ abstract class Storage
     /**
      * Saves/updates a given model instance to the storage
      *
-     * @param string $model
+     * @param string $model_name
      * @param Model $instance
      * @return bool
      */
-    public function save($model, Model $instance)
+    public function save($model_name, Model $instance)
     {
         $query = new Query();
         $query->setType(Query::TYPE_INSERT);
 
-        if ($this->exists($model, $instance)) {
+        if ($this->exists($model_name, $instance)) {
             $query->setType(Query::TYPE_UPDATE);
         }
 
-        $query->setModelName($model);
+        $query->setModelName($model_name);
         $query->setData($instance->toArray());
 
         $success = $this->executeQuery($query);
 
         // if the model was new we have to set it's ID
         if ($instance->isNew()) {
-            $instance->id = $this->getLastId($model);
+            $instance->id = $this->getLastId($model_name);
         }
 
         // save relations
@@ -453,17 +453,17 @@ abstract class Storage
     /**
      * Loads instances of a model from the storage
      *
-     * @param string $model
+     * @param string $model_name
      * @param [Query $query] if not set all model instances will be loaded
      * @return array
      */
-    public function load($model, Query $query = NULL)
+    public function load($model_name, Query $query = NULL)
     {
         if (empty($query)) {
             $query = new Query();
         }
         $query->setType(Query::TYPE_SELECT);
-        $query->setModelName($model);
+        $query->setModelName($model_name);
         return $this->executeQuery($query);
     }
 
@@ -524,18 +524,18 @@ abstract class Storage
     /**
      * Updates a list of models in the storage with given data
      *
-     * @param string $model
+     * @param string $model_name
      * @param [Query $query] if null all models will be updated
      * @param array $data
      * @return bool
      */
-    public function update($model, Query $query = NULL, array $data = array())
+    public function update($model_name, Query $query = NULL, array $data = array())
     {
         if (empty($query)) {
             $query = new Query();
         }
         $query->setType(Query::TYPE_UPDATE);
-        $query->setModelName($model);
+        $query->setModelName($model_name);
         $query->setData($data);
         return $this->executeQuery($query);
     }
@@ -543,17 +543,17 @@ abstract class Storage
     /**
      * Deletes a list of models from the storage
      *
-     * @param string $model
+     * @param string $model_name
      * @param [Query $query] if null all models will be deleted
      * @return bool
      */
-    public function delete($model, Query $query = NULL)
+    public function delete($model_name, Query $query = NULL)
     {
         if (empty($query)) {
             $query = new Query();
         }
         $query->setType(Query::TYPE_DELETE);
-        $query->setModelName($model);
+        $query->setModelName($model_name);
 
         return $this->executeQuery($query);
     }

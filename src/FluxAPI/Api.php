@@ -189,6 +189,9 @@ class Api
         }
     }
 
+    /**
+     * Registers all extensions found in the extends directory
+     */
     public function registerExtends()
     {
         foreach(array_keys($this->_extends) as $type) {
@@ -209,6 +212,16 @@ class Api
         }
     }
 
+    /**
+     * Registers a single extension
+     *
+     * Will add dynamic models to the model plugins to make them available
+     *
+     * TODO: currently it will read in the json file but maybe it's better to only read those files on demand?
+     *
+     * @param $type
+     * @param $name
+     */
     public function registerExtend($type, $name)
     {
         $extends_dir = $this->config['extends_path'].'/'.$type;
@@ -435,10 +448,10 @@ class Api
     /**
      * Returns an instance of the storage for a given model
      *
-     * @param [string $model] if not set the default storage will be returned
+     * @param [string $model_name] if not set the default storage will be returned
      * @return Storage
      */
-    public function getStorage($model = NULL)
+    public function getStorage($model_name = NULL)
     {
         $storagePlugins = $this->getPlugins('Storage');
 
@@ -451,16 +464,16 @@ class Api
     /**
      * Loads and returns a list of Model instances
      *
-     * @param string $model
+     * @param string $model_name
      * @param [Query $query] if not set all instances of the model are loaded
      * @return array|null
      */
-    public function loadModels($model, Query $query = NULL)
+    public function loadModels($model_name, Query $query = NULL)
     {
         $models = $this->getPlugins('Model');
 
-        if (isset($models[$model])) {
-            return $this->getStorage($model)->load($model,$query);
+        if (isset($models[$model_name])) {
+            return $this->getStorage($model_name)->load($model_name,$query);
         }
 
         return array();
@@ -469,28 +482,28 @@ class Api
     /**
      * Saves a list of or a single model instance
      *
-     * @param string $model
+     * @param string $model_name
      * @param array|Model $instances
      * @return bool
      */
-    public function saveModel($model, $instances)
+    public function saveModel($model_name, $instances)
     {
         $models = $this->getPlugins('Model');
 
-        if (isset($models[$model])) {
+        if (isset($models[$model_name])) {
             if (empty($instances)) {
                 return FALSE;
             }
 
-            $storage = $this->getStorage($model);
+            $storage = $this->getStorage($model_name);
 
             if (is_array($instances)) {
                 foreach($instances as $instance) {
-                    $storage->save($model,$instance);
+                    $storage->save($model_name,$instance);
                 }
                 return TRUE;
             } else {
-                return $storage->save($model,$instances);
+                return $storage->save($model_name,$instances);
             }
         }
 
@@ -500,17 +513,17 @@ class Api
     /**
      * Updates models with certain data
      *
-     * @param string $model
+     * @param string $model_name
      * @param Query $query
      * @param array $data
      * @return bool
      */
-    public function updateModels($model, Query $query, array $data)
+    public function updateModels($model_name, Query $query, array $data)
     {
 
-        $storage = $this->getStorage($model);
+        $storage = $this->getStorage($model_name);
 
-        return $storage->update($model, $query, $data);
+        return $storage->update($model_name, $query, $data);
     }
 
     /**
@@ -659,17 +672,17 @@ class Api
     /**
      * Deletes models by a query
      *
-     * @param string $model
+     * @param string $model_name
      * @param [Query $query] if not set all instances of the model will be deleted
      * @return bool
      */
-    public function deleteModels($model, Query $query = NULL)
+    public function deleteModels($model_name, Query $query = NULL)
     {
         $models = $this->getPlugins('Model');
 
-        if (isset($models[$model])) {
-            $storage = $this->getStorage($model);
-            return $storage->delete($model, $query);
+        if (isset($models[$model_name])) {
+            $storage = $this->getStorage($model_name);
+            return $storage->delete($model_name, $query);
         }
 
         return FALSE;
@@ -748,11 +761,11 @@ class Api
 
     /**
      * Migrates the storage dabase(s) (for a given model)
-     * @param [string $model]
+     * @param [string $model_name]
      */
-    public function migrate($model = NULL)
+    public function migrate($model_name = NULL)
     {
-        $storage = $this->getStorage($model);
-        $storage->migrate($model);
+        $storage = $this->getStorage($model_name);
+        $storage->migrate($model_name);
     }
 }
