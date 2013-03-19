@@ -85,6 +85,79 @@ class ApiTest extends FluxApi_Database_TestCase
         $this->removeRelatedNodes();
     }
 
+    public function testExtendExistingModel()
+    {
+        $model = 'Node';
+
+        $fields = array(
+          array(
+              'name' => 'newField',
+              'type' => \FluxAPI\Field::TYPE_STRING,
+              'length' => 64
+          ),
+          array(
+              'name' => 'newField2',
+              'type' => \FluxAPI\Field::TYPE_INTEGER,
+              'length' => 10
+          )
+        );
+
+        self::$fluxApi->extendModel($model,$fields);
+
+        $node = self::$fluxApi->createNode(array(
+            'newField' => 'value 1',
+            'newField2' => 2
+        ));
+
+        // check that node contains the new fields
+        $this->assertNotEmpty($node);
+        $this->assertEquals($node->newField, 'value 1');
+        $this->assertEquals($node->newField2, 2);
+
+        // now make the node persistant and reload it form the storage
+        self::$fluxApi->saveNode($node);
+
+        $node = self::$fluxApi->loadNode('1');
+
+        // check that node contains the new fields
+        $this->assertNotEmpty($node);
+        $this->assertEquals($node->newField, 'value 1');
+        $this->assertEquals($node->newField2, 2);
+    }
+
+    public function testExtendNewModel()
+    {
+        $model = 'TestModel';
+
+        $fields = array(
+          new \FluxAPI\Field(array(
+              'name' => 'title',
+              'type' => \FluxAPI\Field::TYPE_STRING,
+              'length' => 512
+          )),
+          new \FluxAPI\Field(array(
+            'name' => 'description',
+            'type' => \FluxAPI\Field::TYPE_LONGSTRING,
+          ))
+        );
+
+        self::$fluxApi->extendModel($model,$fields);
+
+        $instance = self::$fluxApi->createTestModel(array('title'=>'new test model','description'=>'test description'));
+
+        $this->assertNotEmpty($instance);
+        $this->assertEquals($instance->title,'new test model');
+        $this->assertEquals($instance->description,'test description');
+
+        self::$fluxApi->saveTestModel($instance);
+
+        $instance = self::$fluxApi->loadTestModel('1');
+
+        $this->assertNotEmpty($instance);
+        $this->assertEquals($instance->title,'new test model');
+        $this->assertEquals($instance->description,'test description');
+    }
+
     public function createSingleNode()
     {
         $node = self::$fluxApi->createNode(array('title'=>'Node title','body'=>"Node body\non multiple lines"));

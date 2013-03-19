@@ -26,3 +26,6 @@ src/Tests/reports/
 
 # PHPDoc config
 phpdoc.dist.xml
+
+# extends
+extends

@@ -49,7 +49,8 @@ abstract class Storage
      */
     public static function getCollectionName($model)
     {
-        return strtolower($model::getModelName());
+        $instance = new $model();
+        return strtolower($instance->getModelName());
     }
 
     /**

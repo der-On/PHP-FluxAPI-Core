@@ -44,6 +44,7 @@ abstract class Model
     {
         $this->_api = \FluxApi\Api::getInstance();
         $this->defineFields();
+        $this->_addExtends();
         $this->_setDefaults();
 
         $this->populate($data);
@@ -137,6 +138,17 @@ abstract class Model
     {
         foreach($this->_fields as $name => $field) {
             $this->_data[$name] = $field->default;
+        }
+    }
+
+    private function _addExtends()
+    {
+        $extends = $this->_api->getExtends('Model',$this->getModelName());
+
+        if (!empty($extends)) {
+            foreach($extends['fields'] as $field) {
+                $this->addField(new Field($field));
+            }
         }
     }
 
@@ -289,7 +301,7 @@ abstract class Model
      */
     public function toString()
     {
-        return json_encode($this->toArray(),4);
+        return json_encode($this->toArray(),JSON_PRETTY_PRINT);
     }
 
     /**

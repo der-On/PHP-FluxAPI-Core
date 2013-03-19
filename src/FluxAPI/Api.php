@@ -31,6 +31,13 @@ class Api
     );
 
     /**
+     * @var array Internal extensions
+     */
+    private $_extends = array(
+        'Model' => array(),
+    );
+
+    /**
      * @var array Internal lookup for base plugins
      */
     private $_base_plugins = array();
@@ -66,6 +73,7 @@ class Api
         $this->config = array_replace_recursive(
             array(
                 'plugins_path' => realpath(__DIR__ . '/../../src/Plugins'),
+                'extends_path' => realpath(__DIR__ . '/../../extends'),
                 'base_route' => '/',
                 'storage.plugin' => 'MySql',
                 'storage.options' => array(
@@ -86,6 +94,7 @@ class Api
         $this->app->register(new \Silex\Provider\SerializerServiceProvider());
 
         $this->registerPlugins();
+        $this->registerExtends();
     }
 
     /**
@@ -177,6 +186,39 @@ class Api
 
         foreach($this->_base_plugins as $plugin => $plugin_class_name) {
             $plugin_class_name::register($this);
+        }
+    }
+
+    public function registerExtends()
+    {
+        foreach(array_keys($this->_extends) as $type) {
+            $extends_dir = $this->config['extends_path'].'/'.$type;
+
+            if (file_exists($extends_dir)) {
+
+                $files = scandir($extends_dir);
+
+                foreach($files as $file) {
+                    if (!in_array($file,array('.','..')) && substr($file,-strlen('.json')) == '.json') {
+                        $name = substr($file,0,-strlen('.json'));
+                        $this->registerExtend($type, $name);
+
+                    }
+                }
+            }
+        }
+    }
+
+    public function registerExtend($type, $name)
+    {
+        $extends_dir = $this->config['extends_path'].'/'.$type;
+        $file = $name.'.json';
+
+        switch($type) {
+            case 'Model':
+                $this->_extends[$type][$name] = json_decode(file_get_contents($extends_dir.'/'.$file),TRUE);
+                $this->registerPluginMethods($type,$name);
+                break;
         }
     }
 
@@ -273,6 +315,7 @@ class Api
             }
 
             $models = $self->loadModels($model,$query);
+
             if (count($models)) {
                 switch($format) {
                     case Api::DATA_FORMAT_XML:
@@ -521,6 +564,81 @@ class Api
         }
 
         return FALSE;
+    }
+
+    /**
+     * Extends a model with new fields. If the model does not exists, it will be created.
+     *
+     * @param string $model
+     * @param array $fields Field definitions. Either containing real Field instances or key => value pairs
+     * @param [string $format] the format of the $fields. Default is Api::DATA_FORMAT_ARRAY.
+     */
+    public function extendModel($model, array $fields, $format = self::DATA_FORMAT_ARRAY)
+    {
+        $extend_dir = $this->config['extends_path'].'/Model';
+        $file = $extend_dir.'/'.$model.'.json';
+        $version = 1;
+
+        if (!file_exists($extend_dir)) {
+
+            // create models directory if not existing
+            if (!mkdir($extend_dir,0755,TRUE)) {
+                // TODO: throw an exception
+            }
+        }
+
+        // create model file if not existing
+        if (!file_exists($file)) {
+            touch($file);
+        }
+
+        if (file_exists($file)) {
+
+            $config = json_decode(file_get_contents($file),TRUE);
+
+            if (!empty($config)) {
+                $version = intval($config['version']) + 1;
+            }
+
+            $_fields = array();
+
+            foreach($fields as $name => $field) {
+                if (is_object($field)) {
+                    $_fields[] = $field->toArray();
+                } else if(is_array($field)) {
+                    $_fields[] = $field;
+                }
+            }
+
+            $config = array(
+                'name' => $model,
+                'updated' => date('c'),
+                'version' => $version,
+                'fields' => $_fields,
+            );
+
+            file_put_contents($file, json_encode($config, JSON_PRETTY_PRINT));
+
+            // add model to model plugins
+            $instance = new DynamicModel();
+            $instance->setModelName($model);
+
+            $this->registerExtend('Model',$model);
+
+            $this->migrate($model);
+
+        } else {
+            // TODO: throw an exception
+        }
+    }
+
+    public function getExtends($type, $name)
+    {
+        if (isset($this->_extends[$type]) && isset($this->_extends[$type][$name])) {
+            return $this->_extends[$type][$name];
+        } else {
+            return NULL;
+        }
     }
 
     /**
