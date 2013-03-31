@@ -12,7 +12,7 @@ namespace FluxAPI;
  * @method Model delete_Model_(string|Query $query) Deletes a single _Model_ by id or by a given query
  * @method Model delete_Model_s([Query $query]) Deletes a list of _Model_s by a given query
  */
-class Api
+class Api extends \Pimple
 {
     const DATA_FORMAT_ARRAY = 'array';
     const DATA_FORMAT_JSON = 'json';
@@ -67,6 +67,8 @@ class Api
     {
         $GLOBALS['fluxApi'] = $this;
 
+        $api = $this;
+
         $this->app = $app;
 
         // overwrite default config with given config
@@ -89,6 +91,10 @@ class Api
             ),
             $config
         );
+
+        $this['model_factory'] = $this->share(function() use ($api) {
+            return new ModelFactory($api);
+        });
 
         // register Serializer
         $this->app->register(new \Silex\Provider\SerializerServiceProvider());
@@ -205,7 +211,6 @@ class Api
                     if (!in_array($file,array('.','..')) && substr($file,-strlen('.json')) == '.json') {
                         $name = substr($file,0,-strlen('.json'));
                         $this->registerExtend($type, $name);
-
                     }
                 }
             }
@@ -283,8 +288,9 @@ class Api
 
         $model_name = ucfirst($model_name);
 
+        // load multiple model instances
         $this->_methods['load'.$model_name.'s'] = function($query = NULL, $format = NULL) use ($model_name, $self) {
-            $models =  $self->loadModels($model_name,$query);
+            $models =  $self['model_factory']->load($model_name,$query);
 
             if (in_array($format,array(Api::DATA_FORMAT_ARRAY,Api::DATA_FORMAT_JSON,Api::DATA_FORMAT_YAML))) {
                 foreach($models as $i => $model_name) {
@@ -321,6 +327,7 @@ class Api
             }
         };
 
+        // load single model instance
         $this->_methods['load'.$model_name] = function($query, $format = NULL) use ($model_name, $self) {
 
             if (is_string($query)) {
@@ -333,7 +340,7 @@ class Api
                 $query->filter('limit',array(0,1));
             }
 
-            $models = $self->loadModels($model_name,$query);
+            $models = $self['model_factory']->load($model_name,$query);
 
             if (count($models)) {
                 switch($format) {
@@ -361,14 +368,17 @@ class Api
             }
         };
 
+        // save a model instance
         $this->_methods['save'.$model_name] = function($instance) use ($model_name, $self) {
-            return $self->saveModel($model_name,$instance);
+            return $self['model_factory']->save($model_name,$instance);
         };
 
+        // delete model multiple instances
         $this->_methods['delete'.$model_name.'s'] = function($query = NULL) use ($model_name, $self) {
-            return $self->deleteModels($model_name, $query);
+            return $self['model_factory']->delete($model_name, $query);
         };
 
+        // delete a single model instance
         $this->_methods['delete'.$model_name] = function($query) use ($model_name, $self) {
             if (is_string($query)) {
                 $id = $query;
@@ -387,9 +397,10 @@ class Api
             }
 
 
-            return $self->deleteModels($model_name, $query);
+            return $self['model_factory']->delete($model_name, $query);
         };
 
+        // update multiple model instances
         $this->_methods['update'.$model_name.'s'] = function($query, array $data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model_name, $self) {
             if (is_array($query)) {
                 $ids = $query;
@@ -397,19 +408,21 @@ class Api
                 $query = new Query();
                 $query->filter('in',array('id',$ids));
             }
-            return $self->updateModels($model_name, $query, $data, $format);
+            return $self['model_factory']->update($model_name, $query, $data, $format);
         };
 
+        // update a single model instance
         $this->_methods['update'.$model_name] = function($id, array $data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model_name, $self) {
             $query = new Query();
             $query->filter('equal',array('id',$id));
             $query->filter('limit',array(0,1));
 
-            return $self->updateModels($model_name, $query, $data, $format);
+            return $self['model_factory']->update($model_name, $query, $data, $format);
         };
 
+        // create a model instance
         $this->_methods['create'.$model_name] = function($data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model_name, $self) {
-            return $self->createModel($model_name, $data, $format);
+            return $self['model_factory']->create($model_name, $data, $format);
         };
     }
 
@@ -459,233 +472,6 @@ class Api
         $storageClass = $storagePlugins[$this->config['storage.plugin']];
 
         return new $storageClass($this,$this->config['storage.options']);
-    }
-
-    /**
-     * Loads and returns a list of Model instances
-     *
-     * @param string $model_name
-     * @param [Query $query] if not set all instances of the model are loaded
-     * @return array|null
-     */
-    public function loadModels($model_name, Query $query = NULL)
-    {
-        $models = $this->getPlugins('Model');
-
-        if (isset($models[$model_name])) {
-            return $this->getStorage($model_name)->load($model_name,$query);
-        }
-
-        return array();
-    }
-
-    /**
-     * Saves a list of or a single model instance
-     *
-     * @param string $model_name
-     * @param array|Model $instances
-     * @return bool
-     */
-    public function saveModel($model_name, $instances)
-    {
-        $models = $this->getPlugins('Model');
-
-        if (isset($models[$model_name])) {
-            if (empty($instances)) {
-                return FALSE;
-            }
-
-            $storage = $this->getStorage($model_name);
-
-            if (is_array($instances)) {
-                foreach($instances as $instance) {
-                    $storage->save($model_name,$instance);
-                }
-                return TRUE;
-            } else {
-                return $storage->save($model_name,$instances);
-            }
-        }
-
-        return FALSE;
-    }
-
-    /**
-     * Updates models with certain data
-     *
-     * @param string $model_name
-     * @param Query $query
-     * @param array $data
-     * @return bool
-     */
-    public function updateModels($model_name, Query $query, array $data)
-    {
-
-        $storage = $this->getStorage($model_name);
-
-        return $storage->update($model_name, $query, $data);
-    }
-
-    /**
-     * Creates a new instance of a model
-     *
-     * @param string $model_name
-     * @param [array $data] if set the model will contain that initial data
-     * @param [string $format] the format of the given $data
-     * @return null|Model
-     */
-    public function createModel($model_name, array $data = array(), $format = Api::DATA_FORMAT_ARRAY)
-    {
-        $models = $this->getPlugins('Model');
-        $extends = $this->_extends['Model'];
-
-        if (isset($models[$model_name])) {
-            switch($format) {
-                case self::DATA_FORMAT_ARRAY:
-                    $instance = $this->modelFromArray($model_name, $data);
-                    break;
-
-                case self::DATA_FORMAT_JSON:
-                    $instance = $this->modelFromJson($model_name, $data);
-                    break;
-
-                case self::DATA_FORMAT_XML:
-                    $instance = $this->modelFromXml($model_name, $data);
-                    break;
-
-                case self::DATA_FORMAT_YAML:
-                    $instance = $this->modelFromYaml($model_name, $data);
-                    break;
-
-                default:
-                    $instance = $this->modelFromArray($model_name, $data);
-            }
-
-            if (isset($extends[$model_name]) && $instance->getModelName() != $model_name) {
-                $instance->setModelName($model_name);
-                $instance->addExtends();
-                $instance->setDefaults();
-            }
-
-            return $instance;
-        }
-
-        return NULL;
-    }
-
-    /**
-     * Returns a new model instance with data from an array
-     *
-     * @param string $model_name
-     * @param [array $data]
-     * @return Model
-     */
-    public function modelFromArray($model_name, array $data = array())
-    {
-        $className = $this->getPluginClass('Model',$model_name);
-
-        if (!empty($className) && !empty($data)) {
-            return new $className($data);
-        } else {
-            return new $className();
-        }
-    }
-
-    /**
-     * Returns a new model instance with data form an object
-     *
-     * @param string $model_name
-     * @param object $object
-     * @return Model
-     */
-    public function modelFromObject($model_name, $object)
-    {
-        $data = array();
-
-        if (is_object($object)) {
-            foreach(get_object_vars($object) as $name => $value) {
-                $data[$name] = $value;
-            }
-        }
-
-        return $this->modelFromArray($model_name, $data);
-    }
-
-    /**
-     * Returns a new model instance with data from a JSON string
-     *
-     * @param string $model_name
-     * @param string $json
-     * @return Model|null
-     */
-    public function modelFromJson($model_name, $json)
-    {
-        $data = array();
-
-        if (!empty($json)) {
-            $data = json_decode($json,TRUE);
-        }
-
-        return $this->modelFromArray($model_name, $data);
-    }
-
-    /**
-     * Returns a new model instance with data from a XML string
-     *
-     * @param string $model_name
-     * @param string $xml
-     * @return Model|null
-     */
-    public function modelFromXml($model_name, $xml)
-    {
-        $data = array();
-
-        if (!empty($xml)) {
-            $api = \FluxAPI\Api::getInstance();
-
-            $parser = new \Symfony\Component\Serializer\Encoder\XmlEncoder($model_name);
-            $data = $parser->decode($xml,'xml');
-        }
-
-        return $this->modelFromArray($model_name, $data);
-    }
-
-    /**
-     * Returns a new model instance with data from a YAML string
-     *
-     * @param string $model_name
-     * @param string $yaml
-     * @return Model|null
-     */
-    public function modelFromYaml($model_name, $yaml)
-    {
-        $data = array();
-
-        if (!empty($yaml)) {
-            $parser = new \Symfony\Component\Yaml\Parser();
-            $data = $parser->parse($yaml);
-        }
-
-        return $this->modelFromArray($model_name, $data);
-    }
-
-    /**
-     * Deletes models by a query
-     *
-     * @param string $model_name
-     * @param [Query $query] if not set all instances of the model will be deleted
-     * @return bool
-     */
-    public function deleteModels($model_name, Query $query = NULL)
-    {
-        $models = $this->getPlugins('Model');
-
-        if (isset($models[$model_name])) {
-            $storage = $this->getStorage($model_name);
-            return $storage->delete($model_name, $query);
-        }
-
-        return FALSE;
     }
 
     /**
@@ -750,13 +536,23 @@ class Api
         }
     }
 
-    public function getExtends($type, $name)
+    /**
+     * @param string $type
+     * @param [string $name]
+     * @return array
+     */
+    public function getExtends($type, $name = null)
     {
-        if (isset($this->_extends[$type]) && isset($this->_extends[$type][$name])) {
-            return $this->_extends[$type][$name];
+        if (empty($name)) {
+            if (isset($this->_extends[$type])) {
+                return $this->_extends[$type];
+            }
         } else {
-            return NULL;
+            if (isset($this->_extends[$type]) && isset($this->_extends[$type][$name])) {
+                return $this->_extends[$type][$name];
+            }
         }
+        return NULL;
     }
 
     /**

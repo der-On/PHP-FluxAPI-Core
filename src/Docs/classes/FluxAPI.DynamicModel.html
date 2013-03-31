@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>PHP-FluxAPI » \FluxAPI\Model</title>
+<title>PHP-FluxAPI » \FluxAPI\DynamicModel</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../css/template.css" rel="stylesheet" media="all">
@@ -62,30 +62,32 @@
 <li class="nav-header">
 <i class="icon-custom icon-method"></i> Methods
                     <ul>
-<li class="method public "><a href="#method___construct" title="__construct :: Constructor"><span class="description">Constructor</span><pre>__construct()</pre></a></li>
-<li class="method public "><a href="#method___get" title="__get :: Returns a magic property (a fields value)"><span class="description">Returns a magic property (a fields value)</span><pre>__get()</pre></a></li>
-<li class="method public "><a href="#method___isset" title="__isset :: Checks if a magic property (a fields value) isset"><span class="description">Checks if a magic property (a fields value) isset</span><pre>__isset()</pre></a></li>
-<li class="method public "><a href="#method___set" title="__set :: Sets a magic property (a fields value)"><span class="description">Sets a magic property (a fields value)</span><pre>__set()</pre></a></li>
-<li class="method public "><a href="#method___toString" title="__toString :: Magic method to return a string represantation of the model"><span class="description">Magic method to return a string represantation of the model</span><pre>__toString()</pre></a></li>
-<li class="method public "><a href="#method___unset" title="__unset :: Unsets a magic property (a fields value)"><span class="description">Unsets a magic property (a fields value)</span><pre>__unset()</pre></a></li>
-<li class="method public "><a href="#method_addExtends" title="addExtends :: Adds dynamic extends (currently only fields)"><span class="description">Adds dynamic extends (currently only fields)</span><pre>addExtends()</pre></a></li>
-<li class="method public "><a href="#method_addField" title="addField :: Adds a new field definition to the model"><span class="description">Adds a new field definition to the model</span><pre>addField()</pre></a></li>
-<li class="method public "><a href="#method_defineFields" title="defineFields :: Defines field definitions of this model."><span class="description">Defines field definitions of this model.</span><pre>defineFields()</pre></a></li>
-<li class="method public "><a href="#method_getClassName" title="getClassName :: Returns the full class name of the model"><span class="description">Returns the full class name of the model</span><pre>getClassName()</pre></a></li>
-<li class="method public "><a href="#method_getField" title="getField :: Returns a field definition by it's name"><span class="description">Returns a field definition by it's name</span><pre>getField()</pre></a></li>
-<li class="method public "><a href="#method_getFields" title="getFields :: Returns all field definitions of this model"><span class="description">Returns all field definitions of this model</span><pre>getFields()</pre></a></li>
+<li class="method public inherited"><a href="#method___construct" title="__construct :: Constructor"><span class="description">Constructor</span><pre>__construct()</pre></a></li>
+<li class="method public inherited"><a href="#method___get" title="__get :: Returns a magic property (a fields value)"><span class="description">Returns a magic property (a fields value)</span><pre>__get()</pre></a></li>
+<li class="method public inherited"><a href="#method___isset" title="__isset :: Checks if a magic property (a fields value) isset"><span class="description">Checks if a magic property (a fields value) isset</span><pre>__isset()</pre></a></li>
+<li class="method public inherited"><a href="#method___set" title="__set :: Sets a magic property (a fields value)"><span class="description">Sets a magic property (a fields value)</span><pre>__set()</pre></a></li>
+<li class="method public inherited"><a href="#method___toString" title="__toString :: Magic method to return a string represantation of the model"><span class="description">Magic method to return a string represantation of the model</span><pre>__toString()</pre></a></li>
+<li class="method public inherited"><a href="#method___unset" title="__unset :: Unsets a magic property (a fields value)"><span class="description">Unsets a magic property (a fields value)</span><pre>__unset()</pre></a></li>
+<li class="method public inherited"><a href="#method_addExtends" title="addExtends :: Adds dynamic extends (currently only fields)"><span class="description">Adds dynamic extends (currently only fields)</span><pre>addExtends()</pre></a></li>
+<li class="method public inherited"><a href="#method_addField" title="addField :: Adds a new field definition to the model"><span class="description">Adds a new field definition to the model</span><pre>addField()</pre></a></li>
+<li class="method public inherited"><a href="#method_defineFields" title="defineFields :: Defines field definitions of this model."><span class="description">Defines field definitions of this model.</span><pre>defineFields()</pre></a></li>
+<li class="method public inherited"><a href="#method_getClassName" title="getClassName :: Returns the full class name of the model"><span class="description">Returns the full class name of the model</span><pre>getClassName()</pre></a></li>
+<li class="method public inherited"><a href="#method_getField" title="getField :: Returns a field definition by it's name"><span class="description">Returns a field definition by it's name</span><pre>getField()</pre></a></li>
+<li class="method public inherited"><a href="#method_getFields" title="getFields :: Returns all field definitions of this model"><span class="description">Returns all field definitions of this model</span><pre>getFields()</pre></a></li>
 <li class="method public "><a href="#method_getModelName" title="getModelName :: Returns the model name which is basically the last part of the full class name."><span class="description">Returns the model name which is basically the last part of the full class name.</span><pre>getModelName()</pre></a></li>
-<li class="method public "><a href="#method_getRelationFields" title="getRelationFields :: Returns all relation fields of this model"><span class="description">Returns all relation fields of this model</span><pre>getRelationFields()</pre></a></li>
-<li class="method public "><a href="#method_hasField" title="hasField :: Checks if a field exists in the model"><span class="description">Checks if a field exists in the model</span><pre>hasField()</pre></a></li>
-<li class="method public "><a href="#method_isModified" title="isModified :: Checks if the model instance was modified since it was loaded"><span class="description">Checks if the model instance was modified since it was loaded</span><pre>isModified()</pre></a></li>
-<li class="method public "><a href="#method_isNew" title="isNew :: Checks if the model instance is new or already existing in the storage"><span class="description">Checks if the model instance is new or already existing in the storage</span><pre>isNew()</pre></a></li>
-<li class="method public "><a href="#method_populate" title="populate :: Populates the model instance with the given data."><span class="description">Populates the model instance with the given data.</span><pre>populate()</pre></a></li>
-<li class="method public "><a href="#method_setDefaults" title="setDefaults :: Sets default field values."><span class="description">Sets default field values.</span><pre>setDefaults()</pre></a></li>
-<li class="method public "><a href="#method_toArray" title="toArray :: Returns an array represantation of the model"><span class="description">Returns an array represantation of the model</span><pre>toArray()</pre></a></li>
-<li class="method public "><a href="#method_toJson" title="toJson :: Returns a JSON string represantation of the model"><span class="description">Returns a JSON string represantation of the model</span><pre>toJson()</pre></a></li>
-<li class="method public "><a href="#method_toString" title="toString :: Returns a string represantation of the model"><span class="description">Returns a string represantation of the model</span><pre>toString()</pre></a></li>
-<li class="method public "><a href="#method_toXml" title="toXml :: Returns a XML string represantation of the model"><span class="description">Returns a XML string represantation of the model</span><pre>toXml()</pre></a></li>
-<li class="method public "><a href="#method_toYaml" title="toYaml :: Returns a YAML string represantation of the model"><span class="description">Returns a YAML string represantation of the model</span><pre>toYaml()</pre></a></li>
+<li class="method public inherited"><a href="#method_getRelationFields" title="getRelationFields :: Returns all relation fields of this model"><span class="description">Returns all relation fields of this model</span><pre>getRelationFields()</pre></a></li>
+<li class="method public inherited"><a href="#method_hasField" title="hasField :: Checks if a field exists in the model"><span class="description">Checks if a field exists in the model</span><pre>hasField()</pre></a></li>
+<li class="method public inherited"><a href="#method_isModified" title="isModified :: Checks if the model instance was modified since it was loaded"><span class="description">Checks if the model instance was modified since it was loaded</span><pre>isModified()</pre></a></li>
+<li class="method public inherited"><a href="#method_isNew" title="isNew :: Checks if the model instance is new or already existing in the storage"><span class="description">Checks if the model instance is new or already existing in the storage</span><pre>isNew()</pre></a></li>
+<li class="method public inherited"><a href="#method_populate" title="populate :: Populates the model instance with the given data."><span class="description">Populates the model instance with the given data.</span><pre>populate()</pre></a></li>
+<li class="method public inherited"><a href="#method_setDefaults" title="setDefaults :: Sets default field values."><span class="description">Sets default field values.</span><pre>setDefaults()</pre></a></li>
+<li class="method public "><a href="#method_setModelName" title="setModelName :: "><span class="description">setModelName()
+        </span><pre>setModelName()</pre></a></li>
+<li class="method public inherited"><a href="#method_toArray" title="toArray :: Returns an array represantation of the model"><span class="description">Returns an array represantation of the model</span><pre>toArray()</pre></a></li>
+<li class="method public inherited"><a href="#method_toJson" title="toJson :: Returns a JSON string represantation of the model"><span class="description">Returns a JSON string represantation of the model</span><pre>toJson()</pre></a></li>
+<li class="method public inherited"><a href="#method_toString" title="toString :: Returns a string represantation of the model"><span class="description">Returns a string represantation of the model</span><pre>toString()</pre></a></li>
+<li class="method public inherited"><a href="#method_toXml" title="toXml :: Returns a XML string represantation of the model"><span class="description">Returns a XML string represantation of the model</span><pre>toXml()</pre></a></li>
+<li class="method public inherited"><a href="#method_toYaml" title="toYaml :: Returns a YAML string represantation of the model"><span class="description">Returns a YAML string represantation of the model</span><pre>toYaml()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header">
@@ -93,32 +95,35 @@
                     <ul></ul>
 </li>
 <li class="nav-header protected">» Protected
-                    <ul><li class="property protected "><a href="#property__api" title="$_api :: "><span class="description">Api instance</span><pre>$_api</pre></a></li></ul>
+                    <ul>
+<li class="property protected inherited"><a href="#property__api" title="$_api :: "><span class="description">Api instance</span><pre>$_api</pre></a></li>
+<li class="property protected "><a href="#property__modelName" title="$_modelName :: "><span class="description"></span><pre>$_modelName</pre></a></li>
+</ul>
 </li>
 <li class="nav-header private">» Private
                     <ul>
-<li class="property private "><a href="#property__data" title="$_data :: "><span class="description">Internal data</span><pre>$_data</pre></a></li>
-<li class="property private "><a href="#property__fields" title="$_fields :: "><span class="description">Internal list of field definitions</span><pre>$_fields</pre></a></li>
-<li class="property private "><a href="#property__loaded_relations" title="$_loaded_relations :: "><span class="description">Internal lookup of already (lazy) loaded relation fields</span><pre>$_loaded_relations</pre></a></li>
-<li class="property private "><a href="#property__modified" title="$_modified :: "><span class="description">Internal flag that's true if the model instance was modified since it was loaded</span><pre>$_modified</pre></a></li>
+<li class="property private inherited"><a href="#property__data" title="$_data :: "><span class="description">Internal data</span><pre>$_data</pre></a></li>
+<li class="property private inherited"><a href="#property__fields" title="$_fields :: "><span class="description">Internal list of field definitions</span><pre>$_fields</pre></a></li>
+<li class="property private inherited"><a href="#property__loaded_relations" title="$_loaded_relations :: "><span class="description">Internal lookup of already (lazy) loaded relation fields</span><pre>$_loaded_relations</pre></a></li>
+<li class="property private inherited"><a href="#property__modified" title="$_modified :: "><span class="description">Internal flag that's true if the model instance was modified since it was loaded</span><pre>$_modified</pre></a></li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="span8">
-<a id="\FluxAPI\Model"></a><ul class="breadcrumb">
+<a id="\FluxAPI\DynamicModel"></a><ul class="breadcrumb">
 <li>
 <a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
 <li><a href="../namespaces/FluxAPI.html">FluxAPI</a></li>
 <li class="active">
-<span class="divider">\</span><a href="../classes/FluxAPI.Model.html">Model</a>
+<span class="divider">\</span><a href="../classes/FluxAPI.DynamicModel.html">DynamicModel</a>
 </li>
 </ul>
 <div class="element class">
-<p class="short_description">A Model definition plugin</p>
+<p class="short_description">A dynamic model definition.</p>
 <div class="details">
-<div class="long_description"><p>All your model plugins must inherit form this class.</p></div>
+<div class="long_description"><p>This class is used for all dynamically created models.</p></div>
 <table class="table table-bordered"><tr>
 <th>package</th>
 <td><a href="../packages/FluxAPI.html">FluxAPI</a></td>
@@ -128,9 +133,13 @@
 <a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
 <h2>Constructor</h2>
 <pre>__construct($data) </pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::__construct()</td>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument"><h4>$data</h4></div>
 </div></div>
@@ -138,9 +147,13 @@
 <a id="method___get"></a><div class="element clickable method public method___get" data-toggle="collapse" data-target=".method___get .collapse">
 <h2>Returns a magic property (a fields value)</h2>
 <pre>__get(string $name) : null | mixed</pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::__get()</td>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$name</h4>
@@ -155,9 +168,13 @@
 <a id="method___isset"></a><div class="element clickable method public method___isset" data-toggle="collapse" data-target=".method___isset .collapse">
 <h2>Checks if a magic property (a fields value) isset</h2>
 <pre>__isset(string $name) : bool</pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::__isset()</td>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$name</h4>
@@ -170,9 +187,13 @@
 <a id="method___set"></a><div class="element clickable method public method___set" data-toggle="collapse" data-target=".method___set .collapse">
 <h2>Sets a magic property (a fields value)</h2>
 <pre>__set(string $name, mixed $value) </pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::__set()</td>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$name</h4>
@@ -187,9 +208,13 @@
 <a id="method___toString"></a><div class="element clickable method public method___toString" data-toggle="collapse" data-target=".method___toString .collapse">
 <h2>Magic method to return a string represantation of the model</h2>
 <pre>__toString() : string</pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::__toString()</td>
+</tr></table>
 <h3>Returns</h3>
 <div class="subelement response"><code>string</code></div>
 </div></div>
@@ -197,9 +222,13 @@
 <a id="method___unset"></a><div class="element clickable method public method___unset" data-toggle="collapse" data-target=".method___unset .collapse">
 <h2>Unsets a magic property (a fields value)</h2>
 <pre>__unset(string $name) </pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::__unset()</td>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$name</h4>
@@ -210,19 +239,31 @@
 <a id="method_addExtends"></a><div class="element clickable method public method_addExtends" data-toggle="collapse" data-target=".method_addExtends .collapse">
 <h2>Adds dynamic extends (currently only fields)</h2>
 <pre>addExtends() </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::addExtends()</td>
+</tr></table>
+</div></div>
 </div>
 <a id="method_addField"></a><div class="element clickable method public method_addField" data-toggle="collapse" data-target=".method_addField .collapse">
 <h2>Adds a new field definition to the model</h2>
 <pre>addField(\FluxAPI\Field $field) : <a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
-<table class="table table-bordered"><tr>
+<table class="table table-bordered">
+<tr>
 <th>chainable</th>
 <td></td>
-</tr></table>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::addField()</td>
+</tr>
+</table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$field</h4>
@@ -236,15 +277,27 @@
 <a id="method_defineFields"></a><div class="element clickable method public method_defineFields" data-toggle="collapse" data-target=".method_defineFields .collapse">
 <h2>Defines field definitions of this model.</h2>
 <pre>defineFields() </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"><p>Extend this method in child classes while calling parent::defineFields()</p></div></div></div>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>Extend this method in child classes while calling parent::defineFields()</p></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::defineFields()</td>
+</tr></table>
+</div></div>
 </div>
 <a id="method_getClassName"></a><div class="element clickable method public method_getClassName" data-toggle="collapse" data-target=".method_getClassName .collapse">
 <h2>Returns the full class name of the model</h2>
 <pre>getClassName() : string</pre>
-<div class="labels"><span class="label">Static</span></div>
+<div class="labels">
+<span class="label">Inherited</span><span class="label">Static</span>
+</div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::getClassName()</td>
+</tr></table>
 <h3>Returns</h3>
 <div class="subelement response"><code>string</code></div>
 </div></div>
@@ -252,9 +305,13 @@
 <a id="method_getField"></a><div class="element clickable method public method_getField" data-toggle="collapse" data-target=".method_getField .collapse">
 <h2>Returns a field definition by it's name</h2>
 <pre>getField(string $name) : null | <a href="../classes/FluxAPI.Field.html">\FluxAPI\Field</a></pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::getField()</td>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$name</h4>
@@ -269,9 +326,13 @@
 <a id="method_getFields"></a><div class="element clickable method public method_getFields" data-toggle="collapse" data-target=".method_getFields .collapse">
 <h2>Returns all field definitions of this model</h2>
 <pre>getFields() : array</pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::getFields()</td>
+</tr></table>
 <h3>Returns</h3>
 <div class="subelement response"><code>array</code></div>
 </div></div>
@@ -289,9 +350,13 @@
 <a id="method_getRelationFields"></a><div class="element clickable method public method_getRelationFields" data-toggle="collapse" data-target=".method_getRelationFields .collapse">
 <h2>Returns all relation fields of this model</h2>
 <pre>getRelationFields() : array</pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::getRelationFields()</td>
+</tr></table>
 <h3>Returns</h3>
 <div class="subelement response"><code>array</code></div>
 </div></div>
@@ -299,9 +364,13 @@
 <a id="method_hasField"></a><div class="element clickable method public method_hasField" data-toggle="collapse" data-target=".method_hasField .collapse">
 <h2>Checks if a field exists in the model</h2>
 <pre>hasField(string $name) : bool</pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::hasField()</td>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$name</h4>
@@ -315,9 +384,13 @@
 <a id="method_isModified"></a><div class="element clickable method public method_isModified" data-toggle="collapse" data-target=".method_isModified .collapse">
 <h2>Checks if the model instance was modified since it was loaded</h2>
 <pre>isModified() : bool</pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::isModified()</td>
+</tr></table>
 <h3>Returns</h3>
 <div class="subelement response"><code>bool</code></div>
 </div></div>
@@ -325,9 +398,13 @@
 <a id="method_isNew"></a><div class="element clickable method public method_isNew" data-toggle="collapse" data-target=".method_isNew .collapse">
 <h2>Checks if the model instance is new or already existing in the storage</h2>
 <pre>isNew() : bool</pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::isNew()</td>
+</tr></table>
 <h3>Returns</h3>
 <div class="subelement response">
 <code>bool</code>true if the model instance is new, else false</div>
@@ -336,9 +413,13 @@
 <a id="method_populate"></a><div class="element clickable method public method_populate" data-toggle="collapse" data-target=".method_populate .collapse">
 <h2>Populates the model instance with the given data.</h2>
 <pre>populate(array $data) </pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::populate()</td>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument"><h4>$data</h4></div>
 </div></div>
@@ -346,15 +427,36 @@
 <a id="method_setDefaults"></a><div class="element clickable method public method_setDefaults" data-toggle="collapse" data-target=".method_setDefaults .collapse">
 <h2>Sets default field values.</h2>
 <pre>setDefaults() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>Called automatically in the constructor.</p></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::setDefaults()</td>
+</tr></table>
+</div></div>
+</div>
+<a id="method_setModelName"></a><div class="element clickable method public method_setModelName" data-toggle="collapse" data-target=".method_setModelName .collapse">
+<h2>setModelName()
+        </h2>
+<pre>setModelName($name) </pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"><p>Called automatically in the constructor.</p></div></div></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$name</h4></div>
+</div></div>
 </div>
 <a id="method_toArray"></a><div class="element clickable method public method_toArray" data-toggle="collapse" data-target=".method_toArray .collapse">
 <h2>Returns an array represantation of the model</h2>
 <pre>toArray() : array</pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::toArray()</td>
+</tr></table>
 <h3>Returns</h3>
 <div class="subelement response"><code>array</code></div>
 </div></div>
@@ -362,9 +464,13 @@
 <a id="method_toJson"></a><div class="element clickable method public method_toJson" data-toggle="collapse" data-target=".method_toJson .collapse">
 <h2>Returns a JSON string represantation of the model</h2>
 <pre>toJson() : string</pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::toJson()</td>
+</tr></table>
 <h3>Returns</h3>
 <div class="subelement response"><code>string</code></div>
 </div></div>
@@ -372,9 +478,13 @@
 <a id="method_toString"></a><div class="element clickable method public method_toString" data-toggle="collapse" data-target=".method_toString .collapse">
 <h2>Returns a string represantation of the model</h2>
 <pre>toString() : string</pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::toString()</td>
+</tr></table>
 <h3>Returns</h3>
 <div class="subelement response"><code>string</code></div>
 </div></div>
@@ -382,9 +492,13 @@
 <a id="method_toXml"></a><div class="element clickable method public method_toXml" data-toggle="collapse" data-target=".method_toXml .collapse">
 <h2>Returns a XML string represantation of the model</h2>
 <pre>toXml() : string</pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::toXml()</td>
+</tr></table>
 <h3>Returns</h3>
 <div class="subelement response"><code>string</code></div>
 </div></div>
@@ -392,9 +506,13 @@
 <a id="method_toYaml"></a><div class="element clickable method public method_toYaml" data-toggle="collapse" data-target=".method_toYaml .collapse">
 <h2>Returns a YAML string represantation of the model</h2>
 <pre>toYaml() : string</pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::toYaml()</td>
+</tr></table>
 <h3>Returns</h3>
 <div class="subelement response"><code>string</code></div>
 </div></div>
@@ -404,32 +522,68 @@
 <a id="property__api"> </a><div class="element clickable property protected property__api" data-toggle="collapse" data-target=".property__api .collapse">
 <h2>Api instance</h2>
 <pre>$_api : <a href="../classes/FluxAPI.Api.html">\FluxAPI\Api</a></pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::$$_api</td>
+</tr></table>
+</div></div>
+</div>
+<a id="property__modelName"> </a><div class="element clickable property protected property__modelName" data-toggle="collapse" data-target=".property__modelName .collapse">
+<h2></h2>
+<pre>$_modelName </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <a id="property__data"> </a><div class="element clickable property private property__data" data-toggle="collapse" data-target=".property__data .collapse">
 <h2>Internal data</h2>
 <pre>$_data : array</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::$$_data</td>
+</tr></table>
+</div></div>
 </div>
 <a id="property__fields"> </a><div class="element clickable property private property__fields" data-toggle="collapse" data-target=".property__fields .collapse">
 <h2>Internal list of field definitions</h2>
 <pre>$_fields : array</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::$$_fields</td>
+</tr></table>
+</div></div>
 </div>
 <a id="property__loaded_relations"> </a><div class="element clickable property private property__loaded_relations" data-toggle="collapse" data-target=".property__loaded_relations .collapse">
 <h2>Internal lookup of already (lazy) loaded relation fields</h2>
 <pre>$_loaded_relations : array</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::$$_loaded_relations</td>
+</tr></table>
+</div></div>
 </div>
 <a id="property__modified"> </a><div class="element clickable property private property__modified" data-toggle="collapse" data-target=".property__modified .collapse">
 <h2>Internal flag that's true if the model instance was modified since it was loaded</h2>
 <pre>$_modified : bool</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Model::$$_modified</td>
+</tr></table>
+</div></div>
 </div>
 </div>
 </div>

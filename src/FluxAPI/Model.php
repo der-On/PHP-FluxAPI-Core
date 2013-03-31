@@ -146,10 +146,10 @@ abstract class Model
      */
     public function addExtends()
     {
-        $extends = $this->_api->getExtends('Model',$this->getModelName());
+        $extend = $this->_api->getExtends('Model',$this->getModelName());
 
-        if (!empty($extends)) {
-            foreach($extends['fields'] as $field) {
+        if (!empty($extend) && isset($extend['fields'])) {
+            foreach($extend['fields'] as $field) {
                 $this->addField(new Field($field));
             }
         }

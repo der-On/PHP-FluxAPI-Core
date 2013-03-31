@@ -43,7 +43,9 @@ abstract class FluxApi_Database_TestCase extends PHPUnit_Extensions_Database_Tes
 
     protected function getConfig()
     {
-        return  json_decode(file_get_contents(__DIR__ . '/../../../config/testing.json'),TRUE);
+        $config = json_decode(file_get_contents(__DIR__ . '/../../../config/testing.json'),TRUE);
+        $config['extends_path'] = realpath(__DIR__ . '/../../../' . $config['extends_path']);
+        return $config;
     }
 
     /**

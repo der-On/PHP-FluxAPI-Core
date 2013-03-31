@@ -400,7 +400,7 @@ class MySql extends \FluxAPI\Storage
                 $instances = array();
 
                 foreach($result as $data) {
-                    $instances[] = $this->_api->createModel($model_name, $data);
+                    $instances[] = $this->_api['model_factory']->create($model_name, $data);
                 }
                 return $instances;
             }
@@ -444,7 +444,7 @@ class MySql extends \FluxAPI\Storage
 
     public function getRelationField(\FluxAPI\Field $field)
     {
-        $rel_model_instance = $this->_api->createModel($field->relationModel);
+        $rel_model_instance = $this->_api['model_factory']->create($field->relationModel);
 
         if (!empty($rel_model_instance)) {
             // we need the id field of the model so we can create a field in the relation table matching the field config
@@ -469,7 +469,7 @@ class MySql extends \FluxAPI\Storage
         $models = $this->_api->getPlugins('Model');
 
         foreach($models as $model_name => $modelClass) {
-            $model = $this->_api->createModel($model_name);
+            $model = $this->_api['model_factory']->create($model_name);
             $table_name = $this->getTableName($model_name);
             $table = $toSchema->createTable($table_name);
             $primary = array();
