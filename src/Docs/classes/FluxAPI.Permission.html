@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>PHP-FluxAPI » Plugins\Core</title>
+<title>PHP-FluxAPI » \FluxAPI\Permission</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../css/template.css" rel="stylesheet" media="all">
@@ -55,98 +55,88 @@
                         </div></noscript>
 <div class="row">
 <div class="span4">
-<div class="btn-group view pull-right" data-toggle="buttons-radio">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
 <button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
 </div>
 <ul class="side-nav nav nav-list">
 <li class="nav-header">
-<i class="icon-map-marker"></i> Namespaces</li>
-<li>
-<a href="../namespaces/Plugins.Core.html" title="Core"><i class="icon-th"></i>Core</a><ul class="nav nav-list nav-namespaces">
-<li>
-<a href="../namespaces/Plugins.Core.Model.html" title="Model"><i class="icon-th"></i>Model</a><ul class="nav nav-list nav-namespaces"></ul>
-</li>
-<li>
-<a href="../namespaces/Plugins.Core.Storage.html" title="Storage"><i class="icon-th"></i>Storage</a><ul class="nav nav-list nav-namespaces"></ul>
-</li>
+<i class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method___construct" title="__construct :: "><span class="description">__construct()
+        </span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#method_hasControllerAccess" title="hasControllerAccess :: "><span class="description">hasControllerAccess()
+        </span><pre>hasControllerAccess()</pre></a></li>
+<li class="method public "><a href="#method_hasModelAccess" title="hasModelAccess :: "><span class="description">hasModelAccess()
+        </span><pre>hasModelAccess()</pre></a></li>
 </ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties
+                    <ul></ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul><li class="property protected "><a href="#property__api" title="$_api :: "><span class="description"></span><pre>$_api</pre></a></li></ul>
 </li>
 </ul>
 </div>
-<div class="span8 namespace-contents">
-<ul class="breadcrumb">
+<div class="span8">
+<a id="\FluxAPI\Permission"></a><ul class="breadcrumb">
 <li>
-<a href="../index.html"><i class="icon-th"></i></a><span class="divider">\</span>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
-<li><a href="../namespaces/Plugins.html">Plugins</a></li>
+<li><a href="../namespaces/FluxAPI.html">FluxAPI</a></li>
 <li class="active">
-<span class="divider">\</span><a href="../namespaces/Plugins.Core.html">Core</a>
+<span class="divider">\</span><a href="../classes/FluxAPI.Permission.html">Permission</a>
 </li>
 </ul>
-<div class="namespace-indent">
+<div class="element class"><div class="details">
 <h3>
-<i class="icon-custom icon-class"></i> Classes and interfaces</h3>
-<div id="Core" class="element ajax clickable class">
-<h1>Core<a href="../classes/Plugins.Core.Core.html">¶</a>
-</h1>
-<p class="short_description">A general plugin</p>
-<div class="details collapse"></div>
-<a href="../classes/Plugins.Core.Core.html" class="more">« More »</a>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
+<h2>__construct()
+        </h2>
+<pre>__construct(\FluxAPI\Api $api) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$api</h4></div>
+</div></div>
 </div>
-<div id="Rest" class="element ajax clickable class">
-<h1>Rest<a href="../classes/Plugins.Core.Rest.html">¶</a>
-</h1>
-<p class="short_description"></p>
-<div class="details collapse"></div>
-<a href="../classes/Plugins.Core.Rest.html" class="more">« More »</a>
+<a id="method_hasControllerAccess"></a><div class="element clickable method public method_hasControllerAccess" data-toggle="collapse" data-target=".method_hasControllerAccess .collapse">
+<h2>hasControllerAccess()
+        </h2>
+<pre>hasControllerAccess($controller_name, $action) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$controller_name</h4></div>
+<div class="subelement argument"><h4>$action</h4></div>
+</div></div>
 </div>
-<ul class="breadcrumb">
-<li>
-<a href="../index.html"><i class="icon-th"></i></a><span class="divider">\</span>
-</li>
-<li><a href="../namespaces/Plugins.html">Plugins</a></li>
-<li>
-<span class="divider">\</span><a href="../namespaces/Plugins.Core.html">Core</a>
-</li>
-<li class="active">
-<span class="divider">\</span><a href="../namespaces/Plugins.Core.Model.html">Model</a>
-</li>
-</ul>
-<div class="namespace-indent">
+<a id="method_hasModelAccess"></a><div class="element clickable method public method_hasModelAccess" data-toggle="collapse" data-target=".method_hasModelAccess .collapse">
+<h2>hasModelAccess()
+        </h2>
+<pre>hasModelAccess($model_name, \FluxAPI\Model $model, $action) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$model_name</h4></div>
+<div class="subelement argument"><h4>$model</h4></div>
+<div class="subelement argument"><h4>$action</h4></div>
+</div></div>
+</div>
 <h3>
-<i class="icon-custom icon-class"></i> Classes and interfaces</h3>
-<div id="Node" class="element ajax clickable class">
-<h1>Node<a href="../classes/Plugins.Core.Model.Node.html">¶</a>
-</h1>
-<p class="short_description">A Model definition plugin</p>
-<div class="details collapse"></div>
-<a href="../classes/Plugins.Core.Model.Node.html" class="more">« More »</a>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a id="property__api"> </a><div class="element clickable property protected property__api" data-toggle="collapse" data-target=".property__api .collapse">
+<h2></h2>
+<pre>$_api </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-</div>
-<ul class="breadcrumb">
-<li>
-<a href="../index.html"><i class="icon-th"></i></a><span class="divider">\</span>
-</li>
-<li><a href="../namespaces/Plugins.html">Plugins</a></li>
-<li>
-<span class="divider">\</span><a href="../namespaces/Plugins.Core.html">Core</a>
-</li>
-<li class="active">
-<span class="divider">\</span><a href="../namespaces/Plugins.Core.Storage.html">Storage</a>
-</li>
-</ul>
-<div class="namespace-indent">
-<h3>
-<i class="icon-custom icon-class"></i> Classes and interfaces</h3>
-<div id="MySql" class="element ajax clickable class">
-<h1>MySql<a href="../classes/Plugins.Core.Storage.MySql.html">¶</a>
-</h1>
-<p class="short_description">Data storage plugin</p>
-<div class="details collapse"></div>
-<a href="../classes/Plugins.Core.Storage.MySql.html" class="more">« More »</a>
-</div>
-</div>
-</div>
+</div></div>
 </div>
 </div>
 <div class="row"><footer class="span12">

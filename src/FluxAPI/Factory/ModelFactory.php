@@ -2,9 +2,10 @@
 
 namespace FluxAPI\Factory;
 
+use \FluxAPI\Event\ModelEvent;
+
 class ModelFactory
 {
-
     protected $_api;
 
     public function __construct(\FluxAPI\Api $api)
@@ -22,6 +23,8 @@ class ModelFactory
      */
     public function create($model_name, array $data = array(), $format = \FluxAPI\Api::DATA_FORMAT_ARRAY)
     {
+        $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_CREATE, new ModelEvent($model_name));
+
         $models = $this->_api->getPlugins('Model');
         $extend = $this->_api->getExtends('Model',$model_name);
 
@@ -51,8 +54,10 @@ class ModelFactory
                 $instance->setModelName($model_name);
                 $instance->addExtends();
                 $instance->setDefaults();
+                $instance->populate($data);
             }
 
+            $this->_api['dispatcher']->dispatch(ModelEvent::CREATE, new ModelEvent($model_name, NULL, $instance));
             return $instance;
         }
 
@@ -162,10 +167,18 @@ class ModelFactory
      */
     public function load($model_name, \FluxAPI\Query $query = NULL)
     {
+        $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_LOAD, new ModelEvent($model_name, $query));
+
         $models = $this->_api->getPlugins('Model');
 
         if (isset($models[$model_name])) {
-            return $this->_api['storage_factory']->get($model_name)->load($model_name,$query);
+            $instances = $this->_api['storage_factory']->get($model_name)->load($model_name,$query);
+
+            foreach($instances as &$instance) {
+                $this->_api['dispatcher']->dispatch(ModelEvent::LOAD, new ModelEvent($model_name, $query, $instance));
+            }
+
+            return $instances;
         }
 
         return array();
@@ -180,6 +193,8 @@ class ModelFactory
      */
     public function save($model_name, $instances)
     {
+        $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_SAVE, new ModelEvent($model_name));
+
         $models = $this->_api->getPlugins('Model');
 
         if (isset($models[$model_name])) {
@@ -190,12 +205,15 @@ class ModelFactory
             $storage = $this->_api['storage_factory']->get($model_name);
 
             if (is_array($instances)) {
-                foreach($instances as $instance) {
+                foreach($instances as &$instance) {
                     $storage->save($model_name,$instance);
+                    $this->_api['dispatcher']->dispatch(ModelEvent::SAVE, new ModelEvent($model_name, NULL, $instance));
                 }
                 return TRUE;
             } else {
-                return $storage->save($model_name,$instances);
+                $return = $storage->save($model_name,$instances);
+                $this->_api['dispatcher']->dispatch(ModelEvent::SAVE, new ModelEvent($model_name, NULL, $instances));
+                return $return;
             }
         }
 
@@ -212,10 +230,13 @@ class ModelFactory
      */
     public function update($model_name, \FluxAPI\Query $query, array $data)
     {
+        $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_UPDATE, new ModelEvent($model_name, $query));
 
         $storage = $this->_api['storage_factory']->get($model_name);
 
-        return $storage->update($model_name, $query, $data);
+        $return = $storage->update($model_name, $query, $data);
+        $this->_api['dispatcher']->dispatch(ModelEvent::UPDATE, new ModelEvent($model_name, $query));
+        return $return;
     }
 
     /**
@@ -227,11 +248,15 @@ class ModelFactory
      */
     public function delete($model_name, \FluxAPI\Query $query = NULL)
     {
+        $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_DELETE, new ModelEvent($model_name, $query));
+
         $models = $this->_api->getPlugins('Model');
 
         if (isset($models[$model_name])) {
             $storage = $this->_api['storage_factory']->get($model_name);
-            return $storage->delete($model_name, $query);
+            $return = $storage->delete($model_name, $query);
+            $this->_api['dispatcher']->dispatch(ModelEvent::DELETE, new ModelEvent($model_name, $query));
+            return $return;
         }
 
         return FALSE;

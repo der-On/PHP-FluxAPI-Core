@@ -6,7 +6,7 @@ class ModelTest extends FluxApi_Database_TestCase
     public function getNodeData()
     {
         return array(
-            'id' => '1',
+            'id' => 1,
             'title' => 'Node title',
             'body' => "Node body\non multiple lines",
         );

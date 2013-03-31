@@ -1,0 +1,261 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>PHP-FluxAPI » \FluxAPI\EventListener\ModelListener</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">PHP-FluxAPI</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Namespaces</a></li>
+<li><a href="../namespaces/FluxAPI.html"><i class="icon-th"></i> FluxAPI</a></li>
+<li><a href="../namespaces/Plugins.html"><i class="icon-th"></i> Plugins</a></li>
+<li><a>Packages</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+<li><a href="../packages/FluxAPI.html"><i class="icon-folder-open"></i> FluxAPI</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">155</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">5</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods
+                    <ul>
+<li class="method public "><a href="#method___construct" title="__construct :: "><span class="description">__construct()
+        </span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#method_getSubscribedEvents" title="getSubscribedEvents :: "><span class="description">getSubscribedEvents()
+        </span><pre>getSubscribedEvents()</pre></a></li>
+<li class="method public "><a href="#method_onModelBeforeCreate" title="onModelBeforeCreate :: "><span class="description">onModelBeforeCreate()
+        </span><pre>onModelBeforeCreate()</pre></a></li>
+<li class="method public "><a href="#method_onModelBeforeDelete" title="onModelBeforeDelete :: "><span class="description">onModelBeforeDelete()
+        </span><pre>onModelBeforeDelete()</pre></a></li>
+<li class="method public "><a href="#method_onModelBeforeLoad" title="onModelBeforeLoad :: "><span class="description">onModelBeforeLoad()
+        </span><pre>onModelBeforeLoad()</pre></a></li>
+<li class="method public "><a href="#method_onModelBeforeSave" title="onModelBeforeSave :: "><span class="description">onModelBeforeSave()
+        </span><pre>onModelBeforeSave()</pre></a></li>
+<li class="method public "><a href="#method_onModelBeforeUpdate" title="onModelBeforeUpdate :: "><span class="description">onModelBeforeUpdate()
+        </span><pre>onModelBeforeUpdate()</pre></a></li>
+<li class="method public "><a href="#method_onModelCreate" title="onModelCreate :: "><span class="description">onModelCreate()
+        </span><pre>onModelCreate()</pre></a></li>
+<li class="method public "><a href="#method_onModelDelete" title="onModelDelete :: "><span class="description">onModelDelete()
+        </span><pre>onModelDelete()</pre></a></li>
+<li class="method public "><a href="#method_onModelLoad" title="onModelLoad :: "><span class="description">onModelLoad()
+        </span><pre>onModelLoad()</pre></a></li>
+<li class="method public "><a href="#method_onModelSave" title="onModelSave :: "><span class="description">onModelSave()
+        </span><pre>onModelSave()</pre></a></li>
+<li class="method public "><a href="#method_onModelUpdate" title="onModelUpdate :: "><span class="description">onModelUpdate()
+        </span><pre>onModelUpdate()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties
+                    <ul></ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul><li class="property protected "><a href="#property__api" title="$_api :: "><span class="description"></span><pre>$_api</pre></a></li></ul>
+</li>
+</ul>
+</div>
+<div class="span8">
+<a id="\FluxAPI\EventListener\ModelListener"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/FluxAPI.html">FluxAPI</a></li>
+<li>
+<span class="divider">\</span><a href="../namespaces/FluxAPI.EventListener.html">EventListener</a>
+</li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/FluxAPI.EventListener.ModelListener.html">ModelListener</a>
+</li>
+</ul>
+<div class="element class"><div class="details">
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
+<h2>__construct()
+        </h2>
+<pre>__construct(\FluxAPI\Api $api) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$api</h4></div>
+</div></div>
+</div>
+<a id="method_getSubscribedEvents"></a><div class="element clickable method public method_getSubscribedEvents" data-toggle="collapse" data-target=".method_getSubscribedEvents .collapse">
+<h2>getSubscribedEvents()
+        </h2>
+<pre>getSubscribedEvents() </pre>
+<div class="labels"><span class="label">Static</span></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_onModelBeforeCreate"></a><div class="element clickable method public method_onModelBeforeCreate" data-toggle="collapse" data-target=".method_onModelBeforeCreate .collapse">
+<h2>onModelBeforeCreate()
+        </h2>
+<pre>onModelBeforeCreate(\FluxAPI\Event\ModelEvent $event) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$event</h4></div>
+</div></div>
+</div>
+<a id="method_onModelBeforeDelete"></a><div class="element clickable method public method_onModelBeforeDelete" data-toggle="collapse" data-target=".method_onModelBeforeDelete .collapse">
+<h2>onModelBeforeDelete()
+        </h2>
+<pre>onModelBeforeDelete(\FluxAPI\Event\ModelEvent $event) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$event</h4></div>
+</div></div>
+</div>
+<a id="method_onModelBeforeLoad"></a><div class="element clickable method public method_onModelBeforeLoad" data-toggle="collapse" data-target=".method_onModelBeforeLoad .collapse">
+<h2>onModelBeforeLoad()
+        </h2>
+<pre>onModelBeforeLoad(\FluxAPI\Event\ModelEvent $event) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$event</h4></div>
+</div></div>
+</div>
+<a id="method_onModelBeforeSave"></a><div class="element clickable method public method_onModelBeforeSave" data-toggle="collapse" data-target=".method_onModelBeforeSave .collapse">
+<h2>onModelBeforeSave()
+        </h2>
+<pre>onModelBeforeSave(\FluxAPI\Event\ModelEvent $event) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$event</h4></div>
+</div></div>
+</div>
+<a id="method_onModelBeforeUpdate"></a><div class="element clickable method public method_onModelBeforeUpdate" data-toggle="collapse" data-target=".method_onModelBeforeUpdate .collapse">
+<h2>onModelBeforeUpdate()
+        </h2>
+<pre>onModelBeforeUpdate(\FluxAPI\Event\ModelEvent $event) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$event</h4></div>
+</div></div>
+</div>
+<a id="method_onModelCreate"></a><div class="element clickable method public method_onModelCreate" data-toggle="collapse" data-target=".method_onModelCreate .collapse">
+<h2>onModelCreate()
+        </h2>
+<pre>onModelCreate(\FluxAPI\Event\ModelEvent $event) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$event</h4></div>
+</div></div>
+</div>
+<a id="method_onModelDelete"></a><div class="element clickable method public method_onModelDelete" data-toggle="collapse" data-target=".method_onModelDelete .collapse">
+<h2>onModelDelete()
+        </h2>
+<pre>onModelDelete(\FluxAPI\Event\ModelEvent $event) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$event</h4></div>
+</div></div>
+</div>
+<a id="method_onModelLoad"></a><div class="element clickable method public method_onModelLoad" data-toggle="collapse" data-target=".method_onModelLoad .collapse">
+<h2>onModelLoad()
+        </h2>
+<pre>onModelLoad(\FluxAPI\Event\ModelEvent $event) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$event</h4></div>
+</div></div>
+</div>
+<a id="method_onModelSave"></a><div class="element clickable method public method_onModelSave" data-toggle="collapse" data-target=".method_onModelSave .collapse">
+<h2>onModelSave()
+        </h2>
+<pre>onModelSave(\FluxAPI\Event\ModelEvent $event) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$event</h4></div>
+</div></div>
+</div>
+<a id="method_onModelUpdate"></a><div class="element clickable method public method_onModelUpdate" data-toggle="collapse" data-target=".method_onModelUpdate .collapse">
+<h2>onModelUpdate()
+        </h2>
+<pre>onModelUpdate(\FluxAPI\Event\ModelEvent $event) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$event</h4></div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a id="property__api"> </a><div class="element clickable property protected property__api" data-toggle="collapse" data-target=".property__api .collapse">
+<h2></h2>
+<pre>$_api </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+</div></div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
+            generated on 2013-04-01T00:15:46+02:00.<br></footer></div>
+</div>
+</body>
+</html>

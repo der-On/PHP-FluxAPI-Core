@@ -136,7 +136,7 @@ class Api extends \Pimple
         $this['dispatcher'] = $this->share(function () use ($api) {
             $dispatcher = new $api['dispatcher_class']();
 
-
+            $dispatcher->addSubscriber(new \FluxAPI\EventListener\ModelListener($api));
 
             return $dispatcher;
         });

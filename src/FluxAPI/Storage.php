@@ -622,4 +622,57 @@ abstract class Storage
     {
 
     }
+
+    /**
+     * Converts the given data to a serialized string
+     *
+     * @param mixed $data
+     * @param Field $field
+     */
+    public function serialize($data, \FluxAPI\Field $field)
+    {
+        if (in_array($field->type,array(Field::TYPE_ARRAY, Field::TYPE_OBJECT))) {
+            return serialize($data);
+        } else {
+            switch($field->type) {
+                case Field::TYPE_DATE:
+                    return (string) $data; break;
+
+                default:
+                    return (string) $data;
+            }
+        }
+
+        return NULL;
+    }
+
+    /**
+     * Converts a serialized string to a real datatype
+     *
+     * @param string $str
+     * @param Field $field
+     */
+    public function unserialize($str, \FluxAPI\Field $field)
+    {
+        if (in_array($field->type,array(Field::TYPE_ARRAY, Field::TYPE_OBJECT))) {
+            return unserialize($str);
+        } else {
+            switch($field->type) {
+                case Field::TYPE_INTEGER:
+                    return intval($str); break;
+
+                case Field::TYPE_TIMESTAMP:
+                    return intval($str); break;
+
+                case Field::TYPE_FLOAT:
+                    return floatval($str); break;
+
+                case Field::TYPE_DATE:
+                    return new DateTime($str); break;
+
+                default:
+                    return $str;
+            }
+        }
+    }
 }

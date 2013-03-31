@@ -305,6 +305,8 @@ class MySql extends \FluxAPI\Storage
         parent::executeQuery($query);
 
         $model_name = $query->getModelName();
+        $model = $this->_api['model_factory']->create($model_name);
+        $fields = $model->getFields();
         $tableName = $this->getTableName($model_name);
 
         $connection = $this->getConnection();
@@ -313,10 +315,12 @@ class MySql extends \FluxAPI\Storage
         if ($query->getType() == Query::TYPE_INSERT) { // Doctrines query builder does not support INSERTs so we need to create the SQL manually
             $data = $query->getData();
 
-            // remove empty fields
+            // serialize and remove empty fields
             foreach($data as $name => $value) {
                 if (empty($value)) {
                     unset($data[$name]);
+                } elseif (isset($fields[$name]) && $fields[$name]->type != Field::TYPE_RELATION) {
+                    $data[$name] = $this->serialize($data[$name], $fields[$name]);
                 }
             }
 
@@ -362,7 +366,8 @@ class MySql extends \FluxAPI\Storage
 
                     foreach($query->getData() as $name => $value)
                     {
-                        if ($name != 'id') { // do not set the ID again
+                        if ($name != 'id' && isset($fields[$name]) && $fields[$name]->type != Field::TYPE_RELATION) { // do not set the ID again
+                            $value = $this->serialize($value, $fields[$name]);
                             $qb->set($name,$qb->expr()->literal($value));
                         }
                     }
@@ -400,6 +405,13 @@ class MySql extends \FluxAPI\Storage
                 $instances = array();
 
                 foreach($result as $data) {
+                    // unserialize the data
+                    foreach($data as $name => $value) {
+                        if (isset($fields[$name]) && $fields[$name]->type != Field::TYPE_RELATION) {
+                            $data[$name] = $this->unserialize($data[$name], $fields[$name]);
+                        }
+                    }
+
                     $instances[] = $this->_api['model_factory']->create($model_name, $data);
                 }
                 return $instances;
@@ -414,6 +426,10 @@ class MySql extends \FluxAPI\Storage
         switch($field->type) {
             case Field::TYPE_LONGSTRING:
                 $type = 'text';
+                break;
+
+            case Field::TYPE_TIMESTAMP:
+                $type = 'integer';
                 break;
 
             default:
