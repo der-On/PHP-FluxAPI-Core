@@ -1,24 +1,13 @@
 <?php
-/**
- * Created by JetBrains PhpStorm.
- * User: ondrej
- * Date: 30.03.13
- * Time: 22:18
- * To change this template use File | Settings | File Templates.
- */
 
-namespace FluxAPI;
+namespace FluxAPI\Factory;
 
-/**
- * Class ModelFactory
- * @package FluxAPI
- */
 class ModelFactory
 {
 
     protected $_api;
 
-    public function __construct(Api $api)
+    public function __construct(\FluxAPI\Api $api)
     {
         $this->_api = $api;
     }
@@ -31,26 +20,26 @@ class ModelFactory
      * @param [string $format] the format of the given $data
      * @return null|Model
      */
-    public function create($model_name, array $data = array(), $format = Api::DATA_FORMAT_ARRAY)
+    public function create($model_name, array $data = array(), $format = \FluxAPI\Api::DATA_FORMAT_ARRAY)
     {
         $models = $this->_api->getPlugins('Model');
         $extend = $this->_api->getExtends('Model',$model_name);
 
         if (isset($models[$model_name])) {
             switch($format) {
-                case Api::DATA_FORMAT_ARRAY:
+                case \FluxAPI\Api::DATA_FORMAT_ARRAY:
                     $instance = $this->createFromArray($model_name, $data);
                     break;
 
-                case Api::DATA_FORMAT_JSON:
+                case \FluxAPI\Api::DATA_FORMAT_JSON:
                     $instance = $this->createFromJson($model_name, $data);
                     break;
 
-                case Api::DATA_FORMAT_XML:
+                case \FluxAPI\Api::DATA_FORMAT_XML:
                     $instance = $this->createFromXml($model_name, $data);
                     break;
 
-                case Api::DATA_FORMAT_YAML:
+                case \FluxAPI\Api::DATA_FORMAT_YAML:
                     $instance = $this->createFromYaml($model_name, $data);
                     break;
 
@@ -171,7 +160,7 @@ class ModelFactory
      * @param [Query $query] if not set all instances of the model are loaded
      * @return array|null
      */
-    public function load($model_name, Query $query = NULL)
+    public function load($model_name, \FluxAPI\Query $query = NULL)
     {
         $models = $this->_api->getPlugins('Model');
 
@@ -221,7 +210,7 @@ class ModelFactory
      * @param array $data
      * @return bool
      */
-    public function update($model_name, Query $query, array $data)
+    public function update($model_name, \FluxAPI\Query $query, array $data)
     {
 
         $storage = $this->_api['storage_factory']->get($model_name);
@@ -236,7 +225,7 @@ class ModelFactory
      * @param [Query $query] if not set all instances of the model will be deleted
      * @return bool
      */
-    public function delete($model_name, Query $query = NULL)
+    public function delete($model_name, \FluxAPI\Query $query = NULL)
     {
         $models = $this->_api->getPlugins('Model');
 

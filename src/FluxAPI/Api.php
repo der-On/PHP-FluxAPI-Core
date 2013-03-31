@@ -101,7 +101,7 @@ class Api extends \Pimple
         });
 
         $this['model_factory'] = $this->share(function() use ($api) {
-            return new ModelFactory($api);
+            return new Factory\ModelFactory($api);
         });
 
         $this['storages'] = $this->share(function() use ($api) {
@@ -109,7 +109,7 @@ class Api extends \Pimple
         });
 
         $this['storage_factory'] = $this->share(function() use ($api) {
-            return new StorageFactory($api);
+            return new Factory\StorageFactory($api);
         });
 
         $this['controllers'] = $this->share(function() use ($api) {
@@ -117,11 +117,28 @@ class Api extends \Pimple
         });
 
         $this['controller_factory'] = $this->share(function() use ($api) {
-           return new ControllerFactory($api);
+           return new Factory\ControllerFactory($api);
         });
 
         $this['exception_handler'] = $this->share(function () use ($api) {
             return new ExceptionHandler($api->app['debug']);
+        });
+
+        $this['permissions'] = $this->share(function() use ($api) {
+            return $api['permission_factory'];
+        });
+
+        $this['permission_factory'] = $this->share(function() use ($api) {
+            return new Factory\PermissionFactory($api);
+        });
+
+        $this['dispatcher_class'] = 'Symfony\\Component\\EventDispatcher\\EventDispatcher';
+        $this['dispatcher'] = $this->share(function () use ($api) {
+            $dispatcher = new $api['dispatcher_class']();
+
+
+
+            return $dispatcher;
         });
 
         // register Serializer
@@ -577,5 +594,18 @@ class Api extends \Pimple
     {
         $storage = $this['storage_factory']->get($model_name);
         $storage->migrate($model_name);
+    }
+
+    /**
+     * Adds an event listener that listens on the specified events.
+     *
+     * @param string   $eventName The event to listen on
+     * @param callable $callback  The listener
+     * @param integer  $priority  The higher this value, the earlier an event
+     *                            listener will be triggered in the chain (defaults to 0)
+     */
+    public function on($eventName, $callback, $priority = 0)
+    {
+        $this['dispatcher']->addListener($eventName, $callback, $priority);
     }
 }
