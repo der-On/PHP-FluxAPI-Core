@@ -13,7 +13,8 @@ namespace FluxAPI;
  * Class ModelFactory
  * @package FluxAPI
  */
-class ModelFactory {
+class ModelFactory
+{
 
     protected $_api;
 
@@ -175,7 +176,7 @@ class ModelFactory {
         $models = $this->_api->getPlugins('Model');
 
         if (isset($models[$model_name])) {
-            return $this->_api->getStorage($model_name)->load($model_name,$query);
+            return $this->_api['storage_factory']->get($model_name)->load($model_name,$query);
         }
 
         return array();
@@ -197,7 +198,7 @@ class ModelFactory {
                 return FALSE;
             }
 
-            $storage = $this->_api->getStorage($model_name);
+            $storage = $this->_api['storage_factory']->get($model_name);
 
             if (is_array($instances)) {
                 foreach($instances as $instance) {
@@ -223,7 +224,7 @@ class ModelFactory {
     public function update($model_name, Query $query, array $data)
     {
 
-        $storage = $this->_api->getStorage($model_name);
+        $storage = $this->_api['storage_factory']->get($model_name);
 
         return $storage->update($model_name, $query, $data);
     }
@@ -240,7 +241,7 @@ class ModelFactory {
         $models = $this->_api->getPlugins('Model');
 
         if (isset($models[$model_name])) {
-            $storage = $this->_api->getStorage($model_name);
+            $storage = $this->_api['storage_factory']->get($model_name);
             return $storage->delete($model_name, $query);
         }
 

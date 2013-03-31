@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>PHP-FluxAPI » \FluxAPI\Plugin</title>
+<title>PHP-FluxAPI » \FluxAPI\StorageFactory</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../css/template.css" rel="stylesheet" media="all">
@@ -58,48 +58,69 @@
 <span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
 <button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
 </div>
-<ul class="side-nav nav nav-list"><li class="nav-header">
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
 <i class="icon-custom icon-method"></i> Methods
-                    <ul><li class="method public "><a href="#method_register" title="register :: Called when the plugin get's registered"><span class="description">Called when the plugin get's registered</span><pre>register()</pre></a></li></ul>
-</li></ul>
+                    <ul>
+<li class="method public "><a href="#method___construct" title="__construct :: "><span class="description">__construct()
+        </span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#method_get" title="get :: Returns an instance of the storage for a given model"><span class="description">Returns an instance of the storage for a given model</span><pre>get()</pre></a></li>
+</ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties
+                    <ul></ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul><li class="property protected "><a href="#property__api" title="$_api :: "><span class="description"></span><pre>$_api</pre></a></li></ul>
+</li>
+</ul>
 </div>
 <div class="span8">
-<a id="\FluxAPI\Plugin"></a><ul class="breadcrumb">
+<a id="\FluxAPI\StorageFactory"></a><ul class="breadcrumb">
 <li>
 <a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
 <li><a href="../namespaces/FluxAPI.html">FluxAPI</a></li>
 <li class="active">
-<span class="divider">\</span><a href="../classes/FluxAPI.Plugin.html">Plugin</a>
+<span class="divider">\</span><a href="../classes/FluxAPI.StorageFactory.html">StorageFactory</a>
 </li>
 </ul>
-<div class="element class">
-<p class="short_description">A general plugin</p>
-<div class="details">
-<div class="long_description"><p>All general plugins must inherit from this.
-General plugins do not fall into one of the following categories: Model, Storage, Cache, Permission, Controller
-For these categories special base classes exist.</p></div>
-<table class="table table-bordered"><tr>
-<th>package</th>
-<td><a href="../packages/FluxAPI.html">FluxAPI</a></td>
-</tr></table>
+<div class="element class"><div class="details">
 <h3>
 <i class="icon-custom icon-method"></i> Methods</h3>
-<a id="method_register"></a><div class="element clickable method public method_register" data-toggle="collapse" data-target=".method_register .collapse">
-<h2>Called when the plugin get's registered</h2>
-<pre>register(\FluxAPI\Api $api) </pre>
-<div class="labels"><span class="label">Static</span></div>
+<a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
+<h2>__construct()
+        </h2>
+<pre>__construct(\FluxAPI\Api $api) </pre>
+<div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
-<div class="long_description"><p>Use this method to make your plugin magic.</p></div>
+<div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$api</h4>
-<code><a href="../classes/FluxAPI.Api.html">\FluxAPI\Api</a></code>
-</div>
+<div class="subelement argument"><h4>$api</h4></div>
 </div></div>
 </div>
+<a id="method_get"></a><div class="element clickable method public method_get" data-toggle="collapse" data-target=".method_get .collapse">
+<h2>Returns an instance of the storage for a given model</h2>
+<pre>get($model_name) : <a href="../classes/FluxAPI.Storage.html">\FluxAPI\Storage</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$model_name</h4></div>
+<h3>Returns</h3>
+<div class="subelement response"><code><a href="../classes/FluxAPI.Storage.html">\FluxAPI\Storage</a></code></div>
+</div></div>
 </div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a id="property__api"> </a><div class="element clickable property protected property__api" data-toggle="collapse" data-target=".property__api .collapse">
+<h2></h2>
+<pre>$_api </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
+</div></div>
 </div>
 </div>
 <div class="row"><footer class="span12">

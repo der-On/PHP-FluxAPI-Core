@@ -222,7 +222,7 @@ abstract class Model
             if (in_array($name, $this->_loaded_relations)) {
                 return isset($this->_data[$name]) ? $this->_data[$name] : NULL;
             } else { // relations needs to be loaded
-                $this->_data[$name] = $this->_api->getStorage($this->getModelName())->loadRelation($this,$name);
+                $this->_data[$name] = $this->_api['storage_factory']->get($this->getModelName())->loadRelation($this,$name);
                 $this->_loaded_relations[] = $name;
 
                 return isset($this->_data[$name]) ? $this->_data[$name] : NULL;

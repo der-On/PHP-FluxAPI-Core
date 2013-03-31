@@ -14,6 +14,8 @@ namespace FluxAPI;
  */
 class Api extends \Pimple
 {
+    const VERSION = '0.1-DEV';
+
     const DATA_FORMAT_ARRAY = 'array';
     const DATA_FORMAT_JSON = 'json';
     const DATA_FORMAT_XML = 'xml';
@@ -65,10 +67,10 @@ class Api extends \Pimple
      */
     public function __construct(\Silex\Application $app, array $config = array())
     {
+        parent::__construct();
+
         $GLOBALS['fluxApi'] = $this;
-
         $api = $this;
-
         $this->app = $app;
 
         // overwrite default config with given config
@@ -92,8 +94,34 @@ class Api extends \Pimple
             $config
         );
 
+        $this['logger'] = NULL;
+
+        $this['models'] = $this->share(function() use ($api) {
+           return $api['model_factory'];
+        });
+
         $this['model_factory'] = $this->share(function() use ($api) {
             return new ModelFactory($api);
+        });
+
+        $this['storages'] = $this->share(function() use ($api) {
+           return $api['storage_factory'];
+        });
+
+        $this['storage_factory'] = $this->share(function() use ($api) {
+            return new StorageFactory($api);
+        });
+
+        $this['controllers'] = $this->share(function() use ($api) {
+           return $api['controller_factory'];
+        });
+
+        $this['controller_factory'] = $this->share(function() use ($api) {
+           return new ControllerFactory($api);
+        });
+
+        $this['exception_handler'] = $this->share(function () use ($api) {
+            return new ExceptionHandler($api->app['debug']);
         });
 
         // register Serializer
@@ -298,6 +326,7 @@ class Api extends \Pimple
                 }
             }
 
+            // TODO: converting models to certain formats should be dynamic/extendable and within the model factory?
             switch($format) {
                 case Api::DATA_FORMAT_ARRAY:
                     return $models;
@@ -342,6 +371,7 @@ class Api extends \Pimple
 
             $models = $self['model_factory']->load($model_name,$query);
 
+            // TODO: converting models to certain formats should be dynamic/extendable and within the model factory?
             if (count($models)) {
                 switch($format) {
                     case Api::DATA_FORMAT_XML:
@@ -459,22 +489,6 @@ class Api extends \Pimple
     }
 
     /**
-     * Returns an instance of the storage for a given model
-     *
-     * @param [string $model_name] if not set the default storage will be returned
-     * @return Storage
-     */
-    public function getStorage($model_name = NULL)
-    {
-        $storagePlugins = $this->getPlugins('Storage');
-
-        // get default storage plugin
-        $storageClass = $storagePlugins[$this->config['storage.plugin']];
-
-        return new $storageClass($this,$this->config['storage.options']);
-    }
-
-    /**
      * Extends a model with new fields. If the model does not exists, it will be created.
      *
      * @param string $model_name
@@ -561,7 +575,7 @@ class Api extends \Pimple
      */
     public function migrate($model_name = NULL)
     {
-        $storage = $this->getStorage($model_name);
+        $storage = $this['storage_factory']->get($model_name);
         $storage->migrate($model_name);
     }
 }
