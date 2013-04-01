@@ -482,7 +482,7 @@ class MySql extends \FluxAPI\Storage
 
         $toSchema = new Schema();
 
-        $models = $this->_api->getPlugins('Model');
+        $models = $this->_api['plugin_factory']->getPlugins('Model');
 
         foreach($models as $model_name => $modelClass) {
             $model = $this->_api['model_factory']->create($model_name);

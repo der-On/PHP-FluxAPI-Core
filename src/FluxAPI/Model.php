@@ -146,7 +146,7 @@ abstract class Model
      */
     public function addExtends()
     {
-        $extend = $this->_api->getExtends('Model',$this->getModelName());
+        $extend = $this->_api['plugin_factory']->getExtends('Model',$this->getModelName());
 
         if (!empty($extend) && isset($extend['fields'])) {
             foreach($extend['fields'] as $field) {

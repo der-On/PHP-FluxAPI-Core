@@ -25,8 +25,8 @@ class ModelFactory
     {
         $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_CREATE, new ModelEvent($model_name));
 
-        $models = $this->_api->getPlugins('Model');
-        $extend = $this->_api->getExtends('Model',$model_name);
+        $models = $this->_api['plugin_factory']->getPlugins('Model');
+        $extend = $this->_api['plugin_factory']->getExtends('Model',$model_name);
 
         if (isset($models[$model_name])) {
             switch($format) {
@@ -73,7 +73,7 @@ class ModelFactory
      */
     public function createFromArray($model_name, array $data = array())
     {
-        $className = $this->_api->getPluginClass('Model',$model_name);
+        $className = $this->_api['plugin_factory']->getPluginClass('Model',$model_name);
 
         if (!empty($className) && !empty($data)) {
             return new $className($data);
@@ -169,7 +169,7 @@ class ModelFactory
     {
         $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_LOAD, new ModelEvent($model_name, $query));
 
-        $models = $this->_api->getPlugins('Model');
+        $models = $this->_api['plugin_factory']->getPlugins('Model');
 
         if (isset($models[$model_name])) {
             $instances = $this->_api['storage_factory']->get($model_name)->load($model_name,$query);
@@ -195,7 +195,7 @@ class ModelFactory
     {
         $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_SAVE, new ModelEvent($model_name));
 
-        $models = $this->_api->getPlugins('Model');
+        $models = $this->_api['plugin_factory']->getPlugins('Model');
 
         if (isset($models[$model_name])) {
             if (empty($instances)) {
@@ -250,7 +250,7 @@ class ModelFactory
     {
         $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_DELETE, new ModelEvent($model_name, $query));
 
-        $models = $this->_api->getPlugins('Model');
+        $models = $this->_api['plugin_factory']->getPlugins('Model');
 
         if (isset($models[$model_name])) {
             $storage = $this->_api['storage_factory']->get($model_name);

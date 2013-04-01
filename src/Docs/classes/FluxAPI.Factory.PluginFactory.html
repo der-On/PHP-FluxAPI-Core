@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>PHP-FluxAPI » \FluxAPI\EventListener\ModelListener</title>
+<title>PHP-FluxAPI » \FluxAPI\Factory\PluginFactory</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../css/template.css" rel="stylesheet" media="all">
@@ -64,28 +64,14 @@
                     <ul>
 <li class="method public "><a href="#method___construct" title="__construct :: "><span class="description">__construct()
         </span><pre>__construct()</pre></a></li>
-<li class="method public "><a href="#method_getSubscribedEvents" title="getSubscribedEvents :: "><span class="description">getSubscribedEvents()
-        </span><pre>getSubscribedEvents()</pre></a></li>
-<li class="method public "><a href="#method_onModelBeforeCreate" title="onModelBeforeCreate :: "><span class="description">onModelBeforeCreate()
-        </span><pre>onModelBeforeCreate()</pre></a></li>
-<li class="method public "><a href="#method_onModelBeforeDelete" title="onModelBeforeDelete :: "><span class="description">onModelBeforeDelete()
-        </span><pre>onModelBeforeDelete()</pre></a></li>
-<li class="method public "><a href="#method_onModelBeforeLoad" title="onModelBeforeLoad :: "><span class="description">onModelBeforeLoad()
-        </span><pre>onModelBeforeLoad()</pre></a></li>
-<li class="method public "><a href="#method_onModelBeforeSave" title="onModelBeforeSave :: "><span class="description">onModelBeforeSave()
-        </span><pre>onModelBeforeSave()</pre></a></li>
-<li class="method public "><a href="#method_onModelBeforeUpdate" title="onModelBeforeUpdate :: "><span class="description">onModelBeforeUpdate()
-        </span><pre>onModelBeforeUpdate()</pre></a></li>
-<li class="method public "><a href="#method_onModelCreate" title="onModelCreate :: "><span class="description">onModelCreate()
-        </span><pre>onModelCreate()</pre></a></li>
-<li class="method public "><a href="#method_onModelDelete" title="onModelDelete :: "><span class="description">onModelDelete()
-        </span><pre>onModelDelete()</pre></a></li>
-<li class="method public "><a href="#method_onModelLoad" title="onModelLoad :: "><span class="description">onModelLoad()
-        </span><pre>onModelLoad()</pre></a></li>
-<li class="method public "><a href="#method_onModelSave" title="onModelSave :: "><span class="description">onModelSave()
-        </span><pre>onModelSave()</pre></a></li>
-<li class="method public "><a href="#method_onModelUpdate" title="onModelUpdate :: "><span class="description">onModelUpdate()
-        </span><pre>onModelUpdate()</pre></a></li>
+<li class="method public "><a href="#method_extendModel" title="extendModel :: Extends a model with new fields."><span class="description">Extends a model with new fields.</span><pre>extendModel()</pre></a></li>
+<li class="method public "><a href="#method_getExtends" title="getExtends :: "><span class="description">getExtends()
+        </span><pre>getExtends()</pre></a></li>
+<li class="method public "><a href="#method_getPluginClass" title="getPluginClass :: Returns fully class name of a plugin by a given type and name"><span class="description">Returns fully class name of a plugin by a given type and name</span><pre>getPluginClass()</pre></a></li>
+<li class="method public "><a href="#method_getPlugins" title="getPlugins :: Returns all registered plugins (of a given type)"><span class="description">Returns all registered plugins (of a given type)</span><pre>getPlugins()</pre></a></li>
+<li class="method public "><a href="#method_registerExtend" title="registerExtend :: Registers a single extension"><span class="description">Registers a single extension</span><pre>registerExtend()</pre></a></li>
+<li class="method public "><a href="#method_registerExtends" title="registerExtends :: Registers all extensions found in the extends directory"><span class="description">Registers all extensions found in the extends directory</span><pre>registerExtends()</pre></a></li>
+<li class="method public "><a href="#method_registerPlugins" title="registerPlugins :: Registers all available plugins found within the Plugins/ directory"><span class="description">Registers all available plugins found within the Plugins/ directory</span><pre>registerPlugins()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header">
@@ -95,19 +81,26 @@
 <li class="nav-header protected">» Protected
                     <ul><li class="property protected "><a href="#property__api" title="$_api :: "><span class="description"></span><pre>$_api</pre></a></li></ul>
 </li>
+<li class="nav-header private">» Private
+                    <ul>
+<li class="property private "><a href="#property__base_plugins" title="$_base_plugins :: "><span class="description">Internal lookup for base plugins</span><pre>$_base_plugins</pre></a></li>
+<li class="property private "><a href="#property__extends" title="$_extends :: "><span class="description">Internal extensions</span><pre>$_extends</pre></a></li>
+<li class="property private "><a href="#property__plugins" title="$_plugins :: "><span class="description">Internal lookup for plugins</span><pre>$_plugins</pre></a></li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="span8">
-<a id="\FluxAPI\EventListener\ModelListener"></a><ul class="breadcrumb">
+<a id="\FluxAPI\Factory\PluginFactory"></a><ul class="breadcrumb">
 <li>
 <a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
 <li><a href="../namespaces/FluxAPI.html">FluxAPI</a></li>
 <li>
-<span class="divider">\</span><a href="../namespaces/FluxAPI.EventListener.html">EventListener</a>
+<span class="divider">\</span><a href="../namespaces/FluxAPI.Factory.html">Factory</a>
 </li>
 <li class="active">
-<span class="divider">\</span><a href="../classes/FluxAPI.EventListener.ModelListener.html">ModelListener</a>
+<span class="divider">\</span><a href="../classes/FluxAPI.Factory.PluginFactory.html">PluginFactory</a>
 </li>
 </ul>
 <div class="element class"><div class="details">
@@ -124,128 +117,124 @@
 <div class="subelement argument"><h4>$api</h4></div>
 </div></div>
 </div>
-<a id="method_getSubscribedEvents"></a><div class="element clickable method public method_getSubscribedEvents" data-toggle="collapse" data-target=".method_getSubscribedEvents .collapse">
-<h2>getSubscribedEvents()
+<a id="method_extendModel"></a><div class="element clickable method public method_extendModel" data-toggle="collapse" data-target=".method_extendModel .collapse">
+<h2>Extends a model with new fields.</h2>
+<pre>extendModel(string $model_name, array $fields, $format) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>If the model does not exists, it will be created.</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$model_name</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$fields</h4>
+<code>array</code><p>Field definitions. Either containing real Field instances or key => value pairs</p>
+</div>
+<div class="subelement argument"><h4>$format</h4></div>
+</div></div>
+</div>
+<a id="method_getExtends"></a><div class="element clickable method public method_getExtends" data-toggle="collapse" data-target=".method_getExtends .collapse">
+<h2>getExtends()
         </h2>
-<pre>getSubscribedEvents() </pre>
-<div class="labels"><span class="label">Static</span></div>
+<pre>getExtends(string $type, $name) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$type</h4>
+<code>string</code>
+</div>
+<div class="subelement argument"><h4>$name</h4></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a id="method_getPluginClass"></a><div class="element clickable method public method_getPluginClass" data-toggle="collapse" data-target=".method_getPluginClass .collapse">
+<h2>Returns fully class name of a plugin by a given type and name</h2>
+<pre>getPluginClass(string $type, string $name) : null | array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$type</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code>string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>null</code><code>array</code>
+</div>
+</div></div>
+</div>
+<a id="method_getPlugins"></a><div class="element clickable method public method_getPlugins" data-toggle="collapse" data-target=".method_getPlugins .collapse">
+<h2>Returns all registered plugins (of a given type)</h2>
+<pre>getPlugins(string $type) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$type</h4>
+<code>string</code><p>if set, only plugins of that type will be returned</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a id="method_registerExtend"></a><div class="element clickable method public method_registerExtend" data-toggle="collapse" data-target=".method_registerExtend .collapse">
+<h2>Registers a single extension</h2>
+<pre>registerExtend($type, $name) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"><p>Will add dynamic models to the model plugins to make them available</p>
+
+<p>TODO: currently it will read in the json file but maybe it's better to only read those files on demand?</p></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$type</h4></div>
+<div class="subelement argument"><h4>$name</h4></div>
+</div></div>
+</div>
+<a id="method_registerExtends"></a><div class="element clickable method public method_registerExtends" data-toggle="collapse" data-target=".method_registerExtends .collapse">
+<h2>Registers all extensions found in the extends directory</h2>
+<pre>registerExtends() </pre>
+<div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a id="method_onModelBeforeCreate"></a><div class="element clickable method public method_onModelBeforeCreate" data-toggle="collapse" data-target=".method_onModelBeforeCreate .collapse">
-<h2>onModelBeforeCreate()
-        </h2>
-<pre>onModelBeforeCreate(\FluxAPI\Event\ModelEvent $event) </pre>
+<a id="method_registerPlugins"></a><div class="element clickable method public method_registerPlugins" data-toggle="collapse" data-target=".method_registerPlugins .collapse">
+<h2>Registers all available plugins found within the Plugins/ directory</h2>
+<pre>registerPlugins() </pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument"><h4>$event</h4></div>
-</div></div>
-</div>
-<a id="method_onModelBeforeDelete"></a><div class="element clickable method public method_onModelBeforeDelete" data-toggle="collapse" data-target=".method_onModelBeforeDelete .collapse">
-<h2>onModelBeforeDelete()
-        </h2>
-<pre>onModelBeforeDelete(\FluxAPI\Event\ModelEvent $event) </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument"><h4>$event</h4></div>
-</div></div>
-</div>
-<a id="method_onModelBeforeLoad"></a><div class="element clickable method public method_onModelBeforeLoad" data-toggle="collapse" data-target=".method_onModelBeforeLoad .collapse">
-<h2>onModelBeforeLoad()
-        </h2>
-<pre>onModelBeforeLoad(\FluxAPI\Event\ModelEvent $event) </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument"><h4>$event</h4></div>
-</div></div>
-</div>
-<a id="method_onModelBeforeSave"></a><div class="element clickable method public method_onModelBeforeSave" data-toggle="collapse" data-target=".method_onModelBeforeSave .collapse">
-<h2>onModelBeforeSave()
-        </h2>
-<pre>onModelBeforeSave(\FluxAPI\Event\ModelEvent $event) </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument"><h4>$event</h4></div>
-</div></div>
-</div>
-<a id="method_onModelBeforeUpdate"></a><div class="element clickable method public method_onModelBeforeUpdate" data-toggle="collapse" data-target=".method_onModelBeforeUpdate .collapse">
-<h2>onModelBeforeUpdate()
-        </h2>
-<pre>onModelBeforeUpdate(\FluxAPI\Event\ModelEvent $event) </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument"><h4>$event</h4></div>
-</div></div>
-</div>
-<a id="method_onModelCreate"></a><div class="element clickable method public method_onModelCreate" data-toggle="collapse" data-target=".method_onModelCreate .collapse">
-<h2>onModelCreate()
-        </h2>
-<pre>onModelCreate(\FluxAPI\Event\ModelEvent $event) </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument"><h4>$event</h4></div>
-</div></div>
-</div>
-<a id="method_onModelDelete"></a><div class="element clickable method public method_onModelDelete" data-toggle="collapse" data-target=".method_onModelDelete .collapse">
-<h2>onModelDelete()
-        </h2>
-<pre>onModelDelete(\FluxAPI\Event\ModelEvent $event) </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument"><h4>$event</h4></div>
-</div></div>
-</div>
-<a id="method_onModelLoad"></a><div class="element clickable method public method_onModelLoad" data-toggle="collapse" data-target=".method_onModelLoad .collapse">
-<h2>onModelLoad()
-        </h2>
-<pre>onModelLoad(\FluxAPI\Event\ModelEvent $event) </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument"><h4>$event</h4></div>
-</div></div>
-</div>
-<a id="method_onModelSave"></a><div class="element clickable method public method_onModelSave" data-toggle="collapse" data-target=".method_onModelSave .collapse">
-<h2>onModelSave()
-        </h2>
-<pre>onModelSave(\FluxAPI\Event\ModelEvent $event) </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument"><h4>$event</h4></div>
-</div></div>
-</div>
-<a id="method_onModelUpdate"></a><div class="element clickable method public method_onModelUpdate" data-toggle="collapse" data-target=".method_onModelUpdate .collapse">
-<h2>onModelUpdate()
-        </h2>
-<pre>onModelUpdate(\FluxAPI\Event\ModelEvent $event) </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument"><h4>$event</h4></div>
-</div></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
 <h3>
 <i class="icon-custom icon-property"></i> Properties</h3>
 <a id="property__api"> </a><div class="element clickable property protected property__api" data-toggle="collapse" data-target=".property__api .collapse">
 <h2></h2>
 <pre>$_api </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property__base_plugins"> </a><div class="element clickable property private property__base_plugins" data-toggle="collapse" data-target=".property__base_plugins .collapse">
+<h2>Internal lookup for base plugins</h2>
+<pre>$_base_plugins : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property__extends"> </a><div class="element clickable property private property__extends" data-toggle="collapse" data-target=".property__extends .collapse">
+<h2>Internal extensions</h2>
+<pre>$_extends : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property__plugins"> </a><div class="element clickable property private property__plugins" data-toggle="collapse" data-target=".property__plugins .collapse">
+<h2>Internal lookup for plugins</h2>
+<pre>$_plugins : array</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
