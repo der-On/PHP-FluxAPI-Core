@@ -636,7 +636,10 @@ abstract class Storage
         } else {
             switch($field->type) {
                 case Field::TYPE_DATE:
-                    return (string) $data; break;
+                    return $data->format('Y-m-d'); break;
+
+                case Field::TYPE_DATETIME:
+                    return $data->format('Y-m-d H:i:s'); break;
 
                 default:
                     return (string) $data;
@@ -668,7 +671,10 @@ abstract class Storage
                     return floatval($str); break;
 
                 case Field::TYPE_DATE:
-                    return new DateTime($str); break;
+                    return new \DateTime($str); break;
+
+                case Field::TYPE_DATETIME:
+                    return new \DateTime($str); break;
 
                 default:
                     return $str;

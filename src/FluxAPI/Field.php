@@ -59,6 +59,7 @@ class Field
     const TYPE_FLOAT = 'float';
     const TYPE_LONGSTRING = 'longstring';
     const TYPE_DATE = 'date';
+    const TYPE_DATETIME = 'datetime';
     const TYPE_TIMESTAMP = 'timestamp';
     const TYPE_ARRAY = 'array';
     const TYPE_OBJECT = 'object';
