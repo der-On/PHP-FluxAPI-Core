@@ -102,7 +102,7 @@ class ApiTest extends FluxApi_Database_TestCase
           )
         );
 
-        self::$fluxApi->extendModel($model,$fields);
+        self::$fluxApi->extendNode($fields);
 
         $node = self::$fluxApi->createNode(array(
             'newField' => 'value 1',
