@@ -22,11 +22,6 @@ class Api extends \Pimple
     const DATA_FORMAT_YAML = 'yaml';
 
     /**
-     * @var array Internal lookup for magic methods
-     */
-    private $_methods = array();
-
-    /**
      * @var \Silex\Application The silex app
      */
     public $app = NULL;
@@ -117,6 +112,14 @@ class Api extends \Pimple
             return new Factory\PluginFactory($api);
         });
 
+        $this['methods'] = $this->share(function() use ($api) {
+            return $api['method_factory'];
+        });
+
+        $this['method_factory'] = $this->share(function() use ($api) {
+            return new Factory\MethodFactory($api);
+        });
+
         $this['dispatcher_class'] = 'Symfony\\Component\\EventDispatcher\\EventDispatcher';
         $this['dispatcher'] = $this->share(function () use ($api) {
             $dispatcher = new $api['dispatcher_class']();
@@ -160,29 +163,7 @@ class Api extends \Pimple
      */
     public function __call($method, array $arguments)
     {
-        if (isset($this->_methods[$method])) {
-            $callback = $this->_methods[$method];
-
-            return call_user_func_array($callback,$arguments);
-        }
-
-        return NULL;
-    }
-
-    /**
-     * Registers a magic method
-     *
-     * @param string $method
-     * @param function $callback
-     * @return Api $this
-     */
-    public function registerMethod($method, $callback)
-    {
-        if (!isset($this->_methods[$method]) && is_callable($callback)) {
-            $this->_methods[$method] = $callback;
-        }
-
-        return $this; // make it chainable
+        return $this['method_factory']->callMethod($method, $arguments);
     }
 
     /**
@@ -212,7 +193,7 @@ class Api extends \Pimple
         $model_name = ucfirst($model_name);
 
         // load multiple model instances
-        $this->_methods['load'.$model_name.'s'] = function($query = NULL, $format = NULL) use ($model_name, $self) {
+        $this['method_factory']->registerMethod('load'.$model_name.'s', function($query = NULL, $format = NULL) use ($model_name, $self) {
             $models =  $self['model_factory']->load($model_name,$query);
 
             if (in_array($format,array(Api::DATA_FORMAT_ARRAY,Api::DATA_FORMAT_JSON,Api::DATA_FORMAT_YAML))) {
@@ -249,10 +230,10 @@ class Api extends \Pimple
                 default:
                     return $models;
             }
-        };
+        });
 
         // load single model instance
-        $this->_methods['load'.$model_name] = function($query, $format = NULL) use ($model_name, $self) {
+        $this['method_factory']->registerMethod('load'.$model_name, function($query, $format = NULL) use ($model_name, $self) {
 
             if (is_string($query)) {
                 $id = $query;
@@ -291,20 +272,20 @@ class Api extends \Pimple
             } else {
                 return NULL;
             }
-        };
+        });
 
         // save a model instance
-        $this->_methods['save'.$model_name] = function($instance) use ($model_name, $self) {
+        $this['method_factory']->registerMethod('save'.$model_name, function($instance) use ($model_name, $self) {
             return $self['model_factory']->save($model_name,$instance);
-        };
+        });
 
         // delete model multiple instances
-        $this->_methods['delete'.$model_name.'s'] = function($query = NULL) use ($model_name, $self) {
+        $this['method_factory']->registerMethod('delete'.$model_name.'s', function($query = NULL) use ($model_name, $self) {
             return $self['model_factory']->delete($model_name, $query);
-        };
+        });
 
         // delete a single model instance
-        $this->_methods['delete'.$model_name] = function($query) use ($model_name, $self) {
+        $this['method_factory']->registerMethod('delete'.$model_name, function($query) use ($model_name, $self) {
             if (is_string($query)) {
                 $id = $query;
                 $query = new Query();
@@ -323,10 +304,10 @@ class Api extends \Pimple
 
 
             return $self['model_factory']->delete($model_name, $query);
-        };
+        });
 
         // update multiple model instances
-        $this->_methods['update'.$model_name.'s'] = function($query, array $data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model_name, $self) {
+        $this['method_factory']->registerMethod('update'.$model_name.'s', function($query, array $data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model_name, $self) {
             if (is_array($query)) {
                 $ids = $query;
 
@@ -334,26 +315,26 @@ class Api extends \Pimple
                 $query->filter('in',array('id',$ids));
             }
             return $self['model_factory']->update($model_name, $query, $data, $format);
-        };
+        });
 
         // update a single model instance
-        $this->_methods['update'.$model_name] = function($id, array $data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model_name, $self) {
+        $this['method_factory']->registerMethod('update'.$model_name, function($id, array $data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model_name, $self) {
             $query = new Query();
             $query->filter('equal',array('id',$id));
             $query->filter('limit',array(0,1));
 
             return $self['model_factory']->update($model_name, $query, $data, $format);
-        };
+        });
 
         // create a model instance
-        $this->_methods['create'.$model_name] = function($data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model_name, $self) {
+        $this['method_factory']->registerMethod('create'.$model_name, function($data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model_name, $self) {
             return $self['model_factory']->create($model_name, $data, $format);
-        };
+        });
 
         // extend an existing model
-        $this->_methods['extend'.$model_name] = function($fields = array(), $format = self::DATA_FORMAT_ARRAY) use ($model_name, $self) {
+        $this['method_factory']->registerMethod('extend'.$model_name, function($fields = array(), $format = self::DATA_FORMAT_ARRAY) use ($model_name, $self) {
             return $self['plugin_factory']->extendModel($model_name, $fields, $format);
-        };
+        });
     }
 
     public function extendModel($model_name, array $fields, $format = self::DATA_FORMAT_ARRAY)
