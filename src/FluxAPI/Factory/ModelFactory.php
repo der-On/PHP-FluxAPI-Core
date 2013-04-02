@@ -193,7 +193,14 @@ class ModelFactory
      */
     public function save($model_name, $instances)
     {
-        $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_SAVE, new ModelEvent($model_name));
+        if (is_array($instances)) {
+            foreach($instances as $instance) {
+                $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_SAVE, new ModelEvent($model_name, NULL, $instance));
+            }
+        } else {
+            $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_SAVE, new ModelEvent($model_name, NULL, $instances));
+        }
+
 
         $models = $this->_api['plugin_factory']->getPlugins('Model');
 

@@ -1,40 +1,50 @@
 -
     id: 1
+    active: false
     body: 'Body for Node 1'
     title: 'Node 1'
 -
     id: 2
+    active: false
     body: 'Body for Node 2'
     title: 'Node 2'
 -
     id: 3
+    active: false
     body: 'Body for Node 3'
     title: 'Node 3'
 -
     id: 4
+    active: false
     body: 'Body for Node 4'
     title: 'Node 4'
 -
     id: 5
+    active: false
     body: 'Body for Node 5'
     title: 'Node 5'
 -
     id: 6
+    active: false
     body: 'Body for Node 6'
     title: 'Node 6'
 -
     id: 7
+    active: false
     body: 'Body for Node 7'
     title: 'Node 7'
 -
     id: 8
+    active: false
     body: 'Body for Node 8'
     title: 'Node 8'
 -
     id: 9
+    active: false
     body: 'Body for Node 9'
     title: 'Node 9'
 -
     id: 10
+    active: false
     body: 'Body for Node 10'
     title: 'Node 10'

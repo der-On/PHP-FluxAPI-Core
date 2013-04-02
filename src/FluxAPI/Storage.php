@@ -636,10 +636,13 @@ abstract class Storage
         } else {
             switch($field->type) {
                 case Field::TYPE_DATE:
-                    return $data->format('Y-m-d'); break;
+                    return (is_object($data)) ? \FluxAPI\Utils::dateToString($data) : $data; break;
 
                 case Field::TYPE_DATETIME:
-                    return $data->format('Y-m-d H:i:s'); break;
+                    return (is_object($data)) ? \FluxAPI\Utils::dateTimeToString($data) : $data; break;
+
+                case Field::TYPE_BOOLEAN:
+                    return ($data)?1:0; break;
 
                 default:
                     return (string) $data;
@@ -671,10 +674,13 @@ abstract class Storage
                     return floatval($str); break;
 
                 case Field::TYPE_DATE:
-                    return new \DateTime($str); break;
+                    return \FluxAPI\Utils::dateTimeFromString($str); break;
 
                 case Field::TYPE_DATETIME:
-                    return new \DateTime($str); break;
+                    return \FluxAPI\Utils::dateTimeFromString($str); break;
+
+                case Field::TYPE_BOOLEAN:
+                    return ($str != '0' || $str != 0 || !empty($str))?TRUE:FALSE; break;
 
                 default:
                     return $str;

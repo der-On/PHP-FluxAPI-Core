@@ -291,7 +291,18 @@ abstract class Model
         $array = array();
         foreach($this->_fields as $name => $field) {
             if ($field->type != Field::TYPE_RELATION) {
-                $array[$name] = $this->_data[$name];
+                switch($field->type) {
+                    case Field::TYPE_DATE:
+                        $array[$name] = (is_object($this->_data[$name])) ? \FluxAPI\Utils::dateToString($this->_data[$name]) : $this->_data[$name];
+                        break;
+
+                    case Field::TYPE_DATETIME:
+                        $array[$name] = (is_object($this->_data[$name])) ? \FluxAPI\Utils::dateTimeToString($this->_data[$name]) : $this->_data[$name];
+                        break;
+
+                    default:
+                        $array[$name] = $this->_data[$name];
+                }
             }
         }
         return $array;

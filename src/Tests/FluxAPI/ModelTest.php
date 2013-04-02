@@ -7,8 +7,11 @@ class ModelTest extends FluxApi_Database_TestCase
     {
         return array(
             'id' => 1,
+            'active' => FALSE,
             'title' => 'Node title',
             'body' => "Node body\non multiple lines",
+            'updatedAt' => NULL,
+            'createdAt' => NULL
         );
     }
 
@@ -33,6 +36,7 @@ class ModelTest extends FluxApi_Database_TestCase
     public function testToJson()
     {
         $data = $this->getNodeData();
+
         $node = new \Plugins\Core\Model\Node($data);
 
         $json = $node->toJson();
@@ -42,11 +46,14 @@ class ModelTest extends FluxApi_Database_TestCase
     public function testToYaml()
     {
         $data = $this->getNodeData();
+
         $node = new \Plugins\Core\Model\Node($data);
 
         $yaml = trim($node->toYaml());
 
         $yaml_file = trim(file_get_contents(__DIR__ . '/_files/node.yml'));
+        $yaml = preg_replace('/updatedAt: null\n/','',$yaml);
+        $yaml = preg_replace('/createdAt: null\n/','',$yaml);
 
         $this->assertEquals($yaml_file,$yaml);
     }
@@ -59,6 +66,8 @@ class ModelTest extends FluxApi_Database_TestCase
         $node = new \Plugins\Core\Model\Node($data);
 
         $xml = $node->toXml();
+        $xml = $this->removeDateTimesFromXml($xml);
+
         $this->assertXmlStringEqualsXmlFile(__DIR__ . '/_files/node.xml', $xml);
     }
 }

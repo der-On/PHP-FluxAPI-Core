@@ -3,7 +3,7 @@ namespace Plugins\Core;
 
 class Rest
 {
-    private $_api = NULL;
+    protected $_api = NULL;
 
     public function __construct(\FluxAPI\Api $api)
     {

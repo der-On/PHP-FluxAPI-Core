@@ -3,7 +3,7 @@ namespace Plugins\Core\Model;
 
 use \FluxAPI\Field;
 
-class Node extends \FluxAPI\Model
+class Node extends \Plugins\Core\Model
 {
     public function defineFields()
     {
@@ -28,6 +28,12 @@ class Node extends \FluxAPI\Model
             'type' => Field::TYPE_RELATION,
             'relationType' => Field::HAS_MANY,
             'relationModel' => 'Node'
+        )))
+        ->addField(new Field(array(
+            'name' => 'author',
+            'type' => Field::TYPE_RELATION,
+            'relationType' => Field::HAS_ONE,
+            'relationModel' => 'User',
         )));
     }
 }

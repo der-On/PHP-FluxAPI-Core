@@ -23,6 +23,9 @@ class ApiTest extends FluxApi_Database_TestCase
 
         $nodes = self::$fluxApi->loadNodes(NULL,\FluxAPI\Api::DATA_FORMAT_XML);
 
+        // we need to remove the datetime fields which change everytime
+        $nodes = $this->removeDateTimesFromXml($nodes);
+
         $this->assertXmlStringEqualsXmlFile(__DIR__ . '/_files/nodes.xml',$nodes);
     }
 
@@ -32,6 +35,9 @@ class ApiTest extends FluxApi_Database_TestCase
         $this->createSingleNode();
 
         $node = self::$fluxApi->loadNode('1',\FluxAPI\Api::DATA_FORMAT_XML);
+
+        // we need to remove the datetime fields which change everytime
+        $node = $this->removeDateTimesFromXml($node);
 
         $this->assertXmlStringEqualsXmlFile(__DIR__ . '/_files/node.xml',$node);
     }
@@ -43,6 +49,9 @@ class ApiTest extends FluxApi_Database_TestCase
 
         $nodes = self::$fluxApi->loadNodes(NULL,\FluxAPI\Api::DATA_FORMAT_JSON);
 
+        // we need to remove the datetime fields which change everytime
+        $nodes = $this->removeDateTimesFromJson($nodes);
+
         $this->assertJsonStringEqualsJsonFile(__DIR__ . '/_files/nodes.json',$nodes);
     }
 
@@ -52,6 +61,9 @@ class ApiTest extends FluxApi_Database_TestCase
         $this->createSingleNode();
 
         $node = self::$fluxApi->loadNode('1',\FluxAPI\Api::DATA_FORMAT_JSON);
+
+        // we need to remove the datetime fields which change everytime
+        $node = $this->removeDateTimesFromJson($node);
 
         $this->assertJsonStringEqualsJsonFile(__DIR__ . '/_files/node.json',$node);
     }
@@ -63,6 +75,9 @@ class ApiTest extends FluxApi_Database_TestCase
 
         $nodes = self::$fluxApi->loadNodes(NULL,\FluxAPI\Api::DATA_FORMAT_YAML);
 
+        $nodes = $this->removeDateTimesFromYaml($nodes);
+        print('yaml: '.$nodes."\n");
+
         $this->assertStringEqualsFile(__DIR__ . '/_files/nodes.yml',$nodes);
     }
 
@@ -72,6 +87,8 @@ class ApiTest extends FluxApi_Database_TestCase
         $this->createSingleNode();
 
         $node = self::$fluxApi->loadNode('1',\FluxAPI\Api::DATA_FORMAT_YAML);
+
+        $node = $this->removeDateTimesFromYaml($node,0);
 
         $this->assertStringEqualsFile(__DIR__ . '/_files/node.yml',$node);
     }

@@ -1,3 +1,4 @@
 id: 1
+active: false
 body: "Node body\non multiple lines"
 title: 'Node title'

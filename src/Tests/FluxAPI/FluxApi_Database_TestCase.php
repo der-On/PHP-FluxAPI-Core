@@ -75,4 +75,27 @@ abstract class FluxApi_Database_TestCase extends PHPUnit_Extensions_Database_Tes
     {
         self::$fluxApi->migrate();
     }
+
+    public function removeDateTimesFromXml($xml)
+    {
+        $xml =  preg_replace('/\<createdAt\>(.*)\<\/createdAt\>/','',$xml);
+        $xml =  preg_replace('/\<updatedAt\>(.*)\<\/updatedAt\>/','',$xml);
+        $xml =  preg_replace('/\<updatedAt\/\>/','',$xml);
+        $xml =  preg_replace('/\<createdAt\/\>/','',$xml);
+        return $xml;
+    }
+
+    public function removeDateTimesFromJson($json)
+    {
+        $json =  preg_replace('/"createdAt":"\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}",/','',$json);
+        $json =  preg_replace('/"updatedAt":"\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}",/','',$json);
+        return $json;
+    }
+
+    public function removeDateTimesFromYaml($yaml, $indent = 4)
+    {
+        $yaml =  preg_replace('/\s{'.$indent.'}createdAt: \'\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}\'(\n|\t)/','',$yaml);
+        $yaml =  preg_replace('/\s{'.$indent.'}updatedAt: \'\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}\'(\n|\t)/','',$yaml);
+        return $yaml;
+    }
 }

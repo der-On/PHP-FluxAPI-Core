@@ -21,6 +21,9 @@ class Api extends \Pimple
     const DATA_FORMAT_XML = 'xml';
     const DATA_FORMAT_YAML = 'yaml';
 
+    const EARLY_EVENT = -512;
+    const LATE_EVENT = 512;
+
     /**
      * @var \Silex\Application The silex app
      */
