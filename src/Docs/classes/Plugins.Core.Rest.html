@@ -35,10 +35,10 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">183</span></a></li>
+                <span class="label label-info">211</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul><li>todo 
-                <span class="label label-info">8</span>
+                <span class="label label-info">9</span>
 </li></ul></a></li>
 <li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
                 <span class="label label-info">0</span></a></li>
@@ -64,13 +64,41 @@
                     <ul>
 <li class="method public "><a href="#method___construct" title="__construct :: "><span class="description">__construct()
         </span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#method_addFiltersToQueryFromRequest" title="addFiltersToQueryFromRequest :: "><span class="description">addFiltersToQueryFromRequest()
+        </span><pre>addFiltersToQueryFromRequest()</pre></a></li>
+<li class="method public "><a href="#method_createModel" title="createModel :: "><span class="description">createModel()
+        </span><pre>createModel()</pre></a></li>
+<li class="method public "><a href="#method_deleteModel" title="deleteModel :: "><span class="description">deleteModel()
+        </span><pre>deleteModel()</pre></a></li>
+<li class="method public "><a href="#method_deleteModels" title="deleteModels :: "><span class="description">deleteModels()
+        </span><pre>deleteModels()</pre></a></li>
+<li class="method public "><a href="#method_getContentTypeFromFormat" title="getContentTypeFromFormat :: "><span class="description">getContentTypeFromFormat()
+        </span><pre>getContentTypeFromFormat()</pre></a></li>
+<li class="method public "><a href="#method_getFormatFromContentType" title="getFormatFromContentType :: "><span class="description">getFormatFromContentType()
+        </span><pre>getFormatFromContentType()</pre></a></li>
+<li class="method public "><a href="#method_getInputFormat" title="getInputFormat :: "><span class="description">getInputFormat()
+        </span><pre>getInputFormat()</pre></a></li>
+<li class="method public "><a href="#method_getOutputFormat" title="getOutputFormat :: "><span class="description">getOutputFormat()
+        </span><pre>getOutputFormat()</pre></a></li>
+<li class="method public "><a href="#method_getValidOutputFormat" title="getValidOutputFormat :: "><span class="description">getValidOutputFormat()
+        </span><pre>getValidOutputFormat()</pre></a></li>
+<li class="method public "><a href="#method_loadModel" title="loadModel :: "><span class="description">loadModel()
+        </span><pre>loadModel()</pre></a></li>
+<li class="method public "><a href="#method_loadModels" title="loadModels :: "><span class="description">loadModels()
+        </span><pre>loadModels()</pre></a></li>
+<li class="method public "><a href="#method_registerModelRoutes" title="registerModelRoutes :: "><span class="description">registerModelRoutes()
+        </span><pre>registerModelRoutes()</pre></a></li>
 <li class="method public "><a href="#method_registerRoutes" title="registerRoutes :: "><span class="description">registerRoutes()
         </span><pre>registerRoutes()</pre></a></li>
+<li class="method public "><a href="#method_updateModel" title="updateModel :: "><span class="description">updateModel()
+        </span><pre>updateModel()</pre></a></li>
+<li class="method public "><a href="#method_updateModels" title="updateModels :: "><span class="description">updateModels()
+        </span><pre>updateModels()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header">
 <i class="icon-custom icon-property"></i> Properties
-                    <ul></ul>
+                    <ul><li class="property public "><a href="#property_config" title="$config :: "><span class="description"></span><pre>$config</pre></a></li></ul>
 </li>
 <li class="nav-header protected">» Protected
                     <ul><li class="property protected "><a href="#property__api" title="$_api :: "><span class="description"></span><pre>$_api</pre></a></li></ul>
@@ -104,6 +132,147 @@
 <div class="subelement argument"><h4>$api</h4></div>
 </div></div>
 </div>
+<a id="method_addFiltersToQueryFromRequest"></a><div class="element clickable method public method_addFiltersToQueryFromRequest" data-toggle="collapse" data-target=".method_addFiltersToQueryFromRequest .collapse">
+<h2>addFiltersToQueryFromRequest()
+        </h2>
+<pre>addFiltersToQueryFromRequest(\Symfony\Component\HttpFoundation\Request $request, \FluxAPI\Query $query) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$request</h4></div>
+<div class="subelement argument"><h4>$query</h4></div>
+</div></div>
+</div>
+<a id="method_createModel"></a><div class="element clickable method public method_createModel" data-toggle="collapse" data-target=".method_createModel .collapse">
+<h2>createModel()
+        </h2>
+<pre>createModel(\Symfony\Component\HttpFoundation\Request $request, $model_name, $format) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$request</h4></div>
+<div class="subelement argument"><h4>$model_name</h4></div>
+<div class="subelement argument"><h4>$format</h4></div>
+</div></div>
+</div>
+<a id="method_deleteModel"></a><div class="element clickable method public method_deleteModel" data-toggle="collapse" data-target=".method_deleteModel .collapse">
+<h2>deleteModel()
+        </h2>
+<pre>deleteModel(\Symfony\Component\HttpFoundation\Request $request, $model_name, $id, $format) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$request</h4></div>
+<div class="subelement argument"><h4>$model_name</h4></div>
+<div class="subelement argument"><h4>$id</h4></div>
+<div class="subelement argument"><h4>$format</h4></div>
+</div></div>
+</div>
+<a id="method_deleteModels"></a><div class="element clickable method public method_deleteModels" data-toggle="collapse" data-target=".method_deleteModels .collapse">
+<h2>deleteModels()
+        </h2>
+<pre>deleteModels(\Symfony\Component\HttpFoundation\Request $request, $model_name, $format) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$request</h4></div>
+<div class="subelement argument"><h4>$model_name</h4></div>
+<div class="subelement argument"><h4>$format</h4></div>
+</div></div>
+</div>
+<a id="method_getContentTypeFromFormat"></a><div class="element clickable method public method_getContentTypeFromFormat" data-toggle="collapse" data-target=".method_getContentTypeFromFormat .collapse">
+<h2>getContentTypeFromFormat()
+        </h2>
+<pre>getContentTypeFromFormat($format) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$format</h4></div>
+</div></div>
+</div>
+<a id="method_getFormatFromContentType"></a><div class="element clickable method public method_getFormatFromContentType" data-toggle="collapse" data-target=".method_getFormatFromContentType .collapse">
+<h2>getFormatFromContentType()
+        </h2>
+<pre>getFormatFromContentType($content_type) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$content_type</h4></div>
+</div></div>
+</div>
+<a id="method_getInputFormat"></a><div class="element clickable method public method_getInputFormat" data-toggle="collapse" data-target=".method_getInputFormat .collapse">
+<h2>getInputFormat()
+        </h2>
+<pre>getInputFormat(\Symfony\Component\HttpFoundation\Request $request) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$request</h4></div>
+</div></div>
+</div>
+<a id="method_getOutputFormat"></a><div class="element clickable method public method_getOutputFormat" data-toggle="collapse" data-target=".method_getOutputFormat .collapse">
+<h2>getOutputFormat()
+        </h2>
+<pre>getOutputFormat(\Symfony\Component\HttpFoundation\Request $request) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$request</h4></div>
+</div></div>
+</div>
+<a id="method_getValidOutputFormat"></a><div class="element clickable method public method_getValidOutputFormat" data-toggle="collapse" data-target=".method_getValidOutputFormat .collapse">
+<h2>getValidOutputFormat()
+        </h2>
+<pre>getValidOutputFormat($format) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$format</h4></div>
+</div></div>
+</div>
+<a id="method_loadModel"></a><div class="element clickable method public method_loadModel" data-toggle="collapse" data-target=".method_loadModel .collapse">
+<h2>loadModel()
+        </h2>
+<pre>loadModel(\Symfony\Component\HttpFoundation\Request $request, $model_name, $id, $format) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$request</h4></div>
+<div class="subelement argument"><h4>$model_name</h4></div>
+<div class="subelement argument"><h4>$id</h4></div>
+<div class="subelement argument"><h4>$format</h4></div>
+</div></div>
+</div>
+<a id="method_loadModels"></a><div class="element clickable method public method_loadModels" data-toggle="collapse" data-target=".method_loadModels .collapse">
+<h2>loadModels()
+        </h2>
+<pre>loadModels(\Symfony\Component\HttpFoundation\Request $request, $model_name, $format) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$request</h4></div>
+<div class="subelement argument"><h4>$model_name</h4></div>
+<div class="subelement argument"><h4>$format</h4></div>
+</div></div>
+</div>
+<a id="method_registerModelRoutes"></a><div class="element clickable method public method_registerModelRoutes" data-toggle="collapse" data-target=".method_registerModelRoutes .collapse">
+<h2>registerModelRoutes()
+        </h2>
+<pre>registerModelRoutes() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
 <a id="method_registerRoutes"></a><div class="element clickable method public method_registerRoutes" data-toggle="collapse" data-target=".method_registerRoutes .collapse">
 <h2>registerRoutes()
         </h2>
@@ -111,8 +280,41 @@
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
+<a id="method_updateModel"></a><div class="element clickable method public method_updateModel" data-toggle="collapse" data-target=".method_updateModel .collapse">
+<h2>updateModel()
+        </h2>
+<pre>updateModel(\Symfony\Component\HttpFoundation\Request $request, $model_name, $id, $format) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$request</h4></div>
+<div class="subelement argument"><h4>$model_name</h4></div>
+<div class="subelement argument"><h4>$id</h4></div>
+<div class="subelement argument"><h4>$format</h4></div>
+</div></div>
+</div>
+<a id="method_updateModels"></a><div class="element clickable method public method_updateModels" data-toggle="collapse" data-target=".method_updateModels .collapse">
+<h2>updateModels()
+        </h2>
+<pre>updateModels(\Symfony\Component\HttpFoundation\Request $request, $model_name, $format) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$request</h4></div>
+<div class="subelement argument"><h4>$model_name</h4></div>
+<div class="subelement argument"><h4>$format</h4></div>
+</div></div>
+</div>
 <h3>
 <i class="icon-custom icon-property"></i> Properties</h3>
+<a id="property_config"> </a><div class="element clickable property public property_config" data-toggle="collapse" data-target=".property_config .collapse">
+<h2></h2>
+<pre>$config </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
 <a id="property__api"> </a><div class="element clickable property protected property__api" data-toggle="collapse" data-target=".property__api .collapse">
 <h2></h2>
 <pre>$_api </pre>
@@ -125,7 +327,7 @@
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a12</a> and<br>
-            generated on 2013-04-02T11:02:14+02:00.<br></footer></div>
+            generated on 2013-04-02T23:16:00+02:00.<br></footer></div>
 </div>
 </body>
 </html>

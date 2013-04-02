@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>PHP-FluxAPI » \FluxAPI\Api</title>
+<title>PHP-FluxAPI » \FluxAPI\CliApi</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../css/template.css" rel="stylesheet" media="all">
@@ -62,60 +62,61 @@
 <li class="nav-header">
 <i class="icon-custom icon-method"></i> Methods
                     <ul>
-<li class="method public "><a href="#method___call" title="__call :: Calls the magic methods"><span class="description">Calls the magic methods</span><pre>__call()</pre></a></li>
-<li class="method public "><a href="#method___construct" title="__construct :: Constructor"><span class="description">Constructor</span><pre>__construct()</pre></a></li>
-<li class="method public "><a href="#method_create_Model_" title="create_Model_ :: Creates and returns a new instance of _Model_. If $data is given the model will contain that initial data."><span class="description">Creates and returns a new instance of _Model_. If $data is given the model will contain that initial data.</span><pre>create_Model_()</pre></a></li>
-<li class="method public "><a href="#method_delete_Model_" title="delete_Model_ :: Deletes a single _Model_ by id or by a given query"><span class="description">Deletes a single _Model_ by id or by a given query</span><pre>delete_Model_()</pre></a></li>
-<li class="method public "><a href="#method_delete_Model_s" title="delete_Model_s :: Deletes a list of _Model_s by a given query"><span class="description">Deletes a list of _Model_s by a given query</span><pre>delete_Model_s()</pre></a></li>
-<li class="method public "><a href="#method_extendModel" title="extendModel :: "><span class="description">extendModel()
+<li class="method public inherited"><a href="#method___call" title="__call :: Calls the magic methods"><span class="description">Calls the magic methods</span><pre>__call()</pre></a></li>
+<li class="method public inherited"><a href="#method___construct" title="__construct :: Constructor"><span class="description">Constructor</span><pre>__construct()</pre></a></li>
+<li class="method public inherited"><a href="#method_extendModel" title="extendModel :: "><span class="description">extendModel()
         </span><pre>extendModel()</pre></a></li>
-<li class="method public "><a href="#method_getInstance" title="getInstance :: Returns the singleton of the Api"><span class="description">Returns the singleton of the Api</span><pre>getInstance()</pre></a></li>
-<li class="method public "><a href="#method_load_Model_" title="load_Model_ :: Loads a _Model_ by id or with a given query. If $format is given the model will be returned in the given format."><span class="description">Loads a _Model_ by id or with a given query. If $format is given the model will be returned in the given format.</span><pre>load_Model_()</pre></a></li>
-<li class="method public "><a href="#method_load_Model_s" title="load_Model_s :: Loads a list of _Model_s with a given query. If $format is given the models will be returned in the given format."><span class="description">Loads a list of _Model_s with a given query. If $format is given the models will be returned in the given format.</span><pre>load_Model_s()</pre></a></li>
-<li class="method public "><a href="#method_migrate" title="migrate :: Migrates the storage dabase(s) (for a given model)"><span class="description">Migrates the storage dabase(s) (for a given model)</span><pre>migrate()</pre></a></li>
-<li class="method public "><a href="#method_on" title="on :: Adds an event listener that listens on the specified events."><span class="description">Adds an event listener that listens on the specified events.</span><pre>on()</pre></a></li>
-<li class="method public "><a href="#method_reduceModel" title="reduceModel :: "><span class="description">reduceModel()
+<li class="method public inherited"><a href="#method_getInstance" title="getInstance :: Returns the singleton of the Api"><span class="description">Returns the singleton of the Api</span><pre>getInstance()</pre></a></li>
+<li class="method public inherited"><a href="#method_migrate" title="migrate :: Migrates the storage dabase(s) (for a given model)"><span class="description">Migrates the storage dabase(s) (for a given model)</span><pre>migrate()</pre></a></li>
+<li class="method public inherited"><a href="#method_on" title="on :: Adds an event listener that listens on the specified events."><span class="description">Adds an event listener that listens on the specified events.</span><pre>on()</pre></a></li>
+<li class="method public inherited"><a href="#method_reduceModel" title="reduceModel :: "><span class="description">reduceModel()
         </span><pre>reduceModel()</pre></a></li>
-<li class="method public "><a href="#method_registerModelMethods" title="registerModelMethods :: Registers all magic methods for a registered model"><span class="description">Registers all magic methods for a registered model</span><pre>registerModelMethods()</pre></a></li>
-<li class="method public "><a href="#method_registerPluginMethods" title="registerPluginMethods :: Registers all magic methods for a plugin"><span class="description">Registers all magic methods for a plugin</span><pre>registerPluginMethods()</pre></a></li>
-<li class="method public "><a href="#method_save_Model_" title="save_Model_ :: Saves a _Model_"><span class="description">Saves a _Model_</span><pre>save_Model_()</pre></a></li>
-<li class="method public "><a href="#method_unregisterModelMethods" title="unregisterModelMethods :: Unregisters all magic methods for a registered model"><span class="description">Unregisters all magic methods for a registered model</span><pre>unregisterModelMethods()</pre></a></li>
-<li class="method public "><a href="#method_unregisterPluginMethods" title="unregisterPluginMethods :: Unregisters all magic methods of a plugin"><span class="description">Unregisters all magic methods of a plugin</span><pre>unregisterPluginMethods()</pre></a></li>
+<li class="method public inherited"><a href="#method_registerModelMethods" title="registerModelMethods :: Registers all magic methods for a registered model"><span class="description">Registers all magic methods for a registered model</span><pre>registerModelMethods()</pre></a></li>
+<li class="method public inherited"><a href="#method_registerPluginMethods" title="registerPluginMethods :: Registers all magic methods for a plugin"><span class="description">Registers all magic methods for a plugin</span><pre>registerPluginMethods()</pre></a></li>
+<li class="method public "><a href="#method_run" title="run :: "><span class="description">run()
+        </span><pre>run()</pre></a></li>
+<li class="method public "><a href="#method_setCliApplication" title="setCliApplication :: "><span class="description">setCliApplication()
+        </span><pre>setCliApplication()</pre></a></li>
+<li class="method public inherited"><a href="#method_unregisterModelMethods" title="unregisterModelMethods :: Unregisters all magic methods for a registered model"><span class="description">Unregisters all magic methods for a registered model</span><pre>unregisterModelMethods()</pre></a></li>
+<li class="method public inherited"><a href="#method_unregisterPluginMethods" title="unregisterPluginMethods :: Unregisters all magic methods of a plugin"><span class="description">Unregisters all magic methods of a plugin</span><pre>unregisterPluginMethods()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header">
 <i class="icon-custom icon-property"></i> Properties
                     <ul>
-<li class="property public "><a href="#property_app" title="$app :: "><span class="description">The silex app</span><pre>$app</pre></a></li>
-<li class="property public "><a href="#property_config" title="$config :: "><span class="description">FluxAPI configuration</span><pre>$config</pre></a></li>
+<li class="property public inherited"><a href="#property_app" title="$app :: "><span class="description">The silex app</span><pre>$app</pre></a></li>
+<li class="property public inherited"><a href="#property_config" title="$config :: "><span class="description">FluxAPI configuration</span><pre>$config</pre></a></li>
 </ul>
+</li>
+<li class="nav-header protected">» Protected
+                    <ul><li class="property protected "><a href="#property__cli_app" title="$_cli_app :: "><span class="description"></span><pre>$_cli_app</pre></a></li></ul>
 </li>
 <li class="nav-header">
 <i class="icon-custom icon-constant"></i> Constants
                     <ul>
-<li class="constant  "><a href="#constant_DATA_FORMAT_ARRAY" title="DATA_FORMAT_ARRAY :: "><span class="description">DATA_FORMAT_ARRAY</span><pre>DATA_FORMAT_ARRAY</pre></a></li>
-<li class="constant  "><a href="#constant_DATA_FORMAT_JSON" title="DATA_FORMAT_JSON :: "><span class="description">DATA_FORMAT_JSON</span><pre>DATA_FORMAT_JSON</pre></a></li>
-<li class="constant  "><a href="#constant_DATA_FORMAT_XML" title="DATA_FORMAT_XML :: "><span class="description">DATA_FORMAT_XML</span><pre>DATA_FORMAT_XML</pre></a></li>
-<li class="constant  "><a href="#constant_DATA_FORMAT_YAML" title="DATA_FORMAT_YAML :: "><span class="description">DATA_FORMAT_YAML</span><pre>DATA_FORMAT_YAML</pre></a></li>
-<li class="constant  "><a href="#constant_EARLY_EVENT" title="EARLY_EVENT :: "><span class="description">EARLY_EVENT</span><pre>EARLY_EVENT</pre></a></li>
-<li class="constant  "><a href="#constant_LATE_EVENT" title="LATE_EVENT :: "><span class="description">LATE_EVENT</span><pre>LATE_EVENT</pre></a></li>
-<li class="constant  "><a href="#constant_VERSION" title="VERSION :: "><span class="description">VERSION</span><pre>VERSION</pre></a></li>
+<li class="constant  inherited"><a href="#constant_DATA_FORMAT_ARRAY" title="DATA_FORMAT_ARRAY :: "><span class="description">DATA_FORMAT_ARRAY</span><pre>DATA_FORMAT_ARRAY</pre></a></li>
+<li class="constant  inherited"><a href="#constant_DATA_FORMAT_JSON" title="DATA_FORMAT_JSON :: "><span class="description">DATA_FORMAT_JSON</span><pre>DATA_FORMAT_JSON</pre></a></li>
+<li class="constant  inherited"><a href="#constant_DATA_FORMAT_XML" title="DATA_FORMAT_XML :: "><span class="description">DATA_FORMAT_XML</span><pre>DATA_FORMAT_XML</pre></a></li>
+<li class="constant  inherited"><a href="#constant_DATA_FORMAT_YAML" title="DATA_FORMAT_YAML :: "><span class="description">DATA_FORMAT_YAML</span><pre>DATA_FORMAT_YAML</pre></a></li>
+<li class="constant  inherited"><a href="#constant_EARLY_EVENT" title="EARLY_EVENT :: "><span class="description">EARLY_EVENT</span><pre>EARLY_EVENT</pre></a></li>
+<li class="constant  inherited"><a href="#constant_LATE_EVENT" title="LATE_EVENT :: "><span class="description">LATE_EVENT</span><pre>LATE_EVENT</pre></a></li>
+<li class="constant  inherited"><a href="#constant_VERSION" title="VERSION :: "><span class="description">VERSION</span><pre>VERSION</pre></a></li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="span8">
-<a id="\FluxAPI\Api"></a><ul class="breadcrumb">
+<a id="\FluxAPI\CliApi"></a><ul class="breadcrumb">
 <li>
 <a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
 <li><a href="../namespaces/FluxAPI.html">FluxAPI</a></li>
 <li class="active">
-<span class="divider">\</span><a href="../classes/FluxAPI.Api.html">Api</a>
+<span class="divider">\</span><a href="../classes/FluxAPI.CliApi.html">CliApi</a>
 </li>
 </ul>
 <div class="element class">
-<p class="short_description">This is the entry point for all API calls.</p>
+<p class="short_description">Command line FluxAPI</p>
 <div class="details">
 <div class="long_description"><p>It contains magic methods to operate on all ressources and controllers.</p></div>
 <table class="table table-bordered"><tr>
@@ -127,9 +128,13 @@
 <a id="method___call"></a><div class="element clickable method public method___call" data-toggle="collapse" data-target=".method___call .collapse">
 <h2>Calls the magic methods</h2>
 <pre>__call($method, array $arguments) : mixed | null</pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Api::__call()</td>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument"><h4>$method</h4></div>
 <div class="subelement argument">
@@ -145,9 +150,13 @@
 <a id="method___construct"></a><div class="element clickable method public method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
 <h2>Constructor</h2>
 <pre>__construct(\Silex\Application $app, array $config) </pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Api::__construct()</td>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$app</h4>
@@ -159,88 +168,17 @@
 </div>
 </div></div>
 </div>
-<a id="method_create_Model_"></a><div class="element clickable method public method_create_Model_" data-toggle="collapse" data-target=".method_create_Model_ .collapse">
-<h2>Creates and returns a new instance of _Model_. If $data is given the model will contain that initial data.</h2>
-<pre>create_Model_([array $data]) : <a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<table class="table table-bordered">
-<tr>
-<th>magic</th>
-<td></td>
-</tr>
-<tr>
-<th>method</th>
-<td>Creates and returns a new instance of _Model_. If $data is given the model will contain that initial data.</td>
-</tr>
-</table>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$data]</h4>
-<code>[array</code>
-</div>
-<h3>Returns</h3>
-<div class="subelement response"><code><a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></code></div>
-</div></div>
-</div>
-<a id="method_delete_Model_"></a><div class="element clickable method public method_delete_Model_" data-toggle="collapse" data-target=".method_delete_Model_ .collapse">
-<h2>Deletes a single _Model_ by id or by a given query</h2>
-<pre>delete_Model_(string|Query $query) : <a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<table class="table table-bordered">
-<tr>
-<th>magic</th>
-<td></td>
-</tr>
-<tr>
-<th>method</th>
-<td>Deletes a single _Model_ by id or by a given query</td>
-</tr>
-</table>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$query</h4>
-<code>string</code><code>Query</code>
-</div>
-<h3>Returns</h3>
-<div class="subelement response"><code><a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></code></div>
-</div></div>
-</div>
-<a id="method_delete_Model_s"></a><div class="element clickable method public method_delete_Model_s" data-toggle="collapse" data-target=".method_delete_Model_s .collapse">
-<h2>Deletes a list of _Model_s by a given query</h2>
-<pre>delete_Model_s([Query $query]) : <a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<table class="table table-bordered">
-<tr>
-<th>magic</th>
-<td></td>
-</tr>
-<tr>
-<th>method</th>
-<td>Deletes a list of _Model_s by a given query</td>
-</tr>
-</table>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$query]</h4>
-<code>[Query</code>
-</div>
-<h3>Returns</h3>
-<div class="subelement response"><code><a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></code></div>
-</div></div>
-</div>
 <a id="method_extendModel"></a><div class="element clickable method public method_extendModel" data-toggle="collapse" data-target=".method_extendModel .collapse">
 <h2>extendModel()
         </h2>
 <pre>extendModel($model_name, array $fields, $format) </pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Api::extendModel()</td>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument"><h4>$model_name</h4></div>
 <div class="subelement argument"><h4>$fields</h4></div>
@@ -250,9 +188,15 @@
 <a id="method_getInstance"></a><div class="element clickable method public method_getInstance" data-toggle="collapse" data-target=".method_getInstance .collapse">
 <h2>Returns the singleton of the Api</h2>
 <pre>getInstance(\Silex\Application $app, array $config) : mixed</pre>
-<div class="labels"><span class="label">Static</span></div>
+<div class="labels">
+<span class="label">Inherited</span><span class="label">Static</span>
+</div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"><p>If no Api instance exists yet it will create one and return it.</p></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Api::getInstance()</td>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$app</h4>
@@ -266,70 +210,16 @@
 <div class="subelement response"><code>mixed</code></div>
 </div></div>
 </div>
-<a id="method_load_Model_"></a><div class="element clickable method public method_load_Model_" data-toggle="collapse" data-target=".method_load_Model_ .collapse">
-<h2>Loads a _Model_ by id or with a given query. If $format is given the model will be returned in the given format.</h2>
-<pre>load_Model_(string|Query $query, [string $format]) : <a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<table class="table table-bordered">
-<tr>
-<th>magic</th>
-<td></td>
-</tr>
-<tr>
-<th>method</th>
-<td>Loads a _Model_ by id or with a given query. If $format is given the model will be returned in the given format.</td>
-</tr>
-</table>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$query</h4>
-<code>string</code><code>Query</code>
-</div>
-<div class="subelement argument">
-<h4>$format]</h4>
-<code>[string</code>
-</div>
-<h3>Returns</h3>
-<div class="subelement response"><code><a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></code></div>
-</div></div>
-</div>
-<a id="method_load_Model_s"></a><div class="element clickable method public method_load_Model_s" data-toggle="collapse" data-target=".method_load_Model_s .collapse">
-<h2>Loads a list of _Model_s with a given query. If $format is given the models will be returned in the given format.</h2>
-<pre>load_Model_s([Query $query], [string $format]) : <a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<table class="table table-bordered">
-<tr>
-<th>magic</th>
-<td></td>
-</tr>
-<tr>
-<th>method</th>
-<td>Loads a list of _Model_s with a given query. If $format is given the models will be returned in the given format.</td>
-</tr>
-</table>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$query]</h4>
-<code>[Query</code>
-</div>
-<div class="subelement argument">
-<h4>$format]</h4>
-<code>[string</code>
-</div>
-<h3>Returns</h3>
-<div class="subelement response"><code><a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></code></div>
-</div></div>
-</div>
 <a id="method_migrate"></a><div class="element clickable method public method_migrate" data-toggle="collapse" data-target=".method_migrate .collapse">
 <h2>Migrates the storage dabase(s) (for a given model)</h2>
 <pre>migrate($model_name) </pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Api::migrate()</td>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument"><h4>$model_name</h4></div>
 </div></div>
@@ -337,9 +227,13 @@
 <a id="method_on"></a><div class="element clickable method public method_on" data-toggle="collapse" data-target=".method_on .collapse">
 <h2>Adds an event listener that listens on the specified events.</h2>
 <pre>on(string $eventName, callable $callback, integer $priority) </pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Api::on()</td>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$eventName</h4>
@@ -358,9 +252,13 @@
 <h2>reduceModel()
         </h2>
 <pre>reduceModel($model_name, array $fields, $format) </pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Api::reduceModel()</td>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument"><h4>$model_name</h4></div>
 <div class="subelement argument"><h4>$fields</h4></div>
@@ -370,9 +268,13 @@
 <a id="method_registerModelMethods"></a><div class="element clickable method public method_registerModelMethods" data-toggle="collapse" data-target=".method_registerModelMethods .collapse">
 <h2>Registers all magic methods for a registered model</h2>
 <pre>registerModelMethods(string $model_name) </pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Api::registerModelMethods()</td>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$model_name</h4>
@@ -383,9 +285,13 @@
 <a id="method_registerPluginMethods"></a><div class="element clickable method public method_registerPluginMethods" data-toggle="collapse" data-target=".method_registerPluginMethods .collapse">
 <h2>Registers all magic methods for a plugin</h2>
 <pre>registerPluginMethods(string $type, string $name) </pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Api::registerPluginMethods()</td>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$type</h4>
@@ -395,37 +301,34 @@
 <code>string</code><p>the plugin name</p></div>
 </div></div>
 </div>
-<a id="method_save_Model_"></a><div class="element clickable method public method_save_Model_" data-toggle="collapse" data-target=".method_save_Model_ .collapse">
-<h2>Saves a _Model_</h2>
-<pre>save_Model_(Model $model) : <a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></pre>
+<a id="method_run"></a><div class="element clickable method public method_run" data-toggle="collapse" data-target=".method_run .collapse">
+<h2>run()
+        </h2>
+<pre>run() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="method_setCliApplication"></a><div class="element clickable method public method_setCliApplication" data-toggle="collapse" data-target=".method_setCliApplication .collapse">
+<h2>setCliApplication()
+        </h2>
+<pre>setCliApplication($cli_app) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
-<table class="table table-bordered">
-<tr>
-<th>magic</th>
-<td></td>
-</tr>
-<tr>
-<th>method</th>
-<td>Saves a _Model_</td>
-</tr>
-</table>
 <h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$model</h4>
-<code>Model</code>
-</div>
-<h3>Returns</h3>
-<div class="subelement response"><code><a href="../classes/FluxAPI.Model.html">\FluxAPI\Model</a></code></div>
+<div class="subelement argument"><h4>$cli_app</h4></div>
 </div></div>
 </div>
 <a id="method_unregisterModelMethods"></a><div class="element clickable method public method_unregisterModelMethods" data-toggle="collapse" data-target=".method_unregisterModelMethods .collapse">
 <h2>Unregisters all magic methods for a registered model</h2>
 <pre>unregisterModelMethods(string $model_name) </pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Api::unregisterModelMethods()</td>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$model_name</h4>
@@ -436,9 +339,13 @@
 <a id="method_unregisterPluginMethods"></a><div class="element clickable method public method_unregisterPluginMethods" data-toggle="collapse" data-target=".method_unregisterPluginMethods .collapse">
 <h2>Unregisters all magic methods of a plugin</h2>
 <pre>unregisterPluginMethods(string $type, string $name) </pre>
-<div class="labels"></div>
+<div class="labels"><span class="label">Inherited</span></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Api::unregisterPluginMethods()</td>
+</tr></table>
 <h3>Parameters</h3>
 <div class="subelement argument">
 <h4>$type</h4>
@@ -453,12 +360,30 @@
 <a id="property_app"> </a><div class="element clickable property public property_app" data-toggle="collapse" data-target=".property_app .collapse">
 <h2>The silex app</h2>
 <pre>$app : \Silex\Application</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Api::$$app</td>
+</tr></table>
+</div></div>
 </div>
 <a id="property_config"> </a><div class="element clickable property public property_config" data-toggle="collapse" data-target=".property_config .collapse">
 <h2>FluxAPI configuration</h2>
 <pre>$config : array</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Api::$$config</td>
+</tr></table>
+</div></div>
+</div>
+<a id="property__cli_app"> </a><div class="element clickable property protected property__cli_app" data-toggle="collapse" data-target=".property__cli_app .collapse">
+<h2></h2>
+<pre>$_cli_app </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
@@ -467,44 +392,86 @@
 <a id="constant_DATA_FORMAT_ARRAY"> </a><div class="element clickable constant  constant_DATA_FORMAT_ARRAY" data-toggle="collapse" data-target=".constant_DATA_FORMAT_ARRAY .collapse">
 <h2>DATA_FORMAT_ARRAY</h2>
 <pre>DATA_FORMAT_ARRAY </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Api::DATA_FORMAT_ARRAY</td>
+</tr></table>
+</div></div>
 </div>
 <a id="constant_DATA_FORMAT_JSON"> </a><div class="element clickable constant  constant_DATA_FORMAT_JSON" data-toggle="collapse" data-target=".constant_DATA_FORMAT_JSON .collapse">
 <h2>DATA_FORMAT_JSON</h2>
 <pre>DATA_FORMAT_JSON </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Api::DATA_FORMAT_JSON</td>
+</tr></table>
+</div></div>
 </div>
 <a id="constant_DATA_FORMAT_XML"> </a><div class="element clickable constant  constant_DATA_FORMAT_XML" data-toggle="collapse" data-target=".constant_DATA_FORMAT_XML .collapse">
 <h2>DATA_FORMAT_XML</h2>
 <pre>DATA_FORMAT_XML </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Api::DATA_FORMAT_XML</td>
+</tr></table>
+</div></div>
 </div>
 <a id="constant_DATA_FORMAT_YAML"> </a><div class="element clickable constant  constant_DATA_FORMAT_YAML" data-toggle="collapse" data-target=".constant_DATA_FORMAT_YAML .collapse">
 <h2>DATA_FORMAT_YAML</h2>
 <pre>DATA_FORMAT_YAML </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Api::DATA_FORMAT_YAML</td>
+</tr></table>
+</div></div>
 </div>
 <a id="constant_EARLY_EVENT"> </a><div class="element clickable constant  constant_EARLY_EVENT" data-toggle="collapse" data-target=".constant_EARLY_EVENT .collapse">
 <h2>EARLY_EVENT</h2>
 <pre>EARLY_EVENT </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Api::EARLY_EVENT</td>
+</tr></table>
+</div></div>
 </div>
 <a id="constant_LATE_EVENT"> </a><div class="element clickable constant  constant_LATE_EVENT" data-toggle="collapse" data-target=".constant_LATE_EVENT .collapse">
 <h2>LATE_EVENT</h2>
 <pre>LATE_EVENT </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Api::LATE_EVENT</td>
+</tr></table>
+</div></div>
 </div>
 <a id="constant_VERSION"> </a><div class="element clickable constant  constant_VERSION" data-toggle="collapse" data-target=".constant_VERSION .collapse">
 <h2>VERSION</h2>
 <pre>VERSION </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\FluxAPI\Api::VERSION</td>
+</tr></table>
+</div></div>
 </div>
 </div>
 </div>

@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>PHP-FluxAPI » \FluxAPI\Utils</title>
+<title>PHP-FluxAPI » \FluxAPI\Cli\Migrate</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../css/template.css" rel="stylesheet" media="all">
@@ -58,62 +58,54 @@
 <span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
 <button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
 </div>
-<ul class="side-nav nav nav-list"><li class="nav-header">
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
 <i class="icon-custom icon-method"></i> Methods
+                    <ul></ul>
+</li>
+<li class="nav-header protected">» Protected
                     <ul>
-<li class="method public "><a href="#method_dateTimeFromString" title="dateTimeFromString :: "><span class="description">dateTimeFromString()
-        </span><pre>dateTimeFromString()</pre></a></li>
-<li class="method public "><a href="#method_dateTimeToString" title="dateTimeToString :: "><span class="description">dateTimeToString()
-        </span><pre>dateTimeToString()</pre></a></li>
-<li class="method public "><a href="#method_dateToString" title="dateToString :: "><span class="description">dateToString()
-        </span><pre>dateToString()</pre></a></li>
+<li class="method protected "><a href="#method_configure" title="configure :: "><span class="description">configure()
+        </span><pre>configure()</pre></a></li>
+<li class="method protected "><a href="#method_execute" title="execute :: "><span class="description">execute()
+        </span><pre>execute()</pre></a></li>
 </ul>
-</li></ul>
+</li>
+</ul>
 </div>
 <div class="span8">
-<a id="\FluxAPI\Utils"></a><ul class="breadcrumb">
+<a id="\FluxAPI\Cli\Migrate"></a><ul class="breadcrumb">
 <li>
 <a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
 <li><a href="../namespaces/FluxAPI.html">FluxAPI</a></li>
+<li>
+<span class="divider">\</span><a href="../namespaces/FluxAPI.Cli.html">Cli</a>
+</li>
 <li class="active">
-<span class="divider">\</span><a href="../classes/FluxAPI.Utils.html">Utils</a>
+<span class="divider">\</span><a href="../classes/FluxAPI.Cli.Migrate.html">Migrate</a>
 </li>
 </ul>
 <div class="element class"><div class="details">
 <h3>
 <i class="icon-custom icon-method"></i> Methods</h3>
-<a id="method_dateTimeFromString"></a><div class="element clickable method public method_dateTimeFromString" data-toggle="collapse" data-target=".method_dateTimeFromString .collapse">
-<h2>dateTimeFromString()
+<a id="method_configure"></a><div class="element clickable method protected method_configure" data-toggle="collapse" data-target=".method_configure .collapse">
+<h2>configure()
         </h2>
-<pre>dateTimeFromString($str) </pre>
-<div class="labels"><span class="label">Static</span></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument"><h4>$str</h4></div>
-</div></div>
+<pre>configure() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
-<a id="method_dateTimeToString"></a><div class="element clickable method public method_dateTimeToString" data-toggle="collapse" data-target=".method_dateTimeToString .collapse">
-<h2>dateTimeToString()
+<a id="method_execute"></a><div class="element clickable method protected method_execute" data-toggle="collapse" data-target=".method_execute .collapse">
+<h2>execute()
         </h2>
-<pre>dateTimeToString(\DateTime $date) </pre>
-<div class="labels"><span class="label">Static</span></div>
+<pre>execute(\Symfony\Component\Console\Input\InputInterface $input, \Symfony\Component\Console\Output\OutputInterface $output) </pre>
+<div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$date</h4></div>
-</div></div>
-</div>
-<a id="method_dateToString"></a><div class="element clickable method public method_dateToString" data-toggle="collapse" data-target=".method_dateToString .collapse">
-<h2>dateToString()
-        </h2>
-<pre>dateToString(\DateTime $date) </pre>
-<div class="labels"><span class="label">Static</span></div>
-<div class="row collapse"><div class="detail-description">
-<div class="long_description"></div>
-<h3>Parameters</h3>
-<div class="subelement argument"><h4>$date</h4></div>
+<div class="subelement argument"><h4>$input</h4></div>
+<div class="subelement argument"><h4>$output</h4></div>
 </div></div>
 </div>
 </div></div>
