@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>PHP-FluxAPI » \FluxAPI\Factory\StorageFactory</title>
+<title>PHP-FluxAPI » \FluxAPI\Factory\MethodFactory</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../css/template.css" rel="stylesheet" media="all">
@@ -64,7 +64,13 @@
                     <ul>
 <li class="method public "><a href="#method___construct" title="__construct :: "><span class="description">__construct()
         </span><pre>__construct()</pre></a></li>
-<li class="method public "><a href="#method_get" title="get :: Returns an instance of the storage for a given model"><span class="description">Returns an instance of the storage for a given model</span><pre>get()</pre></a></li>
+<li class="method public "><a href="#method_callMethod" title="callMethod :: "><span class="description">callMethod()
+        </span><pre>callMethod()</pre></a></li>
+<li class="method public "><a href="#method_getMethod" title="getMethod :: "><span class="description">getMethod()
+        </span><pre>getMethod()</pre></a></li>
+<li class="method public "><a href="#method_hasMethod" title="hasMethod :: "><span class="description">hasMethod()
+        </span><pre>hasMethod()</pre></a></li>
+<li class="method public "><a href="#method_registerMethod" title="registerMethod :: Registers a magic method"><span class="description">Registers a magic method</span><pre>registerMethod()</pre></a></li>
 </ul>
 </li>
 <li class="nav-header">
@@ -74,10 +80,13 @@
 <li class="nav-header protected">» Protected
                     <ul><li class="property protected "><a href="#property__api" title="$_api :: "><span class="description"></span><pre>$_api</pre></a></li></ul>
 </li>
+<li class="nav-header private">» Private
+                    <ul><li class="property private "><a href="#property__methods" title="$_methods :: "><span class="description">Internal lookup for magic methods</span><pre>$_methods</pre></a></li></ul>
+</li>
 </ul>
 </div>
 <div class="span8">
-<a id="\FluxAPI\Factory\StorageFactory"></a><ul class="breadcrumb">
+<a id="\FluxAPI\Factory\MethodFactory"></a><ul class="breadcrumb">
 <li>
 <a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
@@ -86,7 +95,7 @@
 <span class="divider">\</span><a href="../namespaces/FluxAPI.Factory.html">Factory</a>
 </li>
 <li class="active">
-<span class="divider">\</span><a href="../classes/FluxAPI.Factory.StorageFactory.html">StorageFactory</a>
+<span class="divider">\</span><a href="../classes/FluxAPI.Factory.MethodFactory.html">MethodFactory</a>
 </li>
 </ul>
 <div class="element class"><div class="details">
@@ -103,16 +112,58 @@
 <div class="subelement argument"><h4>$api</h4></div>
 </div></div>
 </div>
-<a id="method_get"></a><div class="element clickable method public method_get" data-toggle="collapse" data-target=".method_get .collapse">
-<h2>Returns an instance of the storage for a given model</h2>
-<pre>get($model_name) : \FluxAPI\Factory\Storage</pre>
+<a id="method_callMethod"></a><div class="element clickable method public method_callMethod" data-toggle="collapse" data-target=".method_callMethod .collapse">
+<h2>callMethod()
+        </h2>
+<pre>callMethod($method, array $arguments) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <div class="long_description"></div>
 <h3>Parameters</h3>
-<div class="subelement argument"><h4>$model_name</h4></div>
+<div class="subelement argument"><h4>$method</h4></div>
+<div class="subelement argument"><h4>$arguments</h4></div>
+</div></div>
+</div>
+<a id="method_getMethod"></a><div class="element clickable method public method_getMethod" data-toggle="collapse" data-target=".method_getMethod .collapse">
+<h2>getMethod()
+        </h2>
+<pre>getMethod($method) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$method</h4></div>
+</div></div>
+</div>
+<a id="method_hasMethod"></a><div class="element clickable method public method_hasMethod" data-toggle="collapse" data-target=".method_hasMethod .collapse">
+<h2>hasMethod()
+        </h2>
+<pre>hasMethod($method) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument"><h4>$method</h4></div>
+</div></div>
+</div>
+<a id="method_registerMethod"></a><div class="element clickable method public method_registerMethod" data-toggle="collapse" data-target=".method_registerMethod .collapse">
+<h2>Registers a magic method</h2>
+<pre>registerMethod(string $method, mixed $callback) : \FluxAPI\Factory\Api</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<div class="long_description"></div>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$method</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$callback</h4>
+<code>mixed</code>
+</div>
 <h3>Returns</h3>
-<div class="subelement response"><code>\FluxAPI\Factory\Storage</code></div>
+<div class="subelement response">
+<code>\FluxAPI\Factory\Api</code>$this</div>
 </div></div>
 </div>
 <h3>
@@ -120,6 +171,12 @@
 <a id="property__api"> </a><div class="element clickable property protected property__api" data-toggle="collapse" data-target=".property__api .collapse">
 <h2></h2>
 <pre>$_api </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
+</div>
+<a id="property__methods"> </a><div class="element clickable property private property__methods" data-toggle="collapse" data-target=".property__methods .collapse">
+<h2>Internal lookup for magic methods</h2>
+<pre>$_methods : array</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><div class="long_description"></div></div></div>
 </div>
