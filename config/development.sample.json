@@ -1,5 +1,6 @@
 {
   "debug": true,
+  "base_url": "/",
   "storage.options": {
     "host": "host",
     "user": "user",

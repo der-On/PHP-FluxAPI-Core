@@ -108,7 +108,7 @@ class Api extends \Pimple
         });
 
         $this['plugins'] = $this->share(function() use ($api) {
-            return $api['pplugin_factory'];
+            return $api['plugin_factory'];
         });
 
         $this['plugin_factory'] = $this->share(function() use ($api) {
@@ -319,7 +319,6 @@ class Api extends \Pimple
                     $filter[1][1] = 1;
                 }
             }
-
 
             return $self['model_factory']->delete($model_name, $query);
         });

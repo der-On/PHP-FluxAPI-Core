@@ -162,6 +162,16 @@ class PluginFactory
     }
 
     /**
+     * @param string $type
+     * @param string $name
+     * @return bool
+     */
+    public function hasPlugin($type, $name)
+    {
+        return (isset($this->_plugins[$type]) && isset($this->_plugins[$type][$name]));
+    }
+
+    /**
      * Returns all registered plugins (of a given type)
      * @param string $type if set, only plugins of that type will be returned
      * @return array

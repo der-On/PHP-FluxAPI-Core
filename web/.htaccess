@@ -1,0 +1,34 @@
+<IfModule mod_rewrite.c>
+    Options -MultiViews
+
+    RewriteEngine On
+    #RewriteBase /path/to/app
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+#<IfModule mod_deflate.c>
+#  SetOutputFilter DEFLATE
+#  # Don’t compress
+#  SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
+#  SetEnvIfNoCase Request_URI \.(?:exe|t?gz|zip|bz2|sit|rar)$ no-gzip dont-vary
+#  #Dealing with proxy servers
+#  <IfModule mod_headers.c>
+#    Header append Vary User-Agent
+#  </IfModule>
+#</IfModule>
+
+
+#<IfModule mod_expires.c>
+#  ExpiresActive On
+#  ExpiresDefault "access plus 300 seconds"
+#  ExpiresByType image/gif "access plus 1 month 1 hour"
+#  ExpiresByType image/jpg "access plus 1 month 1 hour"
+#  ExpiresByType image/jpeg "access plus 1 month 1 hour"
+#  ExpiresByType image/png "access plus 1 month 1 hour"
+#  ExpiresByType application/x-shockwave-flash "access plus 1 day 1 hour"
+#  ExpiresByType text/css "access plus 1 day 1 hour"
+#  ExpiresByType text/javascript "access plus 7 days 1 hour"
+#  ExpiresByType application/x-javascript "access plus 7 days 1 hour"
+#  ExpiresByType application/json "access"
+#</IfModule>

@@ -8,6 +8,7 @@
     "doctrine/dbal": "2.3.*",
     "symfony/serializer": ">=2.2.0",
     "symfony/yaml": ">=2.2.0",
+    "symfony/console": ">=2.1.9",
     "FluxAPI/plugins/core": ">=0.1"
   },
   "autoload": {
