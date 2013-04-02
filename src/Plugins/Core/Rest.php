@@ -3,7 +3,6 @@ namespace Plugins\Core;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
 use \FluxAPI\Query;
 
 class Rest
@@ -12,7 +11,8 @@ class Rest
 
     public $config = array(
         'base_route' => '',
-        'default_data_format' => \FluxAPI\Api::DATA_FORMAT_JSON,
+        'default_input_format' => \FluxAPI\Api::DATA_FORMAT_ARRAY,
+        'default_output_format' => \FluxAPI\Api::DATA_FORMAT_JSON,
     );
 
     public function __construct(\FluxAPI\Api $api)
@@ -83,17 +83,17 @@ class Rest
                 break;
 
             default:
-                return \FluxAPI\Api::DATA_FORMAT_ARRAY;
+                return $this->config['default_input_format'];
         }
     }
 
     public function getValidOutputFormat($format)
     {
         if (empty($format)) {
-            $format = $this->config['default_data_format'];
+            $format = $this->config['default_output_format'];
         } else {
             if (!in_array($format,array(\FluxAPI\Api::DATA_FORMAT_JSON,\FluxAPI\Api::DATA_FORMAT_YAML,\FluxAPI\Api::DATA_FORMAT_XML))) {
-                $format = $this->config['default_data_format'];
+                $format = $this->config['default_output_format'];
             }
         }
         return $format;
@@ -101,7 +101,7 @@ class Rest
 
     public function getOutputFormat(Request $request)
     {
-        return $this->config['default_data_format'];
+        return $this->config['default_output_format'];
     }
 
     public function getInputFormat(Request $request)
