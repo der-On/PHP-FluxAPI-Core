@@ -32,6 +32,21 @@ class MethodFactory
         return $this; // make it chainable
     }
 
+    /**
+     * Unregisters a magic method
+     *
+     * @param string $method
+     * @return Api $this
+     */
+    public function unregisterMethod($method)
+    {
+        if (!isset($this->_methods[$method])) {
+            unset($this->_methods[$method]);
+        }
+
+        return $this; // make it chainable
+    }
+
     public function hasMethod($method)
     {
         return (isset($this->_methods[$method]) && is_callable($this->_methods[$method]));

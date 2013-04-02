@@ -141,6 +141,27 @@ class PluginFactory
     }
 
     /**
+     * Unregisters a single extension
+     *
+     * @param $type
+     * @param $name
+     */
+    public function unregisterExtend($type, $name)
+    {
+        if (isset($this->_extends[$type][$name])) {
+            unset($this->_extends[$type][$name]);
+
+            // if this is a dynamic model we have to remove it from the plugins
+            if (isset($this->_plugins[$type][$name]) && $this->_plugins[$type][$name] == 'FluxAPI\DynamicModel') {
+                unset($this->_plugins[$type][$name]);
+            }
+
+            // the api must remove the methods for this plugin
+            $this->_api->unregisterPluginMethods($type,$name);
+        }
+    }
+
+    /**
      * Returns all registered plugins (of a given type)
      * @param string $type if set, only plugins of that type will be returned
      * @return array
@@ -169,6 +190,68 @@ class PluginFactory
             return $this->_plugins[$type][$name];
         } else {
             return NULL;
+        }
+    }
+
+    /**
+     * Reduces a model by removing existing fields or if no fields are given the entire model extend.
+     *
+     * @param string $model_name
+     * @param array $fields Field names to remove.
+     * @param [string $format] the format of the $fields. Default is Api::DATA_FORMAT_ARRAY.
+     */
+    public function reduceModel($model_name, array $fields = NULL, $format = \FluxAPI\Api::DATA_FORMAT_ARRAY)
+    {
+        $extend_dir = $this->_api->config['extends_path'].'/Model';
+        $file = $extend_dir.'/'.$model_name.'.json';
+
+        // an extend must already exist. We cannot reduce build in fields/models.
+        if (file_exists($extend_dir)) {
+
+            // remove the extend completely
+            if ($fields === NULL) {
+                if (file_exists($file)) {
+                    unlink($file);
+                    $this->unregisterExtend('Model',$model_name);
+                } else {
+                    // TODO: throw exception
+                }
+            } else {
+                $config = json_decode(file_get_contents($file),TRUE);
+
+                if (!empty($config)) {
+                    $version = intval($config['version']) + 1;
+
+                    foreach($fields as $name) {
+                        $i = 0;
+
+                        while($i < count($config['fields'])) {
+                            if ($config['fields'][$i]['name'] == $name) {
+                                unset($config['fields'][$i]);
+                                continue;
+                            }
+                            $i++;
+                        }
+                    }
+
+                    $config = array(
+                        'name' => $model_name,
+                        'updated' => date('c'),
+                        'version' => $version,
+                        'fields' => $config['fields'],
+                    );
+
+                    file_put_contents($file, json_encode($config, JSON_PRETTY_PRINT));
+
+                    $this->registerExtend('Model',$model_name);
+
+                    $this->_api->migrate($model_name);
+                } else {
+                    // TODO: throw exception
+                }
+            }
+        } else {
+            // TODO: throw exception
         }
     }
 
@@ -204,9 +287,10 @@ class PluginFactory
 
             if (!empty($config)) {
                 $version = intval($config['version']) + 1;
+                $_fields = $config['fields'];
+            } else {
+                $_fields = array();
             }
-
-            $_fields = array();
 
             foreach($fields as $name => $field) {
                 if (is_object($field)) {

@@ -170,7 +170,7 @@ class Api extends \Pimple
     }
 
     /**
-     * Registers all magic methods of all registered plugins
+     * Registers all magic methods for a plugin
      *
      * @param string $type the plugin type
      * @param string $name the plugin name
@@ -180,6 +180,21 @@ class Api extends \Pimple
         switch (ucfirst($type)) {
             case 'Model':
                 $this->registerModelMethods($name);
+                break;
+        }
+    }
+
+    /**
+     * Unregisters all magic methods of a plugin
+     *
+     * @param string $type the plugin type
+     * @param string $name the plugin name
+     */
+    public function unregisterPluginMethods($type, $name)
+    {
+        switch (ucfirst($type)) {
+            case 'Model':
+                $this->unregisterModelMethods($name);
                 break;
         }
     }
@@ -338,11 +353,41 @@ class Api extends \Pimple
         $this['method_factory']->registerMethod('extend'.$model_name, function($fields = array(), $format = self::DATA_FORMAT_ARRAY) use ($model_name, $self) {
             return $self['plugin_factory']->extendModel($model_name, $fields, $format);
         });
+
+        // reduce an existing model
+        $this['method_factory']->registerMethod('reduce'.$model_name, function($fields = NULL, $format = self::DATA_FORMAT_ARRAY) use ($model_name, $self) {
+            return $self['plugin_factory']->reduceModel($model_name, $fields, $format);
+        });
+    }
+
+    /**
+     * Unregisters all magic methods for a registered model
+     *
+     * @param string $model_name
+     */
+    public function unregisterModelMethods($model_name)
+    {
+        $this['method_factory']
+            ->unregisterMethod('create'.$model_name)
+            ->unregisterMethod('create'.$model_name.'s')
+            ->unregisterMethod('load'.$model_name)
+            ->unregisterMethod('load'.$model_name.'s')
+            ->unregisterMethod('update'.$model_name)
+            ->unregisterMethod('update'.$model_name.'s')
+            ->unregisterMethod('delete'.$model_name)
+            ->unregisterMethod('delete'.$model_name.'s')
+            ->unregisterMethod('extend'.$model_name)
+            ->unregisterMethod('reduce'.$model_name);
     }
 
     public function extendModel($model_name, array $fields, $format = self::DATA_FORMAT_ARRAY)
     {
         return $this['plugin_factory']->extendModel($model_name, $fields, $format);
+    }
+
+    public function reduceModel($model_name, array $fields = NULL, $format = self::DATA_FORMAT_ARRAY)
+    {
+        return $this['plugin_factory']->reduceModel($model_name, $fields, $format);
     }
 
     /**
