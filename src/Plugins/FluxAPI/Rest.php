@@ -108,10 +108,21 @@ class Rest
                 if (substr($name,0,1) == '@') {
                     $query->filter(substr($name,1),explode(',',$value));
                 } else {
-                    $query->filter('equals',array($name,$value));
+                    $query->filter('equal',array($name,$value));
                 }
             }
         }
+    }
+
+    public function getRequestData(Request $request, $format)
+    {
+        if ($format == \FluxAPI\Api::DATA_FORMAT_ARRAY) {
+            $data = $request->request->all();
+        } else {
+            $data = $request->getContent();
+        }
+
+        return $data;
     }
 
     public function registerModelRoutes()
@@ -166,13 +177,13 @@ class Rest
 
             // update an existing a model
             $this->_api->app->post($this->config['base_route'].'/'.$model_route_name.'/{id}.{ext}',
-                function(Request $request, $id = NULL, $ext = NULL) use ($self, $model_name) {
+                function(Request $request, $id, $ext = NULL) use ($self, $model_name) {
                     $format = $self->getFormatFromExtension($ext, $self->config['default_output_format']);
                     return $self->updateModel($request, $model_name, $id, $format);
                 }
             );
             $this->_api->app->post($this->config['base_route'].'/'.$model_route_name.'/{id}',
-                function(Request $request, $id = NULL) use ($self, $model_name) {
+                function(Request $request, $id) use ($self, $model_name) {
                     return $self->updateModel($request, $model_name, $id, $self->config['default_output_format']);
                 }
             );
@@ -223,11 +234,7 @@ class Rest
         if ($this->_api['plugins']->hasPlugin('Model',$model_name)) {
             $input_format = $this->getInputFormat($request);
 
-            if ($input_format == \FluxAPI\Api::DATA_FORMAT_ARRAY) {
-                $data = $request->request->all();
-            } else {
-                $data = $request->getContent();
-            }
+            $data = $this->getRequestData($request, $input_format);
 
             $create_method = 'create'.$model_name;
             $model = $this->_api->$create_method($data, $input_format);
@@ -244,29 +251,17 @@ class Rest
         }
     }
 
-    public function updateModel(Request $request, $model_name, $id = NULL, $format)
+    public function updateModel(Request $request, $model_name, $id, $format)
     {
         if ($this->_api['plugins']->hasPlugin('Model',$model_name)) {
             $input_format = $this->getInputFormat($request);
 
-            if ($input_format == \FluxAPI\Api::DATA_FORMAT_ARRAY) {
-                $data = $request->query->all();
-            } else {
-                $data = $request->getContent();
-            }
-
-            $query = new Query();
-
-            if (!empty($id)) {
-                $query->filter('equal',array('id',$id));
-            }
-
-            $this->addFiltersToQueryFromRequest($request, $query);
+            $data = $this->getRequestData($request, $input_format);
 
             $update_method = 'update'.$model_name;
 
             return $this->_createResponse(
-                $this->_api->$update_method($query, $data, $input_format),
+                $this->_api->$update_method($id, $data, $input_format),
                 200,
                 $format
             );
@@ -280,11 +275,7 @@ class Rest
         if ($this->_api['plugins']->hasPlugin('Model',$model_name)) {
             $input_format = $this->getInputFormat($request);
 
-            if ($input_format == \FluxAPI\Api::DATA_FORMAT_ARRAY) {
-                $data = $request->query->all();
-            } else {
-                $data = $request->getContent();
-            }
+            $data = $this->getRequestData($request, $input_format);
 
             $query = new Query();
 
@@ -351,11 +342,7 @@ class Rest
         if ($this->_api['plugins']->hasPlugin('Model',$model_name)) {
             $input_format = $this->getInputFormat($request);
 
-            if ($input_format == \FluxAPI\Api::DATA_FORMAT_ARRAY) {
-                $data = $request->query->all();
-            } else {
-                $data = $request->getContent();
-            }
+            $data = $this->getRequestData($request, $input_format);
 
             $query = new Query();
 
@@ -382,11 +369,7 @@ class Rest
         if ($this->_api['plugins']->hasPlugin('Model',$model_name)) {
             $input_format = $this->getInputFormat($request);
 
-            if ($input_format == \FluxAPI\Api::DATA_FORMAT_ARRAY) {
-                $data = $request->query->all();
-            } else {
-                $data = $request->getContent();
-            }
+            $data = $this->getRequestData($request, $input_format);
 
             $query = new Query();
 

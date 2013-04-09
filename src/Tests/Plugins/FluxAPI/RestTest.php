@@ -186,6 +186,36 @@ class RestTest extends FluxApi_Database_TestCase
         $this->assertJsonStringEqualsJsonString(json_encode(array()), $response_data);
     }
 
+    public function testUpdateNode()
+    {
+        $this->migrate();
+
+        $client = $this->createClient();
+
+        $data = array('title'=>'Node','body'=>'Body for Node','active'=>false,'id' => 1);
+
+
+        // first save the node
+        $client->request('POST','/node',$data);
+
+        $this->assertTrue($client->getResponse()->isOk());
+
+        // now update
+        $data['title'] = 'Node updated';
+        $data_json = json_encode($data);
+
+        $client->request('POST','/node/1',$data);
+
+        $this->assertTrue($client->getResponse()->isOk());
+
+        // now load it
+        $client->request('GET','/node/1');
+
+        $this->assertTrue($client->getResponse()->isOk());
+        $response_data = $this->removeDateTimesFromJson($client->getResponse()->getContent());
+        $this->assertJsonStringEqualsJsonString($data_json, $response_data);
+    }
+
     public function createClient(array $server = array())
     {
         return new Client(self::$fluxApi->app, $server);
