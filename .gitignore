@@ -19,7 +19,7 @@ composer.lock
 # Plugins
 !src/Plugins/
 src/Plugins/*
-!src/Plugins/Core
+!src/Plugins/FluxAPI
 
 # Test reports
 src/Tests/reports/
