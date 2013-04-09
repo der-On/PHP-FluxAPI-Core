@@ -10,6 +10,7 @@ class PluginFactory
      */
     private $_plugins = array(
         'Model' => array(),
+        'Format' => array(),
         'Controller' => array(),
         'Storage' => array(),
         'Cache' => array(),

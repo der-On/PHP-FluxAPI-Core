@@ -20,8 +20,7 @@ class ApiTest extends FluxApi_Database_TestCase
     {
         $this->migrate();
         $this->createNodes();
-
-        $nodes = self::$fluxApi->loadNodes(NULL,\FluxAPI\Api::DATA_FORMAT_XML);
+        $nodes = self::$fluxApi->loadNodes(NULL,'xml');
 
         // we need to remove the datetime fields which change everytime
         $nodes = $this->removeDateTimesFromXml($nodes);
@@ -34,7 +33,7 @@ class ApiTest extends FluxApi_Database_TestCase
         $this->migrate();
         $this->createSingleNode();
 
-        $node = self::$fluxApi->loadNode('1',\FluxAPI\Api::DATA_FORMAT_XML);
+        $node = self::$fluxApi->loadNode('1','xml');
 
         // we need to remove the datetime fields which change everytime
         $node = $this->removeDateTimesFromXml($node);
@@ -47,7 +46,7 @@ class ApiTest extends FluxApi_Database_TestCase
         $this->migrate();
         $this->createNodes();
 
-        $nodes = self::$fluxApi->loadNodes(NULL,\FluxAPI\Api::DATA_FORMAT_JSON);
+        $nodes = self::$fluxApi->loadNodes(NULL,'json');
 
         // we need to remove the datetime fields which change everytime
         $nodes = $this->removeDateTimesFromJson($nodes);
@@ -60,7 +59,7 @@ class ApiTest extends FluxApi_Database_TestCase
         $this->migrate();
         $this->createSingleNode();
 
-        $node = self::$fluxApi->loadNode('1',\FluxAPI\Api::DATA_FORMAT_JSON);
+        $node = self::$fluxApi->loadNode('1','json');
 
         // we need to remove the datetime fields which change everytime
         $node = $this->removeDateTimesFromJson($node);
@@ -73,7 +72,7 @@ class ApiTest extends FluxApi_Database_TestCase
         $this->migrate();
         $this->createNodes();
 
-        $nodes = self::$fluxApi->loadNodes(NULL,\FluxAPI\Api::DATA_FORMAT_YAML);
+        $nodes = self::$fluxApi->loadNodes(NULL,'yaml');
 
         $nodes = $this->removeDateTimesFromYaml($nodes);
 
@@ -85,7 +84,7 @@ class ApiTest extends FluxApi_Database_TestCase
         $this->migrate();
         $this->createSingleNode();
 
-        $node = self::$fluxApi->loadNode('1',\FluxAPI\Api::DATA_FORMAT_YAML);
+        $node = self::$fluxApi->loadNode('1','yaml');
 
         $node = $this->removeDateTimesFromYaml($node,0);
 

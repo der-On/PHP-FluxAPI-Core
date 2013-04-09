@@ -4,7 +4,7 @@ namespace FluxAPI\Factory;
 
 use \FluxAPI\Event\ModelEvent;
 
-class ModelFactory
+class ModelFactory extends \Pimple
 {
     protected $_api;
 
@@ -17,38 +17,22 @@ class ModelFactory
      * Creates a new instance of a model
      *
      * @param string $model_name
-     * @param [array $data] if set the model will contain that initial data
-     * @param [string $format] the format of the given $data
+     * @param [mixed $data] if set the model will contain that initial data
+     * @param [string $format] the format of the given $data - if not set the data will be treated as an array
      * @return null|Model
      */
-    public function create($model_name, array $data = array(), $format = \FluxAPI\Api::DATA_FORMAT_ARRAY)
+    public function create($model_name, $data = NULL, $format = NULL)
     {
         $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_CREATE, new ModelEvent($model_name));
 
-        $models = $this->_api['plugin_factory']->getPlugins('Model');
-        $extend = $this->_api['plugin_factory']->getExtends('Model',$model_name);
+        $models = $this->_api['plugins']->getPlugins('Model');
+        $extend = $this->_api['plugins']->getExtends('Model',$model_name);
 
         if (isset($models[$model_name])) {
-            switch($format) {
-                case \FluxAPI\Api::DATA_FORMAT_ARRAY:
-                    $instance = $this->createFromArray($model_name, $data);
-                    break;
 
-                case \FluxAPI\Api::DATA_FORMAT_JSON:
-                    $instance = $this->createFromJson($model_name, $data);
-                    break;
-
-                case \FluxAPI\Api::DATA_FORMAT_XML:
-                    $instance = $this->createFromXml($model_name, $data);
-                    break;
-
-                case \FluxAPI\Api::DATA_FORMAT_YAML:
-                    $instance = $this->createFromYaml($model_name, $data);
-                    break;
-
-                default:
-                    $instance = $this->createFromArray($model_name, $data);
-            }
+            $model_class = $models[$model_name];
+            $data = $this->_modelDataFromFormat($data, $format);
+            $instance = new $model_class($this->_api, $data);
 
             if (!empty($extend) && $instance->getModelName() != $model_name) {
                 $instance->setModelName($model_name);
@@ -64,98 +48,44 @@ class ModelFactory
         return NULL;
     }
 
-    /**
-     * Returns a new model instance with data from an array
-     *
-     * @param string $model_name
-     * @param [array $data]
-     * @return Model
-     */
-    public function createFromArray($model_name, array $data = array())
+    protected function _modelDataFromFormat($data, $format)
     {
-        $className = $this->_api['plugin_factory']->getPluginClass('Model',$model_name);
+        $formats = $this->_api['plugins']->getPlugins('Format');
 
-        if (!empty($className) && !empty($data)) {
-            return new $className($data);
-        } else {
-            return new $className();
+        if (!empty($format) && is_string($format) && in_array(ucfirst($format),array_keys($formats))) {
+            $format_class = $formats[ucfirst($format)];
+
+            $format_class::setApi($this->_api);
+            $data = $format_class::decode($data);
         }
+
+        return $data;
     }
 
-    /**
-     * Returns a new model instance with data form an object
-     *
-     * @param string $model_name
-     * @param object $object
-     * @return Model
-     */
-    public function createFromObject($model_name, $object)
+    protected function _modelsToFormat($model_name, array $models, $format)
     {
-        $data = array();
+        $formats = $this->_api['plugins']->getPlugins('Format');
 
-        if (is_object($object)) {
-            foreach(get_object_vars($object) as $name => $value) {
-                $data[$name] = $value;
-            }
+        if (!empty($format) && is_string($format) && in_array(ucfirst($format),array_keys($formats))) {
+            $format_class = $formats[ucfirst($format)];
+
+            $format_class::setApi($this->_api);
+            $models = $format_class::encodeFromModels($model_name, $models);
         }
-
-        return $this->createFromArray($model_name, $data);
+        return $models;
     }
 
-    /**
-     * Returns a new model instance with data from a JSON string
-     *
-     * @param string $model_name
-     * @param string $json
-     * @return Model|null
-     */
-    public function createFromJson($model_name, $json)
+    protected function _modelToFormat($model_name, \FluxAPI\Model $model, $format)
     {
-        $data = array();
+        $formats = $this->_api['plugins']->getPlugins('Format');
 
-        if (!empty($json)) {
-            $data = json_decode($json,TRUE);
+        if (!empty($format) && is_string($format) && in_array(ucfirst($format),array_keys($formats))) {
+            $format_class = $formats[ucfirst($format)];
+
+            $format_class::setApi($this->_api);
+            $model = $format_class::encodeFromModel($model_name, $model);
         }
-
-        return $this->createFromArray($model_name, $data);
-    }
-
-    /**
-     * Returns a new model instance with data from a XML string
-     *
-     * @param string $model_name
-     * @param string $xml
-     * @return Model|null
-     */
-    public function createFromXml($model_name, $xml)
-    {
-        $data = array();
-
-        if (!empty($xml)) {
-            $parser = new \Symfony\Component\Serializer\Encoder\XmlEncoder($model_name);
-            $data = $parser->decode($xml,'xml');
-        }
-
-        return $this->createFromArray($model_name, $data);
-    }
-
-    /**
-     * Returns a new model instance with data from a YAML string
-     *
-     * @param string $model_name
-     * @param string $yaml
-     * @return Model|null
-     */
-    public function createFromYaml($model_name, $yaml)
-    {
-        $data = array();
-
-        if (!empty($yaml)) {
-            $parser = new \Symfony\Component\Yaml\Parser();
-            $data = $parser->parse($yaml);
-        }
-
-        return $this->createFromArray($model_name, $data);
+        return $model;
     }
 
     /**
@@ -163,25 +93,38 @@ class ModelFactory
      *
      * @param string $model_name
      * @param [Query $query] if not set all instances of the model are loaded
+     * @param [string $format]
      * @return array|null
      */
-    public function load($model_name, \FluxAPI\Query $query = NULL)
+    public function load($model_name, \FluxAPI\Query $query = NULL, $format = NULL)
     {
         $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_LOAD, new ModelEvent($model_name, $query));
 
-        $models = $this->_api['plugin_factory']->getPlugins('Model');
+        $models = $this->_api['plugins']->getPlugins('Model');
 
         if (isset($models[$model_name])) {
-            $instances = $this->_api['storage_factory']->get($model_name)->load($model_name,$query);
+            $instances = $this->_api['storages']->get($model_name)->load($model_name,$query);
 
             foreach($instances as &$instance) {
                 $this->_api['dispatcher']->dispatch(ModelEvent::LOAD, new ModelEvent($model_name, $query, $instance));
             }
 
-            return $instances;
+            return $this->_modelsToFormat($model_name, $instances, $format);
         }
 
-        return array();
+        return NULL;
+    }
+
+    public function loadFirst($model_name, \FluxAPI\Query $query = NULL, $format = NULL)
+    {
+        $query->filter('limit',array(0,1));
+        $models = $this->load($model_name, $query);
+
+        if (!empty($models)) {
+            return $this->_modelToFormat($model_name, $models[0], $format);
+        }
+
+        return NULL;
     }
 
     /**
@@ -202,14 +145,14 @@ class ModelFactory
         }
 
 
-        $models = $this->_api['plugin_factory']->getPlugins('Model');
+        $models = $this->_api['plugins']->getPlugins('Model');
 
         if (isset($models[$model_name])) {
             if (empty($instances)) {
                 return FALSE;
             }
 
-            $storage = $this->_api['storage_factory']->get($model_name);
+            $storage = $this->_api['storages']->get($model_name);
 
             if (is_array($instances)) {
                 foreach($instances as &$instance) {
@@ -232,14 +175,15 @@ class ModelFactory
      *
      * @param string $model_name
      * @param Query $query
-     * @param array $data
+     * @param mixed $data
+     * @param [string $format] data format - if not set the data will be treated as an array
      * @return bool
      */
-    public function update($model_name, \FluxAPI\Query $query, array $data)
+    public function update($model_name, \FluxAPI\Query $query, $data, $format = NULL)
     {
         $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_UPDATE, new ModelEvent($model_name, $query));
 
-        $storage = $this->_api['storage_factory']->get($model_name);
+        $storage = $this->_api['storages']->get($model_name);
 
         $return = $storage->update($model_name, $query, $data);
         $this->_api['dispatcher']->dispatch(ModelEvent::UPDATE, new ModelEvent($model_name, $query));
@@ -257,10 +201,10 @@ class ModelFactory
     {
         $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_DELETE, new ModelEvent($model_name, $query));
 
-        $models = $this->_api['plugin_factory']->getPlugins('Model');
+        $models = $this->_api['plugins']->getPlugins('Model');
 
         if (isset($models[$model_name])) {
-            $storage = $this->_api['storage_factory']->get($model_name);
+            $storage = $this->_api['storages']->get($model_name);
             $return = $storage->delete($model_name, $query);
             $this->_api['dispatcher']->dispatch(ModelEvent::DELETE, new ModelEvent($model_name, $query));
             return $return;

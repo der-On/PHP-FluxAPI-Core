@@ -40,9 +40,9 @@ abstract class Model
      *
      * @param [array $data] if set the model will contain that initial data
      */
-    public function  __construct($data = array())
+    public function  __construct(\FluxAPI\Api $api, array $data = NULL)
     {
-        $this->_api = \FluxApi\Api::getInstance();
+        $this->_api = $api;
         $this->defineFields();
         $this->addExtends();
         $this->setDefaults();
@@ -146,7 +146,7 @@ abstract class Model
      */
     public function addExtends()
     {
-        $extend = $this->_api['plugin_factory']->getExtends('Model',$this->getModelName());
+        $extend = $this->_api['plugins']->getExtends('Model',$this->getModelName());
 
         if (!empty($extend) && isset($extend['fields'])) {
             foreach($extend['fields'] as $field) {
@@ -160,11 +160,13 @@ abstract class Model
      *
      * @param [array $data]
      */
-    public function populate(Array $data = array())
+    public function populate(array $data = NULL)
     {
-        foreach($data as $name =>  $value)
-        {
-            $this->_data[$name] = $value;
+        if (!empty($data)) {
+            foreach($data as $name =>  $value)
+            {
+                $this->_data[$name] = $value;
+            }
         }
     }
 
@@ -222,7 +224,7 @@ abstract class Model
             if (in_array($name, $this->_loaded_relations)) {
                 return isset($this->_data[$name]) ? $this->_data[$name] : NULL;
             } else { // relations needs to be loaded
-                $this->_data[$name] = $this->_api['storage_factory']->get($this->getModelName())->loadRelation($this,$name);
+                $this->_data[$name] = $this->_api['storages']->get($this->getModelName())->loadRelation($this,$name);
                 $this->_loaded_relations[] = $name;
 
                 return isset($this->_data[$name]) ? $this->_data[$name] : NULL;
@@ -316,42 +318,5 @@ abstract class Model
     public function toString()
     {
         return json_encode($this->toArray(),JSON_PRETTY_PRINT);
-    }
-
-    /**
-     * Returns a JSON string represantation of the model
-     *
-     * @return string
-     */
-    public function toJson()
-    {
-        $array = $this->toArray();
-        return $this->_api->app['serializer']->serialize($array,'json');
-    }
-
-    /**
-     * Returns a XML string represantation of the model
-     *
-     * @return string
-     */
-    public function toXml()
-    {
-        $array = $this->toArray();
-        $this->_api->app['serializer.encoders'][1]->setRootNodeName($this->getModelName());
-        return $this->_api->app['serializer']->serialize($array,'xml');
-    }
-
-    /**
-     * Returns a YAML string represantation of the model
-     *
-     * @return string
-     */
-    public function toYaml()
-    {
-        $array = $this->toArray();
-
-        $dumper = new \Symfony\Component\Yaml\Dumper();
-
-        return $dumper->dump($array,2);
     }
 }

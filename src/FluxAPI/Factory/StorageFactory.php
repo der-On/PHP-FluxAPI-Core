@@ -22,7 +22,7 @@ class StorageFactory extends \Pimple
      */
     public function get($model_name = NULL)
     {
-        $storagePlugins = $this->_api['plugin_factory']->getPlugins('Storage');
+        $storagePlugins = $this->_api['plugins']->getPlugins('Storage');
 
         // get default storage plugin
         $storageClass = $storagePlugins[$this->_api->config['storage.plugin']];
