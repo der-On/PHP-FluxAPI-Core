@@ -7,8 +7,6 @@ class FluxAPI extends \FluxAPI\Plugin
 {
     public static function register(\FluxAPI\Api $api)
     {
-        parent::register($api);
-
         // create RESTfull webservice
         $rest = new Rest($api);
 

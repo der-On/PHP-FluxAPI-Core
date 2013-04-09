@@ -1,6 +1,8 @@
 <?php
 require_once "PHPUnit/Extensions/Database/TestCase.php";
 
+$loader = require __DIR__ . '/../../../vendor/autoload.php';
+
 abstract class FluxApi_Database_TestCase extends PHPUnit_Extensions_Database_TestCase
 {
     // only instantiate pdo once for test clean-up/fixture load
@@ -28,8 +30,6 @@ abstract class FluxApi_Database_TestCase extends PHPUnit_Extensions_Database_Tes
         $conn = $this->getConnection();
         self::$pdo->exec('DROP TABLE IF EXISTS node');
         self::$pdo->exec('DROP TABLE IF EXISTS node_rel');
-
-        $loader = require __DIR__ . '/../../../vendor/autoload.php';
 
         // create application
         $app = new Silex\Application();
