@@ -150,6 +150,20 @@ class Rest
                 }
             );
 
+            // create a new model
+            $this->_api->app->post($this->config['base_route'].'/'.$model_route_name.'.{ext}',
+                function(Request $request, $ext = NULL) use ($self, $model_name) {
+                    $format = $self->getFormatFromExtension($ext, $self->config['default_output_format']);
+                    return $self->createModel($request, $model_name, $format);
+                }
+            );
+            $this->_api->app->post($this->config['base_route'].'/'.$model_route_name,
+                function(Request $request) use ($self, $model_name) {
+                    $format = $self->config['default_output_format'];
+                    return $self->createModel($request, $model_name, $format);
+                }
+            );
+
             // update an existing a model
             $this->_api->app->post($this->config['base_route'].'/'.$model_route_name.'/{id}.{ext}',
                 function(Request $request, $id = NULL, $ext = NULL) use ($self, $model_name) {
@@ -173,19 +187,6 @@ class Rest
             $this->_api->app->post($this->config['base_route'].'/'.$model_route_name.'s',
                 function(Request $request) use ($self, $model_name) {
                     return $self->updateModels($request, $model_name, $self->config['default_output_format']);
-                }
-            );
-
-            // create a new model
-            $this->_api->app->put($this->config['base_route'].'/'.$model_route_name.'.{ext}',
-                function(Request $request, $id = NULL, $ext = NULL) use ($self, $model_name) {
-                    $format = $self->getFormatFromExtension($ext, $self->config['default_output_format']);
-                    return $self->createModel($request, $model_name, $format);
-                }
-            );
-            $this->_api->app->put($this->config['base_route'].'/'.$model_route_name,
-                function(Request $request, $id = NULL, $format = NULL) use ($self, $model_name) {
-                    return $self->createModel($request, $model_name, $self->config['default_output_format']);
                 }
             );
 
@@ -222,8 +223,8 @@ class Rest
         if ($this->_api['plugins']->hasPlugin('Model',$model_name)) {
             $input_format = $this->getInputFormat($request);
 
-            if ($input_format == \FluxAPI\Api::DATA_TYPE_ARRAY) {
-                $data = $request->query->all();
+            if ($input_format == \FluxAPI\Api::DATA_FORMAT_ARRAY) {
+                $data = $request->request->all();
             } else {
                 $data = $request->getContent();
             }
@@ -232,10 +233,11 @@ class Rest
             $model = $this->_api->$create_method($data, $input_format);
 
             $save_method = 'save'.$model_name;
-            return new Response(
+
+            return $this->_createResponse(
                 $this->_api->$save_method($model),
                 200,
-                array('Content-Type'=>$this->getMimeTypeFromFormat($format, $this->config['default_mime_type']))
+                $format
             );
         } else {
             return NULL;
@@ -247,7 +249,7 @@ class Rest
         if ($this->_api['plugins']->hasPlugin('Model',$model_name)) {
             $input_format = $this->getInputFormat($request);
 
-            if ($input_format == \FluxAPI\Api::DATA_TYPE_ARRAY) {
+            if ($input_format == \FluxAPI\Api::DATA_FORMAT_ARRAY) {
                 $data = $request->query->all();
             } else {
                 $data = $request->getContent();
@@ -262,10 +264,11 @@ class Rest
             $this->addFiltersToQueryFromRequest($request, $query);
 
             $update_method = 'update'.$model_name;
-            return new Response(
+
+            return $this->_createResponse(
                 $this->_api->$update_method($query, $data, $input_format),
                 200,
-                array('Content-Type'=>$this->getMimeTypeFromFormat($format, $this->config['default_mime_type']))
+                $format
             );
         } else {
             return NULL;
@@ -277,7 +280,7 @@ class Rest
         if ($this->_api['plugins']->hasPlugin('Model',$model_name)) {
             $input_format = $this->getInputFormat($request);
 
-            if ($input_format == \FluxAPI\Api::DATA_TYPE_ARRAY) {
+            if ($input_format == \FluxAPI\Api::DATA_FORMAT_ARRAY) {
                 $data = $request->query->all();
             } else {
                 $data = $request->getContent();
@@ -289,10 +292,10 @@ class Rest
 
             $update_method = 'update'.$model_name.'s';
 
-            return new Response(
+            return $this->_createResponse(
                 $this->_api->$update_method($query, $data, $input_format),
                 200,
-                array('Content-Type'=>$this->getMimeTypeFromFormat($format, $this->config['default_mime_type']))
+                $format
             );
         } else {
             return NULL;
@@ -312,10 +315,11 @@ class Rest
 
             $load_method = 'load'.$model_name;
 
-            return new Response(
+            return $this->_createResponse(
                 $this->_api->$load_method($query, $format),
                 200,
-                array('Content-Type'=>$this->getMimeTypeFromFormat($format, $this->config['default_mime_type']))
+                $format,
+                FALSE
             );
         } else {
             return NULL;
@@ -331,10 +335,11 @@ class Rest
 
             $load_method = 'load'.$model_name.'s';
 
-            return new Response(
+            return $this->_createResponse(
                 $this->_api->$load_method($query, $format),
                 200,
-                array('Content-Type'=>$this->getMimeTypeFromFormat($format, $this->config['default_mime_type']))
+                $format,
+                FALSE
             );
         } else {
             return NULL;
@@ -346,7 +351,7 @@ class Rest
         if ($this->_api['plugins']->hasPlugin('Model',$model_name)) {
             $input_format = $this->getInputFormat($request);
 
-            if ($input_format == \FluxAPI\Api::DATA_TYPE_ARRAY) {
+            if ($input_format == \FluxAPI\Api::DATA_FORMAT_ARRAY) {
                 $data = $request->query->all();
             } else {
                 $data = $request->getContent();
@@ -362,10 +367,10 @@ class Rest
 
             $delete_method = 'delete'.$model_name;
 
-            return new Response(
+            return $this->_createResponse(
                 $this->_api->$delete_method($query, $data, $input_format),
                 200,
-                array('Content-Type'=>$this->getMimeTypeFromFormat($format, $this->config['default_mime_type']))
+                $format
             );
         } else {
             return NULL;
@@ -377,7 +382,7 @@ class Rest
         if ($this->_api['plugins']->hasPlugin('Model',$model_name)) {
             $input_format = $this->getInputFormat($request);
 
-            if ($input_format == \FluxAPI\Api::DATA_TYPE_ARRAY) {
+            if ($input_format == \FluxAPI\Api::DATA_FORMAT_ARRAY) {
                 $data = $request->query->all();
             } else {
                 $data = $request->getContent();
@@ -389,13 +394,29 @@ class Rest
 
             $delete_method = 'delete'.$model_name.'s';
 
-            return new Response(
+            return $this->_createResponse(
                 $this->_api->$delete_method($query, $data, $input_format),
                 200,
-                array('Content-Type'=>$this->getMimeTypeFromFormat($format, $this->config['default_mime_type']))
+                $format
             );
         } else {
             return NULL;
         }
+    }
+
+    protected function _createResponse($data, $status, $format, $encode_data = TRUE)
+    {
+        $formats = $this->_api['plugins']->getPlugins('Format');
+
+        if ($encode_data && isset($formats[ucfirst($format)])) {
+            $format_class = $formats[ucfirst($format)];
+            $data = $format_class::encode($data);
+        }
+
+        return new Response(
+            $data,
+            $status,
+            array('Content-Type'=>$this->getMimeTypeFromFormat($format, $this->config['default_mime_type']))
+        );
     }
 }

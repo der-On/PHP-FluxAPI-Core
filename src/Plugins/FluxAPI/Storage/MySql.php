@@ -412,7 +412,7 @@ class MySql extends \FluxAPI\Storage
                         }
                     }
 
-                    $instances[] = $this->_api['models']->create($model_name, $data);
+                    $instances[] = $this->_api['models']->create($model_name, $data, NULL, FALSE);
                 }
                 return $instances;
             }

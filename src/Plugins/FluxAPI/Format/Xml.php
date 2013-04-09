@@ -37,7 +37,7 @@ class Xml extends \FluxAPI\Format
 
         if (!empty($xml)) {
             self::$_api->app['serializer.encoders'][1]->setRootNodeName($root);
-            return self::$_api->app['serializer']->deserialize($xml,'array','xml');
+            return self::$_api->app['serializer']->decode($xml,'xml');
         } else {
             return NULL;
         }

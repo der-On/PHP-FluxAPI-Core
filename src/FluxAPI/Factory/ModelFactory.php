@@ -19,9 +19,10 @@ class ModelFactory extends \Pimple
      * @param string $model_name
      * @param [mixed $data] if set the model will contain that initial data
      * @param [string $format] the format of the given $data - if not set the data will be treated as an array
+     * @param [bool $isNew] true if the model is new, false if it is created due to a load call.
      * @return null|Model
      */
-    public function create($model_name, $data = NULL, $format = NULL)
+    public function create($model_name, $data = NULL, $format = NULL, $isNew = TRUE)
     {
         $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_CREATE, new ModelEvent($model_name));
 
@@ -31,7 +32,13 @@ class ModelFactory extends \Pimple
         if (isset($models[$model_name])) {
 
             $model_class = $models[$model_name];
-            $data = $this->_modelDataFromFormat($data, $format);
+            $data = $this->_modelDataFromFormat($model_name, $data, $format);
+
+            // do not populate new model with an id
+            if ($isNew && !empty($data) && is_array($data) && isset($data['id'])) {
+                unset($data['id']);
+            }
+
             $instance = new $model_class($this->_api, $data);
 
             if (!empty($extend) && $instance->getModelName() != $model_name) {
@@ -48,7 +55,7 @@ class ModelFactory extends \Pimple
         return NULL;
     }
 
-    protected function _modelDataFromFormat($data, $format)
+    protected function _modelDataFromFormat($model_name, $data, $format)
     {
         $formats = $this->_api['plugins']->getPlugins('Format');
 
@@ -56,7 +63,7 @@ class ModelFactory extends \Pimple
             $format_class = $formats[ucfirst($format)];
 
             $format_class::setApi($this->_api);
-            $data = $format_class::decode($data);
+            $data = $format_class::decodeForModel($model_name, $data);
         }
 
         return $data;
