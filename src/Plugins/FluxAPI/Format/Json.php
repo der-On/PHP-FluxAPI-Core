@@ -28,7 +28,7 @@ class Json extends \FluxAPI\Format
     {
         $data = array();
 
-        if (!empty($json) && is_string($json)) {
+        if (is_string($json) && !empty($json)) {
             return json_decode($json,TRUE);
         } else {
             return NULL;
@@ -37,7 +37,7 @@ class Json extends \FluxAPI\Format
 
     public static function encode($data, array $options = NULL)
     {
-        if (!empty($data) && (is_object($data) || is_array($data))) {
+        if ((is_object($data) || is_array($data))) {
             return json_encode($data);
         } else {
             return NULL;

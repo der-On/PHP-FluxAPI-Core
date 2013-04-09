@@ -35,7 +35,7 @@ class Xml extends \FluxAPI\Format
     {
         $root = (!empty($options) && isset($options['root']))?$options['root']:NULL;
 
-        if (!empty($xml)) {
+        if (is_string($xml) && !empty($xml)) {
             self::$_api->app['serializer.encoders'][1]->setRootNodeName($root);
             return self::$_api->app['serializer']->decode($xml,'xml');
         } else {
@@ -47,7 +47,7 @@ class Xml extends \FluxAPI\Format
     {
         $root = (!empty($options) && isset($options['root']))?$options['root']:NULL;
 
-        if (!empty($data) && (is_object($data) || is_array($data))) {
+        if ((is_object($data) || is_array($data))) {
             self::$_api->app['serializer.encoders'][1]->setRootNodeName($root);
             return self::$_api->app['serializer']->serialize($data,'xml');
         } else {

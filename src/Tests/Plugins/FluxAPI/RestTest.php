@@ -153,6 +153,39 @@ class RestTest extends FluxApi_Database_TestCase
         $this->assertEquals($data_all_yaml, $response_data);
     }
 
+    public function testDeleteNode()
+    {
+        $this->migrate();
+
+        $client = $this->createClient();
+
+        $data = array('title'=>'Node','body'=>'Body for Node','active'=>false,'id' => 1);
+        $data_json = json_encode($data);
+
+        // first save the node
+        $client->request('POST','/node',$data);
+
+        $this->assertTrue($client->getResponse()->isOk());
+
+        // now load it
+        $client->request('GET','/node/1');
+
+        $this->assertTrue($client->getResponse()->isOk());
+        $response_data = $this->removeDateTimesFromJson($client->getResponse()->getContent());
+        $this->assertJsonStringEqualsJsonString($data_json, $response_data);
+
+        // now delete it
+        $client->request('DELETE','/node/1');
+        $this->assertTrue($client->getResponse()->isOk());
+
+        // now load all nodes, we should get an empty array back
+        $client->request('GET','/nodes');
+
+        $this->assertTrue($client->getResponse()->isOk());
+        $response_data = $this->removeDateTimesFromJson($client->getResponse()->getContent());
+        $this->assertJsonStringEqualsJsonString(json_encode(array()), $response_data);
+    }
+
     public function createClient(array $server = array())
     {
         return new Client(self::$fluxApi->app, $server);

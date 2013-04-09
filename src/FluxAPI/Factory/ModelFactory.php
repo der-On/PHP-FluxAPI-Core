@@ -77,6 +77,7 @@ class ModelFactory extends \Pimple
             $format_class = $formats[ucfirst($format)];
 
             $format_class::setApi($this->_api);
+
             $models = $format_class::encodeFromModels($model_name, $models);
         }
         return $models;
@@ -101,7 +102,7 @@ class ModelFactory extends \Pimple
      * @param string $model_name
      * @param [Query $query] if not set all instances of the model are loaded
      * @param [string $format]
-     * @return array|null
+     * @return array
      */
     public function load($model_name, \FluxAPI\Query $query = NULL, $format = NULL)
     {
@@ -119,7 +120,7 @@ class ModelFactory extends \Pimple
             return $this->_modelsToFormat($model_name, $instances, $format);
         }
 
-        return NULL;
+        return array();
     }
 
     public function loadFirst($model_name, \FluxAPI\Query $query = NULL, $format = NULL)

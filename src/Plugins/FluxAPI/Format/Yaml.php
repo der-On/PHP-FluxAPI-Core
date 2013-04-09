@@ -26,7 +26,7 @@ class Yaml extends \FluxAPI\Format
 
     public static function decode($yaml, array $options = NULL)
     {
-        if (!empty($yaml) && is_string($yaml)) {
+        if (is_string($yaml) && !empty($yaml)) {
             $parser = new \Symfony\Component\Yaml\Parser();
             return $parser->parse($yaml);
         } else {
@@ -36,7 +36,7 @@ class Yaml extends \FluxAPI\Format
 
     public static function encode($data, array $options = NULL)
     {
-        if (!empty($data) && (is_array($data) || is_object($data))) {
+        if ((is_array($data) || is_object($data))) {
             $dumper = new \Symfony\Component\Yaml\Dumper();
             return $dumper->dump($data,2);
         } else {
