@@ -135,26 +135,44 @@ class Rest
         {
             $model_route_name = strtolower($model_name);
 
-            // view/load single model by id or using filters
+            // view/load single model
+
+            // with id and extension
             $this->_api->app->get($this->config['base_route'].'/'.$model_route_name.'/{id}.{ext}',
                 function(Request $request, $id = NULL, $ext = NULL) use ($self, $model_name) {
                     $format = $self->getFormatFromExtension($ext, $self->config['default_output_format']);
                     return $self->loadModel($request, $model_name, $id, $format);
                 }
             );
+            // with id
             $this->_api->app->get($this->config['base_route'].'/'.$model_route_name.'/{id}',
                 function(Request $request, $id = NULL) use ($self, $model_name) {
                     return $self->loadModel($request, $model_name, $id, $self->config['default_output_format']);
                 }
             );
+            // with no filters only and extension
+            $this->_api->app->get($this->config['base_route'].'/'.$model_route_name.'.{ext}',
+                function(Request $request, $ext = NULL) use ($self, $model_name) {
+                    $format = $self->getFormatFromExtension($ext, $self->config['default_output_format']);
+                    return $self->loadModel($request, $model_name, NULL, $format);
+                }
+            );
+            // with no filters only
+            $this->_api->app->get($this->config['base_route'].'/'.$model_route_name,
+                function(Request $request) use ($self, $model_name) {
+                    return $self->loadModel($request, $model_name, NULL, $self->config['default_output_format']);
+                }
+            );
 
-            // view/load multiple models using filters
+            // view/load multiple models
+            // with extension
             $this->_api->app->get($this->config['base_route'].'/'.$model_route_name.'s.{ext}',
                 function(Request $request, $ext = NULL) use ($self, $model_name) {
                     $format = $self->getFormatFromExtension($ext, $self->config['default_output_format']);
                     return $self->loadModels($request, $model_name, $format);
                 }
             );
+            // without extension
             $this->_api->app->get($this->config['base_route'].'/'.$model_route_name.'s',
                 function(Request $request) use ($self, $model_name) {
                     return $self->loadModels($request, $model_name, $self->config['default_output_format']);
@@ -162,12 +180,14 @@ class Rest
             );
 
             // create a new model
+            // with extension
             $this->_api->app->post($this->config['base_route'].'/'.$model_route_name.'.{ext}',
                 function(Request $request, $ext = NULL) use ($self, $model_name) {
                     $format = $self->getFormatFromExtension($ext, $self->config['default_output_format']);
                     return $self->createModel($request, $model_name, $format);
                 }
             );
+            // without extension
             $this->_api->app->post($this->config['base_route'].'/'.$model_route_name,
                 function(Request $request) use ($self, $model_name) {
                     $format = $self->config['default_output_format'];
@@ -176,25 +196,42 @@ class Rest
             );
 
             // update an existing a model
+            // with id and extension
             $this->_api->app->post($this->config['base_route'].'/'.$model_route_name.'/{id}.{ext}',
                 function(Request $request, $id, $ext = NULL) use ($self, $model_name) {
                     $format = $self->getFormatFromExtension($ext, $self->config['default_output_format']);
                     return $self->updateModel($request, $model_name, $id, $format);
                 }
             );
+            // with id
             $this->_api->app->post($this->config['base_route'].'/'.$model_route_name.'/{id}',
                 function(Request $request, $id) use ($self, $model_name) {
                     return $self->updateModel($request, $model_name, $id, $self->config['default_output_format']);
                 }
             );
+            // with filters only and extension
+            $this->_api->app->post($this->config['base_route'].'/'.$model_route_name.'.{ext}',
+                function(Request $request, $ext = NULL) use ($self, $model_name) {
+                    $format = $self->getFormatFromExtension($ext, $self->config['default_output_format']);
+                    return $self->updateModel($request, $model_name, NULL, $format);
+                }
+            );
+            // with filters only
+            $this->_api->app->post($this->config['base_route'].'/'.$model_route_name,
+                function(Request $request) use ($self, $model_name) {
+                    return $self->updateModel($request, $model_name, NULL, $self->config['default_output_format']);
+                }
+            );
 
             // update multiple models
+            // with extension
             $this->_api->app->post($this->config['base_route'].'/'.$model_route_name.'s.{ext}',
                 function(Request $request, $ext = NULL) use ($self, $model_name) {
                     $format = $self->getFormatFromExtension($ext, $self->config['default_output_format']);
                     return $self->updateModels($request, $model_name, $format);
                 }
             );
+            // without extension
             $this->_api->app->post($this->config['base_route'].'/'.$model_route_name.'s',
                 function(Request $request) use ($self, $model_name) {
                     return $self->updateModels($request, $model_name, $self->config['default_output_format']);
@@ -202,25 +239,42 @@ class Rest
             );
 
             // delete a single model
+            // with id and extension
             $this->_api->app->delete($this->config['base_route'].'/'.$model_route_name.'/{id}.{ext}',
                 function(Request $request, $id = NULL, $ext = NULL) use ($self, $model_name) {
                     $format = $self->getFormatFromExtension($ext, $self->config['default_output_format']);
                     return $self->deleteModel($request, $model_name, $id, $format);
                 }
             );
+            // with id
             $this->_api->app->delete($this->config['base_route'].'/'.$model_route_name.'/{id}',
                 function(Request $request, $id = NULL) use ($self, $model_name) {
                     return $self->deleteModel($request, $model_name, $id, $self->config['default_output_format']);
                 }
             );
+            // with filters only and extension
+            $this->_api->app->delete($this->config['base_route'].'/'.$model_route_name.'.{ext}',
+                function(Request $request, $ext = NULL) use ($self, $model_name) {
+                    $format = $self->getFormatFromExtension($ext, $self->config['default_output_format']);
+                    return $self->deleteModel($request, $model_name, NULL, $format);
+                }
+            );
+            // with filters only
+            $this->_api->app->delete($this->config['base_route'].'/'.$model_route_name,
+                function(Request $request) use ($self, $model_name) {
+                    return $self->deleteModel($request, $model_name, NULL, $self->config['default_output_format']);
+                }
+            );
 
             // delete multiple models
+            // with extension
             $this->_api->app->delete($this->config['base_route'].'/'.$model_route_name.'s.{ext}',
                 function(Request $request, $ext = NULL) use ($self, $model_name) {
                     $format = $self->getFormatFromExtension($ext, $self->config['default_output_format']);
                     return $self->deleteModels($request, $model_name, $format);
                 }
             );
+            // without extension
             $this->_api->app->delete($this->config['base_route'].'/'.$model_route_name.'s',
                 function(Request $request) use ($self, $model_name) {
                     return $self->deleteModels($request, $model_name, $self->config['default_output_format']);
@@ -251,17 +305,25 @@ class Rest
         }
     }
 
-    public function updateModel(Request $request, $model_name, $id, $format)
+    public function updateModel(Request $request, $model_name, $id = NULL, $format)
     {
         if ($this->_api['plugins']->hasPlugin('Model',$model_name)) {
             $input_format = $this->getInputFormat($request);
 
             $data = $this->getRequestData($request, $input_format);
 
+            $query = new Query();
+
+            if(!empty($id)) {
+                $query->filter('equal',array('id',$id));
+            }
+
+            $this->addFiltersToQueryFromRequest($request, $query);
+
             $update_method = 'update'.$model_name;
 
             return $this->_createResponse(
-                $this->_api->$update_method($id, $data, $input_format),
+                $this->_api->$update_method($query, $data, $input_format),
                 200,
                 $format
             );

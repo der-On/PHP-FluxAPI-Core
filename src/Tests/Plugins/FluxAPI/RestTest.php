@@ -194,7 +194,6 @@ class RestTest extends FluxApi_Database_TestCase
 
         $data = array('title'=>'Node','body'=>'Body for Node','active'=>false,'id' => 1);
 
-
         // first save the node
         $client->request('POST','/node',$data);
 
@@ -214,6 +213,37 @@ class RestTest extends FluxApi_Database_TestCase
         $this->assertTrue($client->getResponse()->isOk());
         $response_data = $this->removeDateTimesFromJson($client->getResponse()->getContent());
         $this->assertJsonStringEqualsJsonString($data_json, $response_data);
+    }
+
+    public function testFilters()
+    {
+        $this->migrate();
+
+        $client = $this->createClient();
+        $data_all = array();
+
+        // first create a bunch of nodes
+        for($i = 1; $i <= 10; $i++) {
+            $data = array('title'=>'Node '.$i,'body'=>'Body for Node '.$i, 'active'=>false,'id'=>$i);
+            $data_all[] = $data;
+            $node = self::$fluxApi->createNode($data);
+
+            self::$fluxApi->saveNode($node);
+        }
+
+        // now load them with various filters
+        $client->request('GET','/node?id=2'); // simple ID filter shortcut
+
+        $this->assertTrue($client->getResponse()->isOk());
+        $data_json = json_encode($data_all[1]);
+        $response_data = $this->removeDateTimesFromJson($client->getResponse()->getContent());
+        $this->assertJsonStringEqualsJsonString($data_json,$response_data);
+
+        $client->request('GET','/nodes?@gte=id,2&@lte=id,5&@order=id,DESC'); // get all with an ID from 2 to 4 order by id descending
+        $data_json = json_encode(array($data_all[4],$data_all[3],$data_all[2],$data_all[1]));
+        $this->assertTrue($client->getResponse()->isOk());
+        $response_data = $this->removeDateTimesFromJson($client->getResponse()->getContent());
+        $this->assertJsonStringEqualsJsonString($data_json,$response_data);
     }
 
     public function createClient(array $server = array())

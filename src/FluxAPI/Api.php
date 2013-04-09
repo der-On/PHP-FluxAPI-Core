@@ -256,9 +256,13 @@ class Api extends \Pimple
         });
 
         // update a single model instance
-        $this['methods']->registerMethod('update'.$model_name, function($id, array $data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model_name, $self) {
-            $query = new Query();
-            $query->filter('equal',array('id',$id));
+        $this['methods']->registerMethod('update'.$model_name, function($query, array $data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model_name, $self) {
+            if (is_string($query)) {
+                $id = $query;
+
+                $query = new Query();
+                $query->filter('equal',array('id',$id));
+            }
             $query->filter('limit',array(0,1));
 
             return $self['models']->update($model_name, $query, $data, $format);
