@@ -10,17 +10,7 @@ namespace FluxAPI;
  *
  * @package FluxAPI
  */
-abstract class Plugin
+abstract class Plugin implements PluginInterface
 {
-    /**
-     * Called when the plugin get's registered
-     *
-     * Use this method to make your plugin magic.
-     *
-     * @param Api $api
-     */
-    public static function register(Api $api)
-    {
 
-    }
 }
