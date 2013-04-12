@@ -5,6 +5,9 @@ namespace FluxAPI;
 
 abstract class Format implements FormatInterface
 {
+    /**
+     * @var FluxAPI\Api
+     */
     protected static $_api;
 
     public static function setApi(\FluxAPI\Api $api)

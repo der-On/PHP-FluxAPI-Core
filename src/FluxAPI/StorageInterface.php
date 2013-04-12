@@ -227,4 +227,127 @@ interface StorageInterface
      * @param [string $model]
      */
     public function migrate($model_name = NULL);
+
+    /**
+     * Adds/registers a new filter
+     *
+     * @chainable
+     * @param string $name
+     * @param string $callback
+     * @return Storage $this
+     */
+    public function addFilter($name,$callback);
+
+    /**
+     * Checks if a filter exists
+     *
+     * @param string $name
+     * @return bool
+     */
+    public function hasFilter($name);
+
+    /**
+     * Returns a filters callback
+     *
+     * @param string $name
+     * @return string|null callback string or null if not found
+     */
+    public function getFilter($name);
+
+    /**
+     * Returns all existing filters
+     *
+     * @return array
+     */
+    public function getFilters();
+
+    /**
+     * Executes the callback of a given filter
+     *
+     * @param string $callback
+     * @param array $params parameters passed to the $callback function
+     * @return mixed
+     */
+    public function executeFilter($callback,array $params = array());
+
+    /**
+     * Returns the total count of a model (or the model by a query)
+     *
+     * @param string $model_name
+     * @param [Query $query]
+     * @return int
+     */
+    public function count($model_name, Query $query = NULL);
+
+    /**
+     * Checks if a given model instance already exists in the storage
+     *
+     * @param string $model_name
+     * @param Model $instance
+     * @return bool
+     */
+    public function exists($model_name, Model $instance);
+
+    /**
+     * Saves/updates a given model instance to the storage
+     *
+     * @param string $model_name
+     * @param Model $instance
+     * @return bool
+     */
+    public function save($model_name, Model $instance);
+
+    /**
+     * Loads instances of a model from the storage
+     *
+     * @param string $model_name
+     * @param [Query $query] if not set all model instances will be loaded
+     * @return array
+     */
+    public function load($model_name, Query $query = NULL);
+
+    /**
+     * Updates a list of models in the storage with given data
+     *
+     * @param string $model_name
+     * @param [Query $query] if null all models will be updated
+     * @param array $data
+     * @return bool
+     */
+    public function update($model_name, Query $query = NULL, array $data = array());
+
+    /**
+     * Deletes a list of models from the storage
+     *
+     * @param string $model_name
+     * @param [Query $query] if null all models will be deleted
+     * @return bool
+     */
+    public function delete($model_name, Query $query = NULL);
+
+    /**
+     * Executes a query
+     *
+     * Override this in your storage plugin.
+     *
+     * @param Query $query
+     * @return mixed
+     */
+    public function executeQuery(Query $query);
+
+    /**
+     * Converts the given data to a serialized string
+     *
+     * @param mixed $data
+     * @param Field $field
+     */
+    public function serialize($data, \FluxAPI\Field $field);
+
+    /**
+     * Converts a serialized string to a real datatype
+     *
+     * @param string $str
+     * @param Field $field
+     */
+    public function unserialize($str, \FluxAPI\Field $field);
 }
