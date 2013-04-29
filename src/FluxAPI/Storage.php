@@ -53,6 +53,17 @@ abstract class Storage implements StorageInterface
     }
 
     /**
+     * Returns a new model ID.
+     *
+     * @return string
+     */
+    public function getNewId()
+    {
+        return UUID::v4();
+    }
+
+
+    /**
      * Adds/registers all filters available in this storage
      *
      * Use this method in child classes to add aditional filters while calling parent::addFilters().
@@ -212,22 +223,23 @@ abstract class Storage implements StorageInterface
      */
     public function save($model_name, Model $instance)
     {
+        // if the model is new we have to set it's ID
+        if ($instance->isNew()) {
+            $instance->id = $this->getNewId();
+        }
+
         $query = new Query();
         $query->setType(Query::TYPE_INSERT);
 
         if ($this->exists($model_name, $instance)) {
-            $query->setType(Query::TYPE_UPDATE);
+            $query->setType(Query::TYPE_UPDATE)
+                  ->filter('equal', array('id', $instance->id));
         }
 
         $query->setModelName($model_name);
         $query->setData($instance->toArray());
 
         $success = $this->executeQuery($query);
-
-        // if the model was new we have to set it's ID
-        if ($instance->isNew()) {
-            $instance->id = $this->getLastId($model_name);
-        }
 
         // save relations
 

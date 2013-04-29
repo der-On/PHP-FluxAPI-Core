@@ -57,6 +57,7 @@ class Query
     public function filter($name, array $params)
     {
         $this->_filters[] = array($name,$params);
+
         return $this;
     }
 
@@ -120,6 +121,8 @@ class Query
     public function setStorage(Storage $storage)
     {
         $this->_storage = $storage;
+
+        return $this;
     }
 
     /**
@@ -140,6 +143,8 @@ class Query
     public function setModelName($model)
     {
         $this->_modelName = $model;
+
+        return $this;
     }
 
     /**
@@ -162,6 +167,8 @@ class Query
         if (in_array($type, array(self::TYPE_DELETE, self::TYPE_INSERT, self::TYPE_UPDATE, self::TYPE_SELECT, self::TYPE_COUNT))) {
             $this->_type = $type;
         }
+
+        return $this;
     }
 
     /**
@@ -182,6 +189,8 @@ class Query
     public function setData(array $data)
     {
         $this->_data = array_replace($this->_data,$data);
+
+        return $this;
     }
 
     /**

@@ -68,7 +68,7 @@ class MySqlTest extends FluxApi_Database_TestCase
         // store and reload the data from database
         self::$fluxApi->saveTestModel($model);
 
-        $model = self::$fluxApi->loadTestModel('1');
+        $model = self::$fluxApi->loadTestModel();
 
         // check that data is in the model
         $this->assertNotEmpty($model);

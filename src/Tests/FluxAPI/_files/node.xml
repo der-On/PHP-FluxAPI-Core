@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <Node>
-    <id>1</id>
     <active>0</active>
     <body>Node body
 on multiple lines</body>

@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/FluxApi_Database_TestCase.php';
 
+use \FluxApi\Query;
+
 class ApiTest extends FluxApi_Database_TestCase
 {
     public function testCrudNodes()
@@ -20,10 +22,15 @@ class ApiTest extends FluxApi_Database_TestCase
     {
         $this->migrate();
         $this->createNodes();
-        $nodes = self::$fluxApi->loadNodes(NULL,'xml');
+
+        $query = new Query();
+        $query->filter('order', array('title'));
+
+        $nodes = self::$fluxApi->loadNodes($query, 'xml');
 
         // we need to remove the datetime fields which change everytime
         $nodes = $this->removeDateTimesFromXml($nodes);
+        $nodes = $this->removeIdsFromXml($nodes);
 
         $this->assertXmlStringEqualsXmlFile(__DIR__ . '/_files/nodes.xml',$nodes);
     }
@@ -33,10 +40,14 @@ class ApiTest extends FluxApi_Database_TestCase
         $this->migrate();
         $this->createSingleNode();
 
-        $node = self::$fluxApi->loadNode('1','xml');
+        $query = new \FluxAPI\Query();
+        $query->filter('equal',array('title','Node title'));
+
+        $node = self::$fluxApi->loadNode($query,'xml');
 
         // we need to remove the datetime fields which change everytime
         $node = $this->removeDateTimesFromXml($node);
+        $node = $this->removeIdsFromXml($node);
 
         $this->assertXmlStringEqualsXmlFile(__DIR__ . '/_files/node.xml',$node);
     }
@@ -46,10 +57,14 @@ class ApiTest extends FluxApi_Database_TestCase
         $this->migrate();
         $this->createNodes();
 
-        $nodes = self::$fluxApi->loadNodes(NULL,'json');
+        $query = new Query();
+        $query->filter('order', array('title'));
+
+        $nodes = self::$fluxApi->loadNodes($query, 'json');
 
         // we need to remove the datetime fields which change everytime
         $nodes = $this->removeDateTimesFromJson($nodes);
+        $nodes = $this->removeIdsFromJson($nodes);
 
         $this->assertJsonStringEqualsJsonFile(__DIR__ . '/_files/nodes.json',$nodes);
     }
@@ -59,10 +74,14 @@ class ApiTest extends FluxApi_Database_TestCase
         $this->migrate();
         $this->createSingleNode();
 
-        $node = self::$fluxApi->loadNode('1','json');
+        $query = new \FluxAPI\Query();
+        $query->filter('equal',array('title','Node title'));
+
+        $node = self::$fluxApi->loadNode($query,'json');
 
         // we need to remove the datetime fields which change everytime
         $node = $this->removeDateTimesFromJson($node);
+        $node = $this->removeIdsFromJson($node);
 
         $this->assertJsonStringEqualsJsonFile(__DIR__ . '/_files/node.json',$node);
     }
@@ -72,9 +91,13 @@ class ApiTest extends FluxApi_Database_TestCase
         $this->migrate();
         $this->createNodes();
 
-        $nodes = self::$fluxApi->loadNodes(NULL,'yaml');
+        $query = new Query();
+        $query->filter('order', array('title'));
+
+        $nodes = self::$fluxApi->loadNodes($query,'yaml');
 
         $nodes = $this->removeDateTimesFromYaml($nodes);
+        $nodes = $this->removeIdsFromYaml($nodes);
 
         $this->assertStringEqualsFile(__DIR__ . '/_files/nodes.yml',$nodes);
     }
@@ -84,9 +107,13 @@ class ApiTest extends FluxApi_Database_TestCase
         $this->migrate();
         $this->createSingleNode();
 
-        $node = self::$fluxApi->loadNode('1','yaml');
+        $query = new \FluxAPI\Query();
+        $query->filter('equal',array('title','Node title'));
 
-        $node = $this->removeDateTimesFromYaml($node,0);
+        $node = self::$fluxApi->loadNode($query,'yaml');
+
+        $node = $this->removeDateTimesFromYaml($node, 0);
+        $node = $this->removeIdsFromYaml($node, 0);
 
         $this->assertStringEqualsFile(__DIR__ . '/_files/node.yml',$node);
     }
@@ -132,7 +159,10 @@ class ApiTest extends FluxApi_Database_TestCase
         // now make the node persistant and reload it form the storage
         self::$fluxApi->saveNode($node);
 
-        $node = self::$fluxApi->loadNode('1');
+        $query = new \FluxAPI\Query();
+        $query->filter('equal',array('newField','value 1'));
+
+        $node = self::$fluxApi->loadNode($query);
 
         // check that node contains the new fields
         $this->assertNotEmpty($node);
@@ -166,7 +196,10 @@ class ApiTest extends FluxApi_Database_TestCase
 
         self::$fluxApi->saveTestModel($instance);
 
-        $instance = self::$fluxApi->loadTestModel('1');
+        $query = new \FluxAPI\Query();
+        $query->filter('equal',array('title','new test model'));
+
+        $instance = self::$fluxApi->loadTestModel($query);
 
         $this->assertNotEmpty($instance);
         $this->assertEquals($instance->title,'new test model');
@@ -210,7 +243,10 @@ class ApiTest extends FluxApi_Database_TestCase
         // now make the node persistant and reload it form the storage
         self::$fluxApi->saveNode($node);
 
-        $node = self::$fluxApi->loadNode('1');
+        $query = new \FluxAPI\Query();
+        $query->filter('equal',array('newField','value 1'));
+
+        $node = self::$fluxApi->loadNode($query);
 
         // check that node contains the new fields
         $this->assertNotEmpty($node);
@@ -218,7 +254,7 @@ class ApiTest extends FluxApi_Database_TestCase
         $this->assertEquals($node->newField2, 2);
     }
 
-    public function testExtendAndRecudeNewModel()
+    public function testExtendAndReduceNewModel()
     {
         $model = 'TestModel';
 
@@ -244,7 +280,10 @@ class ApiTest extends FluxApi_Database_TestCase
 
         self::$fluxApi->saveTestModel($instance);
 
-        $instance = self::$fluxApi->loadTestModel('1');
+        $query = new \FluxAPI\Query();
+        $query->filter('equal',array('title','new test model'));
+
+        $instance = self::$fluxApi->loadTestModel($query);
 
         $this->assertNotEmpty($instance);
         $this->assertEquals($instance->title,'new test model');
@@ -253,7 +292,10 @@ class ApiTest extends FluxApi_Database_TestCase
         // now reduce it, first by removing a field
         self::$fluxApi->reduceModel($model, array('description'));
 
-        $instance = self::$fluxApi->loadTestModel('1');
+        $query = new \FluxAPI\Query();
+        $query->filter('equal',array('title','new test model'));
+
+        $instance = self::$fluxApi->loadTestModel($query);
 
         $this->assertNotEmpty($instance);
         $this->assertEquals($instance->title,'new test model');
@@ -262,7 +304,7 @@ class ApiTest extends FluxApi_Database_TestCase
         // now remove it completely
         self::$fluxApi->reduceModel($model);
 
-        $this->assertNull(self::$fluxApi->loadTestModel('1'));
+        $this->assertNull(self::$fluxApi->loadTestModel($query));
     }
 
     public function createSingleNode()
@@ -314,11 +356,14 @@ class ApiTest extends FluxApi_Database_TestCase
 
     public function loadSingleNode()
     {
-        $node = self::$fluxApi->loadNode('1');
+        $query = new \FluxAPI\Query();
+        $query->filter('equal',array('title','Node 1'));
+
+        $node = self::$fluxApi->loadNode($query);
 
         $this->assertNotEmpty($node);
 
-        $this->assertEquals($node->title,'Node 1');
+        $this->assertEquals('Node 1',$node->title);
     }
 
     public function updateNodes()
@@ -353,7 +398,9 @@ class ApiTest extends FluxApi_Database_TestCase
 
     public function deleteSingleNode()
     {
-        self::$fluxApi->deleteNode('5');
+        $query = new \FluxAPI\Query();
+        $query->filter('equal',array('title','Node 5'));
+        self::$fluxApi->deleteNode($query);
 
         $nodes = self::$fluxApi->loadNodes();
 
@@ -372,11 +419,19 @@ class ApiTest extends FluxApi_Database_TestCase
 
     public function addRelatedNodes()
     {
-        $node = self::$fluxApi->loadNode('1');
-        $parent_node = self::$fluxApi->loadNode('2');
+        $query = new \FluxAPI\Query();
+        $query->filter('equal',array('title','Node 1'));
+
+        $node = self::$fluxApi->loadNode($query);
 
         $query = new \FluxAPI\Query();
-        $query->filter('range',array('id',3,10));
+        $query->filter('equal',array('title','Node 2'));
+
+        $parent_node = self::$fluxApi->loadNode($query);
+
+        $query = new \FluxAPI\Query();
+        $query->filter('limit', array(2, 8))
+            ->filter('order', array('title'));
         $child_nodes = self::$fluxApi->loadNodes($query);
 
         $node->parent = $parent_node;
@@ -384,18 +439,21 @@ class ApiTest extends FluxApi_Database_TestCase
 
         self::$fluxApi->saveNode($node);
 
-        $node = self::$fluxApi->loadNode('1');
+        $query = new \FluxAPI\Query();
+        $query->filter('equal', array('title', 'Node 1'));
+
+        $node = self::$fluxApi->loadNode($query);
 
         $this->assertNotEmpty($node->parent);
-        $this->assertEquals($node->parent->id,2);
+        $this->assertEquals($node->parent->title, 'Node 2');
 
         $this->assertNotEmpty($node->children);
         $this->assertCount(8,$node->children);
 
-        $ids = array(3,4,5,6,7,8,9,10);
+        $titles = array('Node 2','Node 3','Node 4','Node 5','Node 6','Node 7','Node 8','Node 9');
 
         foreach($node->children as $child_node) {
-            $this->assertContains($child_node->id,$ids);
+            $this->assertContains($child_node->title,$titles);
         }
     }
 
@@ -428,7 +486,10 @@ class ApiTest extends FluxApi_Database_TestCase
 
     public function removeRelatedNodes()
     {
-        $node = self::$fluxApi->loadNode('1');
+        $query = new \FluxAPI\Query();
+        $query->filter('equal',array('title','Node 1'));
+
+        $node = self::$fluxApi->loadNode($query);
 
         $this->assertNotEmpty($node->parent);
 
@@ -441,7 +502,7 @@ class ApiTest extends FluxApi_Database_TestCase
 
         self::$fluxApi->saveNode($node);
 
-        $node = self::$fluxApi->loadNode('1');
+        $node = self::$fluxApi->loadNode($query);
 
         $this->assertEmpty($node->parent);
         $this->assertEmpty($node->children);

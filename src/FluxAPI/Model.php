@@ -124,10 +124,10 @@ abstract class Model
     {
         $this->addField(new Field(array(
             'name' => 'id',
-            'type' => Field::TYPE_INTEGER,
+            'type' => Field::TYPE_BYTEARRAY,
             'primary' => TRUE,
             'default' => NULL,
-            'autoIncrement' => TRUE,
+            'length' => 16
         )));
     }
 

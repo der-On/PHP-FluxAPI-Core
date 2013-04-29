@@ -27,7 +27,7 @@ class RestTest extends FluxApi_Database_TestCase
         $this->assertTrue($client->getResponse()->isOk());
 
         // now load it
-        $client->request('GET','/node/1');
+        $client->request('GET','/node/1'); // TODO: this test fails, as we do not have numeric id's use a filter instead
 
         $this->assertTrue($client->getResponse()->isOk());
         $response_data = $this->removeDateTimesFromJson($client->getResponse()->getContent());

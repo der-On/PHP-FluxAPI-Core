@@ -55,6 +55,7 @@ class Field
 
     const TYPE_STRING = 'string';
     const TYPE_BINARY = 'binary';
+    const TYPE_BYTEARRAY = 'bitearray';
     const TYPE_BOOLEAN = 'boolean';
     const TYPE_INTEGER = 'integer';
     const TYPE_FLOAT = 'float';

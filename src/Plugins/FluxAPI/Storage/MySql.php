@@ -9,6 +9,16 @@ use \Doctrine\DBAL\Schema\Comparator;
 
 class MySql extends \FluxAPI\Storage
 {
+    public function __construct(\FluxAPI\Api $api, array $config = array())
+    {
+        parent::__construct($api, $config);
+
+        if (!\Doctrine\DBAL\Types\Type::hasType('varbinary')) {
+            \Doctrine\DBAL\Types\Type::addType('varbinary', 'Plugins\FluxAPI\DbalTypeVarbinary');
+        }
+    }
+
+
     public function addFilters()
     {
         parent::addFilters();
@@ -24,7 +34,14 @@ class MySql extends \FluxAPI\Storage
 
     public function filterEqual(&$qb, array $params)
     {
-        $type = (isset($params[2]))?$params[2]:'string';
+        $isId = ($params[0] == 'id' || substr($params[0],-3) == '_id');
+
+        if ($isId) {
+            $params[1] = $this->uuidToHex($params[1]);
+            $type = 'varbinary';
+        } else {
+            $type = (isset($params[2]))?$params[2]:'string';
+        }
 
         $qb->andWhere($qb->expr()->eq($params[0],($type!='string')?$params[1]:$qb->expr()->literal($params[1])));
         return $qb;
@@ -205,7 +222,7 @@ class MySql extends \FluxAPI\Storage
             $rel_field_name = $field->name.'_id';
 
             $query = new Query();
-            $query->filter('join',array('left', $table_name, $relation_table, $relation_table.'.'.$id_field_name.'='.$id))
+            $query->filter('join',array('left', $table_name, $relation_table, $relation_table.'.'.$id_field_name.'='.$this->uuidToHex($id)))
                   ->filter('equal',array($table_name.'.id',$relation_table.'.'.$rel_field_name,'field'));
 
             $models = $this->load($model_name,$query);
@@ -233,14 +250,14 @@ class MySql extends \FluxAPI\Storage
         $connection = $this->getConnection();
 
         // before a new record is inserted we need to check if it's not related already
-        $sql = 'SELECT COUNT('.$rel_field_name.') FROM '.$rel_table.' WHERE '.$model_field_name.'='.$model->id.' AND '.$rel_field_name.'='.$relation->id;
+        $sql = 'SELECT COUNT('.$rel_field_name.') FROM '.$rel_table.' WHERE '.$model_field_name.'='.$this->uuidToHex($model->id).' AND '.$rel_field_name.'='.$this->uuidToHex($relation->id);
 
         $result = $connection->query($sql)->fetch();
 
         $count = intval($result['COUNT('.$rel_field_name.')']);
 
         if ($count == 0) {
-            $sql = 'INSERT INTO '.$rel_table.' ('.$model_field_name.','.$rel_field_name.') VALUES('.$model->id.','.$relation->id.')';
+            $sql = 'INSERT INTO '.$rel_table.' ('.$model_field_name.','.$rel_field_name.') VALUES('.$this->uuidToHex($model->id).','.$this->uuidToHex($relation->id).')';
 
             if ($this->config['debug_sql']) {
                 print("\nSQL: ".$sql."\n");
@@ -259,7 +276,7 @@ class MySql extends \FluxAPI\Storage
 
         $connection = $this->getConnection();
 
-        $sql = 'DELETE FROM '.$rel_table.' WHERE '.$model_field_name.'='.$model->id.' AND '.$rel_field_name.'='.$relation->id;
+        $sql = 'DELETE FROM '.$rel_table.' WHERE '.$model_field_name.'='.$this->uuidToHex($model->id).' AND '.$rel_field_name.'='.$this->uuidToHex($relation->id);
 
         if ($this->config['debug_sql']) {
             print("\nSQL: ".$sql."\n");
@@ -277,7 +294,11 @@ class MySql extends \FluxAPI\Storage
 
         $connection = $this->getConnection();
 
-        $sql = 'DELETE FROM '.$rel_table.' WHERE '.$model_field_name.'='.$model->id.' AND '.$rel_field_name.'!=""';
+        $sql = 'DELETE FROM '.$rel_table.' WHERE '.$model_field_name.'='.$this->uuidToHex($model->id).' AND '.$rel_field_name.'!=""';
+
+        foreach($exclude_ids as $i => $id) {
+            $exclude_ids[$i] = $this->uuidToHex($id);
+        }
 
         if (count($exclude_ids) > 0) {
             $sql .= ' AND '.$rel_field_name.' NOT IN ('.implode(',',$exclude_ids).')';
@@ -329,13 +350,20 @@ class MySql extends \FluxAPI\Storage
                     .implode(', ',array_keys($data))
                 .') VALUES(';
 
-                $values = array_values($data);
-                foreach($values as $i => $value) {
-                    $sql .= $qb->expr()->literal($value);
+                $i = 0;
+                foreach($data as $name => $value) {
+                    // convert uuids to hex
+                    if ($name == 'id') {
+                        $value = $this->uuidToHex($value);
+                        $sql .= $value;
+                    } else {
+                        $sql .= $qb->expr()->literal($value);
+                    }
 
-                    if ($i < count($values) - 1) {
+                    if ($i < count($data) - 1) {
                         $sql .= ',';
                     }
+                    $i++;
                 }
                 $sql .= ')';
 
@@ -430,6 +458,10 @@ class MySql extends \FluxAPI\Storage
 
             case Field::TYPE_TIMESTAMP:
                 $type = 'integer';
+                break;
+
+            case Field::TYPE_BYTEARRAY:
+                $type = 'varbinary';
                 break;
 
             default:
@@ -565,5 +597,26 @@ class MySql extends \FluxAPI\Storage
             }
             $connection->query($query);
         }
+    }
+
+    public function unserialize($str, \FluxAPI\Field $field)
+    {
+        // restore truncated uuid's
+        if ($field->name == 'id' && $field->type == Field::TYPE_BYTEARRAY) {
+            return $this->hexToUuid($str);
+        } else {
+            return parent::unserialize($str, $field);
+        }
+    }
+
+    public function uuidToHex($uuid)
+    {
+        return '0x' . str_replace('-','',$uuid);
+    }
+
+    public function hexToUuid($hex)
+    {
+        $hex = bin2hex($hex);
+        return substr($hex, 0, 8) . '-' . substr($hex, 8, 4) . '-' . substr($hex, 12, 4) . '-' . substr($hex, 16, 4) . '-' . substr($hex, 20);
     }
 }

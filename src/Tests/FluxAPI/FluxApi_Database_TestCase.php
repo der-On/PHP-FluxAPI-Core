@@ -85,6 +85,12 @@ abstract class FluxApi_Database_TestCase extends PHPUnit_Extensions_Database_Tes
         return $xml;
     }
 
+    public function removeIdsFromXml($xml)
+    {
+        $xml =  preg_replace('/\<id\>(.*)\<\/id\>/','',$xml);
+        return $xml;
+    }
+
     public function removeDateTimesFromJson($json)
     {
         $json =  preg_replace('/"createdAt":"\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}",/','',$json);
@@ -92,10 +98,22 @@ abstract class FluxApi_Database_TestCase extends PHPUnit_Extensions_Database_Tes
         return $json;
     }
 
+    public function removeIdsFromJson($json)
+    {
+        $json =  preg_replace('/"id":"(([0-9]|\-|[a-z])*)",/','',$json);
+        return $json;
+    }
+
     public function removeDateTimesFromYaml($yaml, $indent = 4)
     {
         $yaml =  preg_replace('/\s{'.$indent.'}createdAt: \'\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}\'(\n|\t)/','',$yaml);
         $yaml =  preg_replace('/\s{'.$indent.'}updatedAt: \'\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}\'(\n|\t)/','',$yaml);
+        return $yaml;
+    }
+
+    public function removeIdsFromYaml($yaml, $indent = 4)
+    {
+        $yaml =  preg_replace('/\s{'.$indent.'}id: (.*)(\n|\t)/','',$yaml);
         return $yaml;
     }
 }

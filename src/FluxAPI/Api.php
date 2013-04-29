@@ -196,7 +196,11 @@ class Api extends \Pimple
         });
 
         // load single model instance
-        $this['methods']->registerMethod('load'.$model_name, function($query, $format = NULL) use ($model_name, $self) {
+        $this['methods']->registerMethod('load'.$model_name, function($query = NULL, $format = NULL) use ($model_name, $self) {
+
+            if (empty($query)) {
+                $query = new Query();
+            }
 
             if (is_string($query)) {
                 $id = $query;

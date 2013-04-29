@@ -13,6 +13,14 @@ namespace FluxAPI;
 interface StorageInterface
 {
     /**
+     * Returns the collection name from a given model instance
+     *
+     * @param string $model_name
+     * @return string
+     */
+    public static function getCollectionName($model_name);
+
+    /**
      * 'select' filter implementation.
      *
      * Override this in your storage plugin.
@@ -143,16 +151,6 @@ interface StorageInterface
     public function filterIn(&$qb, array $params);
 
     /**
-     * Returns last inserted ID of a given model type
-     *
-     * Override this in your storage plugin.
-     *
-     * @param string $model_name
-     * @return mixed
-     */
-    public function getLastId($model_name);
-
-    /**
      * Loads a single or a list of related models of a model instance.
      *
      * Override this in your storage plugin.
@@ -218,6 +216,13 @@ interface StorageInterface
      * @return mixed
      */
     public function getConnection();
+
+    /**
+     * Returns a new model id.
+     *
+     * @return string
+     */
+    public function getNewId();
 
     /**
      * Migrates the storage structure to all or a single model definition
