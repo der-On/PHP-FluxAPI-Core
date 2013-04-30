@@ -197,27 +197,27 @@ class Rest
 
             // update an existing a model
             // with id and extension
-            $this->_api->app->post($this->config['base_route'].'/'.$model_route_name.'/{id}.{ext}',
+            $this->_api->app->put($this->config['base_route'].'/'.$model_route_name.'/{id}.{ext}',
                 function(Request $request, $id, $ext = NULL) use ($self, $model_name) {
                     $format = $self->getFormatFromExtension($ext, $self->config['default_output_format']);
                     return $self->updateModel($request, $model_name, $id, $format);
                 }
             );
             // with id
-            $this->_api->app->post($this->config['base_route'].'/'.$model_route_name.'/{id}',
+            $this->_api->app->put($this->config['base_route'].'/'.$model_route_name.'/{id}',
                 function(Request $request, $id) use ($self, $model_name) {
                     return $self->updateModel($request, $model_name, $id, $self->config['default_output_format']);
                 }
             );
             // with filters only and extension
-            $this->_api->app->post($this->config['base_route'].'/'.$model_route_name.'.{ext}',
+            $this->_api->app->put($this->config['base_route'].'/'.$model_route_name.'.{ext}',
                 function(Request $request, $ext = NULL) use ($self, $model_name) {
                     $format = $self->getFormatFromExtension($ext, $self->config['default_output_format']);
                     return $self->updateModel($request, $model_name, NULL, $format);
                 }
             );
             // with filters only
-            $this->_api->app->post($this->config['base_route'].'/'.$model_route_name,
+            $this->_api->app->put($this->config['base_route'].'/'.$model_route_name,
                 function(Request $request) use ($self, $model_name) {
                     return $self->updateModel($request, $model_name, NULL, $self->config['default_output_format']);
                 }
@@ -225,14 +225,14 @@ class Rest
 
             // update multiple models
             // with extension
-            $this->_api->app->post($this->config['base_route'].'/'.$model_route_name.'s.{ext}',
+            $this->_api->app->put($this->config['base_route'].'/'.$model_route_name.'s.{ext}',
                 function(Request $request, $ext = NULL) use ($self, $model_name) {
                     $format = $self->getFormatFromExtension($ext, $self->config['default_output_format']);
                     return $self->updateModels($request, $model_name, $format);
                 }
             );
             // without extension
-            $this->_api->app->post($this->config['base_route'].'/'.$model_route_name.'s',
+            $this->_api->app->put($this->config['base_route'].'/'.$model_route_name.'s',
                 function(Request $request) use ($self, $model_name) {
                     return $self->updateModels($request, $model_name, $self->config['default_output_format']);
                 }
@@ -295,11 +295,16 @@ class Rest
 
             $save_method = 'save'.$model_name;
 
-            return $this->_createResponse(
-                $this->_api->$save_method($model),
-                200,
-                $format
-            );
+            try {
+                if ($this->_api->$save_method($model)) {
+                    return $this->_createSuccessResponse($model->toArray(), $format);
+                } else {
+                    return $this->_createErrorResponse(new \ErrorException('Error during creation of resource.'), $format);
+                }
+
+            } catch (\Exception $error) {
+                return $this->_createErrorResponse($error, $format);
+            }
         } else {
             return NULL;
         }
@@ -322,11 +327,21 @@ class Rest
 
             $update_method = 'update'.$model_name;
 
-            return $this->_createResponse(
-                $this->_api->$update_method($query, $data, $input_format),
-                200,
-                $format
-            );
+            try {
+                if ($this->_api->$update_method($query, $data, $input_format)) {
+                    return $this->_createSuccessResponse(
+                        array('success' => true),
+                        $format
+                    );
+                } else {
+                    return $this->_createErrorResponse(new \ErrorException('Error during update of resource.'), $format);
+                }
+
+
+            } catch (\Exception $error) {
+                return $this->_createErrorResponse($error, $format);
+            }
+
         } else {
             return NULL;
         }
@@ -345,11 +360,20 @@ class Rest
 
             $update_method = 'update'.$model_name.'s';
 
-            return $this->_createResponse(
-                $this->_api->$update_method($query, $data, $input_format),
-                200,
-                $format
-            );
+            try {
+                $result = $this->_api->$update_method($query, $data, $input_format);
+
+                if ($result) {
+                    return $this->_createSuccessResponse(
+                        array('success' => true),
+                        $format
+                    );
+                } else {
+                    return $this->_createErrorResponse(new \ErrorException('Error during update of resources.'), $format);
+                }
+            } catch (\Exception $error) {
+                return $this->_createErrorResponse($error, $format);
+            }
         } else {
             return NULL;
         }
@@ -368,12 +392,17 @@ class Rest
 
             $load_method = 'load'.$model_name;
 
-            return $this->_createResponse(
-                $this->_api->$load_method($query, $format),
-                200,
-                $format,
-                FALSE
-            );
+            try {
+                $result = $this->_api->$load_method($query, $format);
+
+                if ($result) {
+                    return $this->_createSuccessResponse($result, $format, FALSE);
+                } else {
+                    return $this->_createErrorResponse(new \ErrorException('Error during load of resource.'), $format);
+                }
+            } catch (\Exception $error) {
+                return $this->_createErrorResponse($error, $format);
+            }
         } else {
             return NULL;
         }
@@ -388,12 +417,17 @@ class Rest
 
             $load_method = 'load'.$model_name.'s';
 
-            return $this->_createResponse(
-                $this->_api->$load_method($query, $format),
-                200,
-                $format,
-                FALSE
-            );
+            try {
+                $result = $this->_api->$load_method($query, $format);
+
+                if ($result) {
+                    return $this->_createSuccessResponse($result, $format, FALSE);
+                } else {
+                    return $this->_createErrorResponse(new \ErrorException('Error during load of resources.'), $format);
+                }
+            } catch (\Exception $error) {
+                return $this->_createErrorResponse($error, $format);
+            }
         } else {
             return NULL;
         }
@@ -416,11 +450,17 @@ class Rest
 
             $delete_method = 'delete'.$model_name;
 
-            return $this->_createResponse(
-                $this->_api->$delete_method($query, $data, $input_format),
-                200,
-                $format
-            );
+            try {
+                $result = $this->_api->$delete_method($query, $data, $input_format);
+
+                if ($result) {
+                    return $this->_createSuccessResponse(array('success' => true), $format);
+                } else {
+                    return $this->_createErrorResponse(new \ErrorException('Error during delete of resource.'), $format);
+                }
+            } catch (\Exception $error) {
+                return $this->_createErrorResponse($error, $format);
+            }
         } else {
             return NULL;
         }
@@ -439,11 +479,17 @@ class Rest
 
             $delete_method = 'delete'.$model_name.'s';
 
-            return $this->_createResponse(
-                $this->_api->$delete_method($query, $data, $input_format),
-                200,
-                $format
-            );
+            try {
+                $result = $this->_api->$delete_method($query, $data, $input_format);
+
+                if ($result) {
+                    return $this->_createSuccessResponse(array('success' => true), $format);
+                } else {
+                    return $this->_createErrorResponse(new \ErrorException('Error during delete of resources.'), $format);
+                }
+            } catch (\Exception $error) {
+                return $this->_createErrorResponse($error, $format);
+            }
         } else {
             return NULL;
         }
@@ -462,6 +508,33 @@ class Rest
             $data,
             $status,
             array('Content-Type'=>$this->getMimeTypeFromFormat($format, $this->config['default_mime_type']))
+        );
+    }
+
+    protected function _createSuccessResponse($data, $format, $encode_data = TRUE)
+    {
+        return $this->_createResponse($data, 200, $format, $encode_data);
+    }
+
+    protected function _createErrorResponse(\Exception $error, $format, $encode_data = TRUE)
+    {
+        $arr = array(
+            'error' => array(
+                'message' => $error->getMessage(),
+                'code' => $error->getCode(),
+            )
+        );
+
+        if ($this->_api->config['debug']) {
+            $arr['error']['file'] = $error->getFile();
+            $arr['error']['line'] = $error->getLine();
+            $arr['error']['trace'] = $error->getTraceAsString();
+        }
+
+        return $this->_createResponse(
+            $arr,
+            $format,
+            $encode_data
         );
     }
 }
