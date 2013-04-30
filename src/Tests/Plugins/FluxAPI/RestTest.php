@@ -18,7 +18,7 @@ class RestTest extends FluxApi_Database_TestCase
 
         $client = $this->createClient();
 
-        $data = array('title'=>'Node','body'=>'Body for Node','active'=>false,'id' => 1);
+        $data = array('title'=>'Node','body'=>'Body for Node','active'=>false);
         $data_json = json_encode($data);
 
         // first save the node
@@ -27,10 +27,11 @@ class RestTest extends FluxApi_Database_TestCase
         $this->assertTrue($client->getResponse()->isOk());
 
         // now load it
-        $client->request('GET','/node/1'); // TODO: this test fails, as we do not have numeric id's use a filter instead
+        $client->request('GET','/node?title=Node');
 
         $this->assertTrue($client->getResponse()->isOk());
         $response_data = $this->removeDateTimesFromJson($client->getResponse()->getContent());
+        $response_data = $this->removeIdsFromJson($response_data);
         $this->assertJsonStringEqualsJsonString($data_json, $response_data);
 
         // now load all nodes at once
@@ -39,6 +40,7 @@ class RestTest extends FluxApi_Database_TestCase
 
         $this->assertTrue($client->getResponse()->isOk());
         $response_data = $this->removeDateTimesFromJson($client->getResponse()->getContent());
+        $response_data = $this->removeIdsFromJson($response_data);
         $this->assertJsonStringEqualsJsonString($data_all_json, $response_data);
     }
 
@@ -62,10 +64,11 @@ class RestTest extends FluxApi_Database_TestCase
         $this->assertTrue($client->getResponse()->isOk());
 
         // now load it
-        $client->request('GET','/node/1.json');
+        $client->request('GET','/node.json?title=Node%20title');
 
         $this->assertTrue($client->getResponse()->isOk());
         $response_data = $this->removeDateTimesFromJson($client->getResponse()->getContent());
+        $response_data = $this->removeIdsFromJson($response_data);
         $this->assertJsonStringEqualsJsonString($data_json, $response_data);
 
         // now load all nodes at once
@@ -74,6 +77,7 @@ class RestTest extends FluxApi_Database_TestCase
 
         $this->assertTrue($client->getResponse()->isOk());
         $response_data = $this->removeDateTimesFromJson($client->getResponse()->getContent());
+        $response_data = $this->removeIdsFromJson($response_data);
         $this->assertJsonStringEqualsJsonString($data_all_json, $response_data);
     }
 
@@ -97,11 +101,11 @@ class RestTest extends FluxApi_Database_TestCase
         $this->assertTrue($client->getResponse()->isOk());
 
         // now load it
-        $client->request('GET','/node/1.xml');
+        $client->request('GET','/node.xml?title=Node%20title');
 
         $this->assertTrue($client->getResponse()->isOk());
         $response_data = $this->removeDateTimesFromXml($client->getResponse()->getContent());
-
+        $response_data = $this->removeIdsFromXml($response_data);
         $this->assertXmlStringEqualsXmlString($data_xml, $response_data);
 
         $data_all_xml = str_replace('<?xml version="1.0"?>','<?xml version="1.0"?><Nodes>',$data_xml).'</Nodes>';
@@ -111,6 +115,7 @@ class RestTest extends FluxApi_Database_TestCase
 
         $this->assertTrue($client->getResponse()->isOk());
         $response_data = $this->removeDateTimesFromXml($client->getResponse()->getContent());
+        $response_data = $this->removeIdsFromXml($response_data);
         $this->assertXmlStringEqualsXmlString($data_all_xml, $response_data);
     }
 
@@ -134,11 +139,11 @@ class RestTest extends FluxApi_Database_TestCase
         $this->assertTrue($client->getResponse()->isOk());
 
         // now load it
-        $client->request('GET','/node/1.yaml');
+        $client->request('GET','/node.yaml?title=Node%20title');
 
         $this->assertTrue($client->getResponse()->isOk());
         $response_data = $this->removeDateTimesFromYaml($client->getResponse()->getContent(),0);
-
+        $response_data = $this->removeIdsFromYaml($response_data);
         $this->assertEquals($data_yaml, $response_data);
 
         $data_yaml_lines = explode("\n",$data_yaml);
@@ -150,6 +155,7 @@ class RestTest extends FluxApi_Database_TestCase
 
         $this->assertTrue($client->getResponse()->isOk());
         $response_data = $this->removeDateTimesFromYaml($client->getResponse()->getContent());
+        $response_data = $this->removeIdsFromYaml($response_data, 4);
         $this->assertEquals($data_all_yaml, $response_data);
     }
 
@@ -159,7 +165,7 @@ class RestTest extends FluxApi_Database_TestCase
 
         $client = $this->createClient();
 
-        $data = array('title'=>'Node','body'=>'Body for Node','active'=>false,'id' => 1);
+        $data = array('title'=>'Node','body'=>'Body for Node','active'=>false);
         $data_json = json_encode($data);
 
         // first save the node
@@ -168,14 +174,15 @@ class RestTest extends FluxApi_Database_TestCase
         $this->assertTrue($client->getResponse()->isOk());
 
         // now load it
-        $client->request('GET','/node/1');
+        $client->request('GET','/node?title=Node');
 
         $this->assertTrue($client->getResponse()->isOk());
         $response_data = $this->removeDateTimesFromJson($client->getResponse()->getContent());
+        $response_data = $this->removeIdsFromJson($response_data);
         $this->assertJsonStringEqualsJsonString($data_json, $response_data);
 
         // now delete it
-        $client->request('DELETE','/node/1');
+        $client->request('DELETE','/node?title=Node');
         $this->assertTrue($client->getResponse()->isOk());
 
         // now load all nodes, we should get an empty array back
@@ -183,6 +190,7 @@ class RestTest extends FluxApi_Database_TestCase
 
         $this->assertTrue($client->getResponse()->isOk());
         $response_data = $this->removeDateTimesFromJson($client->getResponse()->getContent());
+        $response_data = $this->removeIdsFromJson($response_data);
         $this->assertJsonStringEqualsJsonString(json_encode(array()), $response_data);
     }
 
@@ -192,7 +200,7 @@ class RestTest extends FluxApi_Database_TestCase
 
         $client = $this->createClient();
 
-        $data = array('title'=>'Node','body'=>'Body for Node','active'=>false,'id' => 1);
+        $data = array('title'=>'Node','body'=>'Body for Node','active'=>false);
 
         // first save the node
         $client->request('POST','/node',$data);
@@ -203,15 +211,16 @@ class RestTest extends FluxApi_Database_TestCase
         $data['title'] = 'Node updated';
         $data_json = json_encode($data);
 
-        $client->request('POST','/node/1',$data);
+        $client->request('POST','/node?title=Node',$data);
 
         $this->assertTrue($client->getResponse()->isOk());
 
         // now load it
-        $client->request('GET','/node/1');
+        $client->request('GET','/node?title=Node%20updated');
 
         $this->assertTrue($client->getResponse()->isOk());
         $response_data = $this->removeDateTimesFromJson($client->getResponse()->getContent());
+        $response_data = $this->removeIdsFromJson($response_data);
         $this->assertJsonStringEqualsJsonString($data_json, $response_data);
     }
 
@@ -224,7 +233,7 @@ class RestTest extends FluxApi_Database_TestCase
 
         // first create a bunch of nodes
         for($i = 1; $i <= 10; $i++) {
-            $data = array('title'=>'Node '.$i,'body'=>'Body for Node '.$i, 'active'=>false,'id'=>$i);
+            $data = array('title'=>'Node '.$i,'body'=>'Body for Node '.$i, 'active'=>false);
             $data_all[] = $data;
             $node = self::$fluxApi->createNode($data);
 
@@ -232,17 +241,19 @@ class RestTest extends FluxApi_Database_TestCase
         }
 
         // now load them with various filters
-        $client->request('GET','/node?id=2'); // simple ID filter shortcut
+        $client->request('GET','/node?title=Node%202'); // simple title filter shortcut
 
         $this->assertTrue($client->getResponse()->isOk());
         $data_json = json_encode($data_all[1]);
         $response_data = $this->removeDateTimesFromJson($client->getResponse()->getContent());
+        $response_data = $this->removeIdsFromJson($response_data);
         $this->assertJsonStringEqualsJsonString($data_json,$response_data);
 
-        $client->request('GET','/nodes?@gte=id,2&@lte=id,5&@order=id,DESC'); // get all with an ID from 2 to 4 order by id descending
+        $client->request('GET','/nodes?@gte=title,Node%202&@lte=title,Node%205&@order=title,DESC'); // get all with an title from 2 to 4 order by id descending
         $data_json = json_encode(array($data_all[4],$data_all[3],$data_all[2],$data_all[1]));
         $this->assertTrue($client->getResponse()->isOk());
         $response_data = $this->removeDateTimesFromJson($client->getResponse()->getContent());
+        $response_data = $this->removeIdsFromJson($response_data);
         $this->assertJsonStringEqualsJsonString($data_json,$response_data);
     }
 
