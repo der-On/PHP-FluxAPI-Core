@@ -225,7 +225,7 @@ class PluginFactory
                     unlink($file);
                     $this->unregisterExtend('Model',$model_name);
                 } else {
-                    // TODO: throw exception
+                    throw new \RuntimeException(sprintf('Extends file %s does not exists.', $file));
                 }
             } else {
                 $config = json_decode(file_get_contents($file),TRUE);
@@ -258,11 +258,11 @@ class PluginFactory
 
                     $this->_api->migrate($model_name);
                 } else {
-                    // TODO: throw exception
+                    throw new \RuntimeException(sprintf('Unable to parse extends file %s', $file));
                 }
             }
         } else {
-            // TODO: throw exception
+            throw new \RuntimeException(sprintf('Extends directory %s does not exist.', $extend_dir));
         }
     }
 
@@ -283,7 +283,7 @@ class PluginFactory
 
             // create models directory if not existing
             if (!mkdir($extend_dir,0755,TRUE)) {
-                // TODO: throw an exception
+                throw new \RuntimeException(sprintf('Unable to create extends directory %s', $extend_dir));
             }
         }
 
@@ -325,7 +325,7 @@ class PluginFactory
             $this->_api->migrate($model_name);
 
         } else {
-            // TODO: throw an exception
+            throw new \RuntimeException(sprintf('Unable to parse extends file %s', $file));
         }
     }
 
