@@ -21,6 +21,9 @@ class Api extends \Pimple
     const EARLY_EVENT = -512;
     const LATE_EVENT = 512;
 
+    const PERMISSION_ALLOW = 'allow';
+    const PERMISSION_DENY = 'deny';
+
     /**
      * @var \Silex\Application The silex app
      */
@@ -60,6 +63,12 @@ class Api extends \Pimple
                     'port' => 3306,
                     'socket' => NULL,
                     'debug_sql' => FALSE,
+                ),
+                'plugin.options' => array(
+                    'disabled' => array()
+                ),
+                'permission.options' => array(
+                    'default' => self::PERMISSION_ALLOW
                 )
             ),
             $config

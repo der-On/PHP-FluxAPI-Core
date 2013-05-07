@@ -6,5 +6,8 @@
     "password": "password",
     "database": "flux-api-testing",
     "debug_sql": true
+  },
+  "permission.options": {
+    "default": "allow"
   }
 }

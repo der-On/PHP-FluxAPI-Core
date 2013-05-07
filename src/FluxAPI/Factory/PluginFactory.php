@@ -44,13 +44,33 @@ class PluginFactory
         $allowed_plugin_types = array_keys($this->_plugins);
 
         foreach($plugins  as $plugin) {
+            if (in_array($plugin, array('.', '..'))) {
+                continue;
+            }
+
             $plugin_base_path = $this->_api->config['plugins_path'].'/'.$plugin;
+
+            // skip disabled root plugins
+            if (in_array($plugin, $this->_api->config['plugin.options']['disabled'])) {
+                continue;
+            }
 
             if (is_dir($plugin_base_path)) {
 
                 $plugin_dirs = scandir($plugin_base_path);
 
                 foreach($plugin_dirs as $plugin_type) {
+                    if (in_array($plugin_type, array('.', '..'))) {
+                        continue;
+                    }
+
+                    $plugin_rel_path = $plugin . '/' . $plugin_type;
+
+                    // skip disabled plugin types for this plugin root
+                    if (in_array($plugin_rel_path, $this->_api->config['plugin.options']['disabled'])) {
+                        continue;
+                    }
+
                     $plugin_dir_path = $plugin_base_path.'/'.$plugin_type;
 
                     // directories
@@ -59,6 +79,17 @@ class PluginFactory
                         $plugin_files = scandir($plugin_dir_path);
 
                         foreach($plugin_files as $plugin_file) {
+                            if (in_array($plugin_file, array('.', '..'))) {
+                                continue;
+                            }
+
+                            $plugin_file_rel_path = $plugin_rel_path . '/' . str_replace('.php','', $plugin_file);
+
+                            // skip disabled plugin files
+                            if (in_array($plugin_file_rel_path, $this->_api->config['plugin.options']['disabled'])) {
+                                continue;
+                            }
+
                             $plugin_file_path = $plugin_dir_path.'/'.$plugin_file;
 
                             if (is_file($plugin_file_path) && substr($plugin_file,-strlen('.php')) == '.php') {

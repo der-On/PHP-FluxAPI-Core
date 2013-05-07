@@ -6,5 +6,8 @@
     "user": "user",
     "password": "password",
     "database": "flux-api"
+  },
+  "permission.options": {
+    "default": "allow"
   }
 }
