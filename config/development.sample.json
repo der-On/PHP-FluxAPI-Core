@@ -9,5 +9,8 @@
   },
   "permission.options": {
     "default": "allow"
+  },
+  "plugin.options": {
+    "disabled": []
   }
 }
