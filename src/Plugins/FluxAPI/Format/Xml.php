@@ -45,7 +45,7 @@ class Xml extends \FluxAPI\Format
 
     public static function encode($data, array $options = NULL)
     {
-        $root = (!empty($options) && isset($options['root']))?$options['root']:NULL;
+        $root = (!empty($options) && isset($options['root']))?$options['root']:'data';
 
         if ((is_object($data) || is_array($data))) {
             self::$_api->app['serializer.encoders'][1]->setRootNodeName($root);

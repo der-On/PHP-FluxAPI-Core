@@ -143,7 +143,7 @@ class RestTest extends FluxApi_Database_TestCase
 
         $this->assertTrue($client->getResponse()->isOk());
         $response_data = $this->removeDateTimesFromYaml($client->getResponse()->getContent(),0);
-        $response_data = $this->removeIdsFromYaml($response_data);
+        $response_data = $this->removeIdsFromYaml($response_data, 0);
         $this->assertEquals($data_yaml, $response_data);
 
         $data_yaml_lines = explode("\n",$data_yaml);

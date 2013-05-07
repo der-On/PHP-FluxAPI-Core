@@ -423,7 +423,7 @@ class MySql extends \FluxAPI\Storage
             $result = $qb->execute();
 
             if (!is_object($result)) {
-                return (intval($result) == 1)?FALSE:TRUE;
+                return (intval($result) > 0) ? TRUE : FALSE;
             }
             $result = $result->fetchAll();
 

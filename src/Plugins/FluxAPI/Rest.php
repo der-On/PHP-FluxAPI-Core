@@ -297,7 +297,7 @@ class Rest
 
             try {
                 if ($this->_api->$save_method($model)) {
-                    return $this->_createSuccessResponse($model->toArray(), $format);
+                    return $this->_createModelSuccessResponse($model, $model_name, $format);
                 } else {
                     return $this->_createErrorResponse(new \ErrorException('Error during creation of resource.'), $format);
                 }
@@ -361,9 +361,7 @@ class Rest
             $update_method = 'update'.$model_name.'s';
 
             try {
-                $result = $this->_api->$update_method($query, $data, $input_format);
-
-                if ($result) {
+                if ($this->_api->$update_method($query, $data, $input_format)) {
                     return $this->_createSuccessResponse(
                         array('success' => true),
                         $format
@@ -396,7 +394,7 @@ class Rest
                 $result = $this->_api->$load_method($query, $format);
 
                 if ($result) {
-                    return $this->_createSuccessResponse($result, $format, FALSE);
+                    return $this->_createModelSuccessResponse($result, $model_name, $format, FALSE);
                 } else {
                     return $this->_createErrorResponse(new \ErrorException('Error during load of resource.'), $format);
                 }
@@ -421,7 +419,7 @@ class Rest
                 $result = $this->_api->$load_method($query, $format);
 
                 if ($result) {
-                    return $this->_createSuccessResponse($result, $format, FALSE);
+                    return $this->_createModelSuccessResponse($result, $model_name, $format, FALSE);
                 } else {
                     return $this->_createErrorResponse(new \ErrorException('Error during load of resources.'), $format);
                 }
@@ -511,6 +509,31 @@ class Rest
         );
     }
 
+    protected function _createModelSuccessResponse($data, $model_name, $format, $encode_data = TRUE)
+    {
+        $formats = $this->_api['plugins']->getPlugins('Format');
+
+        // model collection
+        if (is_array($data)) {
+            $model_name .= 's';
+        }
+        // single model
+        elseif (is_object($data)) {
+            $data = $data->toArray();
+        }
+
+        if ($encode_data && isset($formats[ucfirst($format)])) {
+            $format_class = $formats[ucfirst($format)];
+            $data = $format_class::encode($data, array('root' => $model_name));
+        }
+
+        return new Response(
+            $data,
+            200,
+            array('Content-Type'=>$this->getMimeTypeFromFormat($format, $this->config['default_mime_type']))
+        );
+    }
+
     protected function _createSuccessResponse($data, $format, $encode_data = TRUE)
     {
         return $this->_createResponse($data, 200, $format, $encode_data);
@@ -533,6 +556,7 @@ class Rest
 
         return $this->_createResponse(
             $arr,
+            500,
             $format,
             $encode_data
         );
