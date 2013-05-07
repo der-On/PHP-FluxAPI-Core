@@ -3,6 +3,7 @@
 namespace FluxAPI\Factory;
 
 use \FluxAPI\Event\ModelEvent;
+use \FluxAPI\Exception\AccessDeniedException;
 
 class ModelFactory extends \Pimple
 {
@@ -24,6 +25,12 @@ class ModelFactory extends \Pimple
      */
     public function create($model_name, $data = NULL, $format = NULL, $isNew = TRUE)
     {
+        // skip if user has no access
+        if (!$this->_api['permissions']->hasModelAccess($model_name, null, \FluxAPI\Api::MODEL_CREATE)) {
+            throw new AccessDeniedException(sprintf('You are not allowed to create a %s model.', $model_name));
+            return null;
+        }
+
         $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_CREATE, new ModelEvent($model_name));
 
         $models = $this->_api['plugins']->getPlugins('Model');
@@ -106,6 +113,12 @@ class ModelFactory extends \Pimple
      */
     public function load($model_name, \FluxAPI\Query $query = NULL, $format = NULL)
     {
+        // skip if user has no access
+        if (!$this->_api['permissions']->hasModelAccess($model_name, null, \FluxAPI\Api::MODEL_LOAD)) {
+            throw new AccessDeniedException(sprintf('You are not allowed to load %s models.', $model_name));
+            return null;
+        }
+
         $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_LOAD, new ModelEvent($model_name, $query));
 
         $models = $this->_api['plugins']->getPlugins('Model');
@@ -125,6 +138,12 @@ class ModelFactory extends \Pimple
 
     public function loadFirst($model_name, \FluxAPI\Query $query = NULL, $format = NULL)
     {
+        // skip if user has no access
+        if (!$this->_api['permissions']->hasModelAccess($model_name, null, \FluxAPI\Api::MODEL_LOAD)) {
+            throw new AccessDeniedException(sprintf('You are not allowed to load a %s model.', $model_name));
+            return null;
+        }
+
         $query->filter('limit',array(0,1));
         $models = $this->load($model_name, $query);
 
@@ -144,14 +163,25 @@ class ModelFactory extends \Pimple
      */
     public function save($model_name, $instances)
     {
+        // skip if user has no access
+        if (!$this->_api['permissions']->hasModelAccess($model_name, null, \FluxAPI\Api::MODEL_SAVE)) {
+            throw new AccessDeniedException(sprintf('You are not allowed to save %s models.', $model_name));
+            return null;
+        }
+
         if (is_array($instances)) {
             foreach($instances as $instance) {
+                // skip if user has no access
+                if (!$this->_api['permissions']->hasModelAccess($model_name, $instance, \FluxAPI\Api::MODEL_CREATE)) {
+                    throw new AccessDeniedException(sprintf('You are not allowed to save the %s model with the id %s.', $model_name, $instance->id));
+                    return null;
+                }
+
                 $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_SAVE, new ModelEvent($model_name, NULL, $instance));
             }
         } else {
             $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_SAVE, new ModelEvent($model_name, NULL, $instances));
         }
-
 
         $models = $this->_api['plugins']->getPlugins('Model');
 
@@ -189,6 +219,12 @@ class ModelFactory extends \Pimple
      */
     public function update($model_name, \FluxAPI\Query $query, $data, $format = NULL)
     {
+        // skip if user has no access
+        if (!$this->_api['permissions']->hasModelAccess($model_name, null, \FluxAPI\Api::MODEL_UPDATE)) {
+            throw new AccessDeniedException(sprintf('You are not allowed to update %s models.', $model_name));
+            return null;
+        }
+
         $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_UPDATE, new ModelEvent($model_name, $query));
 
         $storage = $this->_api['storages']->get($model_name);
@@ -207,6 +243,12 @@ class ModelFactory extends \Pimple
      */
     public function delete($model_name, \FluxAPI\Query $query = NULL)
     {
+        // skip if user has no access
+        if (!$this->_api['permissions']->hasModelAccess($model_name, null, \FluxAPI\Api::MODEL_DELETE)) {
+            throw new AccessDeniedException(sprintf('You are not allowed to delete %s models.', $model_name));
+            return null;
+        }
+
         $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_DELETE, new ModelEvent($model_name, $query));
 
         $models = $this->_api['plugins']->getPlugins('Model');

@@ -24,6 +24,12 @@ class Api extends \Pimple
     const PERMISSION_ALLOW = 'allow';
     const PERMISSION_DENY = 'deny';
 
+    const MODEL_LOAD = 'load';
+    const MODEL_UPDATE = 'update';
+    const MODEL_DELETE = 'delete';
+    const MODEL_CREATE = 'create';
+    const MODEL_SAVE = 'save';
+
     /**
      * @var \Silex\Application The silex app
      */

@@ -14,11 +14,11 @@ abstract class Permission
 
     public function hasModelAccess($model_name, \FluxAPI\Model $model = NULL, $action = NULL)
     {
-        return TRUE;
+        return $this->_api['permissions']->getDefaultAccess();
     }
 
     public function hasControllerAccess($controller_name, $action = NULL)
     {
-        return TRUE;
+        return $this->_api['permissions']->getDefaultAccess();
     }
 }
