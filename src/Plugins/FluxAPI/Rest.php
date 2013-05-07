@@ -291,7 +291,12 @@ class Rest
             $data = $this->getRequestData($request, $input_format);
 
             $create_method = 'create'.$model_name;
-            $model = $this->_api->$create_method($data, $input_format);
+
+            try {
+                $model = $this->_api->$create_method($data, $input_format);
+            } catch (\Exception $error) {
+                return $this->_createErrorResponse($error, $format);
+            }
 
             $save_method = 'save'.$model_name;
 
