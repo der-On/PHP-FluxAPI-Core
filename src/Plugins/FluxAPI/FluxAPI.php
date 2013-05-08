@@ -7,6 +7,11 @@ class FluxAPI extends \FluxAPI\Plugin
 {
     public static function register(\FluxAPI\Api $api)
     {
+        // do not enable REST when it's disabled in plugin.options
+        if (in_array('FluxAPI/Rest',$api->config['plugin.options']['disabled'])) {
+            return;
+        }
+
         // create RESTfull webservice
         $rest = new Rest($api);
 
