@@ -12,4 +12,5 @@ web/bundles/*
 composer.lock
 
 # Test reports
-src/Tests/reports/
+Tests/FluxAPI/reports/
+Tests/FluxAPI/_extends

@@ -57,8 +57,8 @@ abstract class FluxApi_TestCase extends PHPUnit_Framework_TestCase
 
     protected function getConfig()
     {
-        $config = json_decode(file_get_contents(__DIR__ . '/../../../config/testing.json'),TRUE);
-        $config['extends_path'] = realpath(__DIR__ . '/../../../' . $config['extends_path']);
+        $config = json_decode(file_get_contents(__DIR__ . '/../../../../config/testing.json'),TRUE);
+        $config['extends_path'] = realpath(__DIR__ . '/../../../../' . $config['extends_path']);
         return $config;
     }
 }

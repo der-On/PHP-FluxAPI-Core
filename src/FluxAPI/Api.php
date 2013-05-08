@@ -55,28 +55,7 @@ class Api extends \Pimple
 
         // overwrite default config with given config
         $this->config = array_replace_recursive(
-            array(
-                'plugins_path' => realpath(__DIR__ . '/../../src/Plugins'),
-                'extends_path' => realpath(__DIR__ . '/../../extends'),
-                'base_route' => '/',
-                'storage.plugin' => 'MySql',
-                'storage.options' => array(
-                    'host' => 'localhost',
-                    'user' => 'username',
-                    'password' => 'password',
-                    'database' => 'database',
-                    'table_prefix' => '',
-                    'port' => 3306,
-                    'socket' => NULL,
-                    'debug_sql' => FALSE,
-                ),
-                'plugin.options' => array(
-                    'disabled' => array()
-                ),
-                'permission.options' => array(
-                    'default' => self::PERMISSION_ALLOW
-                )
-            ),
+            $this->getDefaultConfig(),
             $config
         );
 
@@ -150,6 +129,32 @@ class Api extends \Pimple
         $this['plugins']->registerExtends();
     }
 
+
+    public function getDefaultConfig()
+    {
+        return array(
+            'plugins_path' => realpath(__DIR__ . '/../../../../Plugins'),
+            'extends_path' => realpath(__DIR__ . '/../../../../extends'),
+            'base_route' => '/',
+            'storage.plugin' => 'MySql',
+            'storage.options' => array(
+                'host' => 'localhost',
+                'user' => 'username',
+                'password' => 'password',
+                'database' => 'database',
+                'table_prefix' => '',
+                'port' => 3306,
+                'socket' => NULL,
+                'debug_sql' => FALSE,
+            ),
+            'plugin.options' => array(
+                'disabled' => array()
+            ),
+            'permission.options' => array(
+                'default' => self::PERMISSION_ALLOW
+            )
+        );
+    }
     /**
      * Calls the magic methods
      *
