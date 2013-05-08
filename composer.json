@@ -1,5 +1,7 @@
 {
   "name": "flux-api",
+  "description": "Dynamic RESTfull API",
+  "version": "0.1",
   "license": "GPL",
   "require": {
     "php": ">=5.3.3",
@@ -12,7 +14,10 @@
     "symfony/browser-kit": ">=2.2.1"
   },
   "autoload": {
-    "psr-0": { "": "src/" }
+    "psr-0": { "FluxAPI": "src" }
   },
+  "bin": [
+    "bin/make-docs.sh"
+  ],
   "minimum-stability": "dev"
 }

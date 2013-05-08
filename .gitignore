@@ -5,27 +5,11 @@ vendor/*
 web/uploads/*
 web/bundles/*
 
-# Configuration files
-app/config/parameters.ini
-app/config/parameters.yml
-config/*
-
 # IDE files
 .idea
 
 # Composer
 composer.lock
 
-# Plugins
-!src/Plugins/
-src/Plugins/*
-!src/Plugins/FluxAPI
-
 # Test reports
 src/Tests/reports/
-
-# PHPDoc config
-phpdoc.dist.xml
-
-# extends
-extends

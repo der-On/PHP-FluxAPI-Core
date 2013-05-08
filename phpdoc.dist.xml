@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+    <title>PHP-FluxAPI</title>
+    <parser>
+        <target>Docs</target>
+        <markers>
+            <item>TODO</item>
+            <item>FIXME</item>
+        </markers>
+    </parser>
+    <transformer>
+        <target>Docs</target>
+    </transformer>
+    <files>
+        <directory>src/FluxAPI</directory>
+    </files>
+</phpdoc>
