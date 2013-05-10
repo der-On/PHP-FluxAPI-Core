@@ -67,6 +67,12 @@ class ControllerFactory
         if ($controller) {
             if ($controller::hasAction($action)) {
                 $instance = $this->getController($controller_name);
+
+                // params are an assoc array, convert them to an indexed array
+                if (count(array_keys($params)) > 0) {
+                    $params = $this->_getIndexedParams($params, $controller, $action);
+                }
+
                 return call_user_func_array(array($instance, $action), $params);
             }
         } else {
@@ -103,4 +109,21 @@ class ControllerFactory
 
         return array();
     }
+
+    protected function _getIndexedParams(array $params, $controller, $action)
+    {
+        $_params = array();
+
+        $reflection = new \ReflectionMethod($controller, $action);
+        $names = $reflection->getParameters();
+
+        foreach($names as $param) {
+            if (isset($params[$param->name])) {
+                $_params[] = $params[$param->name];
+            }
+        }
+
+        return $_params;
+    }
+
 }

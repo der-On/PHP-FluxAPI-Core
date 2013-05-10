@@ -13,6 +13,11 @@ abstract class Controller implements ControllerInterface
         $this->_api = $api;
     }
 
+    public static function getActions()
+    {
+        return array();
+    }
+
     /**
      * Checks for the existance of an action in this controller.
      *
@@ -21,7 +26,8 @@ abstract class Controller implements ControllerInterface
      */
     public static function hasAction($action)
     {
-        return (in_array($action, self::getActions()));
+        $class = get_called_class();
+        return (in_array($action, $class::getActions()));
     }
 
 }
