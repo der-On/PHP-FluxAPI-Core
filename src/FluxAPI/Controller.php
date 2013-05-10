@@ -4,7 +4,7 @@ namespace FluxAPI;
 
 use Plugins\FluxAPI\FluxAPI;
 
-class Controller implements ControllerInterface
+abstract class Controller implements ControllerInterface
 {
     protected $_api;
 
