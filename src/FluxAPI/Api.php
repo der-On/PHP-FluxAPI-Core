@@ -133,8 +133,8 @@ class Api extends \Pimple
     public function getDefaultConfig()
     {
         return array(
-            'plugins_path' => realpath(__DIR__ . '/../../../../Plugins'),
-            'extends_path' => realpath(__DIR__ . '/../../../../extends'),
+            'plugins_path' => realpath(__DIR__ . '/../../../../../Plugins'),
+            'extends_path' => realpath(__DIR__ . '/../../../../../extends'),
             'base_route' => '/',
             'storage.plugin' => 'MySql',
             'storage.options' => array(
@@ -179,6 +179,10 @@ class Api extends \Pimple
             case 'Model':
                 $this->registerModelMethods($name);
                 break;
+
+            case 'Controller':
+                $this->registerControllerMethods($name);
+                break;
         }
     }
 
@@ -193,6 +197,10 @@ class Api extends \Pimple
         switch (ucfirst($type)) {
             case 'Model':
                 $this->unregisterModelMethods($name);
+                break;
+
+            case 'Controller':
+                $this->unregisterControllerMethods($name);
                 break;
         }
     }
@@ -326,6 +334,27 @@ class Api extends \Pimple
             ->unregisterMethod('delete'.$model_name.'s')
             ->unregisterMethod('extend'.$model_name)
             ->unregisterMethod('reduce'.$model_name);
+    }
+
+    public function registerControllerMethods($controller_name)
+    {
+        $self = $this;
+        $actions = $this['controllers']->getActions($controller_name);
+
+        // create methods in the form of ->controllerName_actionName()
+        foreach($actions as $action) {
+            $this['methods']->registerMethod(
+                lcfirst($controller_name) . '_' . lcfirst($action),
+                function() use ($controller_name, $action, $self) {
+                    return $self['controllers']->call($controller_name, $action, func_get_args());
+                }
+            );
+        }
+    }
+
+    public function unregisterControllerMethods($controller_name)
+    {
+
     }
 
     public function extendModel($model_name, array $fields, $format = self::DATA_FORMAT_ARRAY)

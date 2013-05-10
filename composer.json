@@ -1,5 +1,5 @@
 {
-  "name": "flux-api",
+  "name": "flux-api/core",
   "description": "Dynamic RESTfull API",
   "version": "0.1",
   "license": "GPL",
