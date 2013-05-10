@@ -23,7 +23,7 @@ class ControllerFactory
             return NULL;
         }
 
-        return $this->_api['plugins']->getPlugin('Controller', $controller_name);
+        return $this->_api['plugins']->getPluginClass('Controller', $controller_name);
     }
 
     public function getController($controller_name)
@@ -94,9 +94,11 @@ class ControllerFactory
 
             return $actions;
         } else {
-            $controller = $this->_api['plugins']->getPlugins('Controller', $controller_name);
+            $controller = $this->_api['plugins']->getPluginClass('Controller', $controller_name);
 
-            return $controller::getActions();
+            if ($controller) {
+                return $controller::getActions();
+            }
         }
 
         return array();
