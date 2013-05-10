@@ -314,6 +314,11 @@ class Api extends \Pimple
         $this['methods']->registerMethod('reduce'.$model_name, function($fields = NULL, $format = self::DATA_FORMAT_ARRAY) use ($model_name, $self) {
             return $self['plugins']->reduceModel($model_name, $fields, $format);
         });
+
+        // count models
+        $this['methods']->registerMethod('count' . $model_name . 's', function(Query $query = NULL) use ($model_name, $self) {
+           return $self['models']->count($model_name, $query);
+        });
     }
 
     /**
@@ -333,7 +338,9 @@ class Api extends \Pimple
             ->unregisterMethod('delete'.$model_name)
             ->unregisterMethod('delete'.$model_name.'s')
             ->unregisterMethod('extend'.$model_name)
-            ->unregisterMethod('reduce'.$model_name);
+            ->unregisterMethod('reduce'.$model_name)
+            ->unregisterMethod('count'.$model_name.'s')
+            ;
     }
 
     public function registerControllerMethods($controller_name)

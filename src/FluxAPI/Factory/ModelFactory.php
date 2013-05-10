@@ -262,4 +262,18 @@ class ModelFactory extends \Pimple
 
         return FALSE;
     }
+
+    /**
+     * Counts the number of all model instances or the ones matching a query.
+     *
+     * @param string $model_name
+     * @param [\FluxAPI\Query $query] - if not given the count for all instances will be returned
+     * @return int
+     */
+    public function count($model_name, \FluxAPI\Query $query = NULL)
+    {
+        $storage = $this->_api['storeages']->get($model_name);
+        $return = $storage->count($model_name, $query);
+        return $return || 0;
+    }
 }

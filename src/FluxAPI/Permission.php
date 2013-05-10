@@ -3,7 +3,7 @@
 namespace FluxAPI;
 
 
-abstract class Permission
+abstract class Permission implements PermissionInterface
 {
     protected $_api;
 
