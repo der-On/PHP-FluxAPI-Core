@@ -14,7 +14,7 @@
     "symfony/browser-kit": ">=2.2.1"
   },
   "autoload": {
-    "psr-0": { "FluxAPI": "core/src" }
+    "psr-0": { "FluxAPI": "src" }
   },
   "bin": [
     "bin/make-docs.sh"
