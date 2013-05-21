@@ -115,12 +115,18 @@ class ModelFactory extends \Pimple
             $field_name = $field->name;
 
             foreach($field->getValidators() as $validator_name) {
+                if (is_array($validator_name)) {
+                    $validator_options = $validator_name[1];
+                    $validator_name = $validator_name[0];
+                } else {
+                    $validator_options = array();
+                }
                 $validator_class = $this->_api['plugins']->getPluginClass('FieldValidator', $validator_name);
 
                 if ($validator_class) {
                     $validator = new $validator_class($this->_api);
 
-                    if (!$validator->validate($model->$field_name, $field, $model)) {
+                    if (!$validator->validate($model->$field_name, $field, $model, $validator_options)) {
                         return FALSE;
                     }
                 }
@@ -217,23 +223,27 @@ class ModelFactory extends \Pimple
                 return FALSE;
             }
 
-            if (!$this->_validate($instance)) {
-                throw new InvalidArgumentException(sprintf('The %s model is invalid.', $model_name));
-                return FALSE;
-            };
-
             $storage = $this->_api['storages']->get($model_name);
 
             if (is_array($instances)) {
                 foreach($instances as &$instance) {
-                    $storage->save($model_name,$instance);
-                    $this->_api['dispatcher']->dispatch(ModelEvent::SAVE, new ModelEvent($model_name, NULL, $instance));
+                    if ($this->_validate($instance)) {
+                        $storage->save($model_name,$instance);
+                        $this->_api['dispatcher']->dispatch(ModelEvent::SAVE, new ModelEvent($model_name, NULL, $instance));
+                    } else {
+                        throw new \InvalidArgumentException(sprintf('The %s model is invalid.', $model_name));
+                    }
                 }
                 return TRUE;
             } else {
-                $return = $storage->save($model_name,$instances);
-                $this->_api['dispatcher']->dispatch(ModelEvent::SAVE, new ModelEvent($model_name, NULL, $instances));
-                return $return;
+                if ($this->_validate($instances)) {
+                    $return = $storage->save($model_name,$instances);
+                    $this->_api['dispatcher']->dispatch(ModelEvent::SAVE, new ModelEvent($model_name, NULL, $instances));
+                    return $return;
+                } else {
+                    throw new \InvalidArgumentException(sprintf('The %s model is invalid.', $model_name));
+                    return FALSE;
+                }
             }
         }
 
