@@ -2,7 +2,7 @@
   "name": "flux-api/core",
   "description": "Dynamic RESTfull API",
   "version": "0.1",
-  "license": "GPL",
+  "license": "GPL-3.0+",
   "require": {
     "php": ">=5.3.3",
     "silex/silex": "1.0.*",
