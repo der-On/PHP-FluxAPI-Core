@@ -104,6 +104,33 @@ class ModelFactory extends \Pimple
     }
 
     /**
+     * Validates a model instance
+     *
+     * @param \FluxAPI\Model $model
+     * @return bool - true if model is valid, else false
+     */
+    protected function _validate(\FluxAPI\Model $model)
+    {
+        foreach($model->getFields() as $field) {
+            $field_name = $field->name;
+
+            foreach($field->getValidators() as $validator_name) {
+                $validator_class = $this->_api['plugins']->getPluginClass('FieldValidator', $validator_name);
+
+                if ($validator_class) {
+                    $validator = new $validator_class($this->_api);
+
+                    if (!$validator->validate($model->$field_name, $field, $model)) {
+                        return FALSE;
+                    }
+                }
+            }
+        }
+
+        return TRUE;
+    }
+
+    /**
      * Loads and returns a list of Model instances
      *
      * @param string $model_name
@@ -174,7 +201,7 @@ class ModelFactory extends \Pimple
                 // skip if user has no access
                 if (!$this->_api['permissions']->hasModelAccess($model_name, $instance, \FluxAPI\Api::MODEL_CREATE)) {
                     throw new AccessDeniedException(sprintf('You are not allowed to save the %s model with the id %s.', $model_name, $instance->id));
-                    return null;
+                    return FALSE;
                 }
 
                 $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_SAVE, new ModelEvent($model_name, NULL, $instance));
@@ -189,6 +216,11 @@ class ModelFactory extends \Pimple
             if (empty($instances)) {
                 return FALSE;
             }
+
+            if (!$this->_validate($instance)) {
+                throw new InvalidArgumentException(sprintf('The %s model is invalid.', $model_name));
+                return FALSE;
+            };
 
             $storage = $this->_api['storages']->get($model_name);
 

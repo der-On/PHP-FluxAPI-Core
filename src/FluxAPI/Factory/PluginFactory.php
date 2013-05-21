@@ -15,6 +15,7 @@ class PluginFactory
         'Storage' => array(),
         'Cache' => array(),
         'Permission' => array(),
+        'FieldValidator' => array()
     );
 
     /**

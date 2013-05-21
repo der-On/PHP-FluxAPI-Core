@@ -33,6 +33,11 @@ class Field
     public $default = NULL;
 
     /**
+     * @var array
+     */
+    public $validators = array();
+
+    /**
      * @var bool Flag if field is primary (mostly used for IDs)
      */
     public $primary = FALSE;
@@ -84,6 +89,24 @@ class Field
                 $this->$name = $value;
             }
         }
+    }
+
+    /**
+     * Adds a validator to this field
+     * @param $validator_name
+     */
+    public function addValidator($validator_name)
+    {
+        $this->validators[] = $validator_name;
+    }
+
+    /**
+     * Returns all validators for this field
+     * @return array
+     */
+    public function getValidators()
+    {
+        return $this->validators;
     }
 
     public function toArray()
