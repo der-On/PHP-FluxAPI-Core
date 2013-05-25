@@ -48,13 +48,13 @@ class PermissionFactory
         foreach($permissions as $permission_name => $permission) {
             $access = $this->getPermission($permission_name)->hasModelAccess($model_name, $model, $action);
 
-            // if access is denied by any plugin we stop here
-            if (!$access) {
-                return FALSE;
+            // if access is other then default return it
+            if ($access != $default_access) {
+                return $access;
             }
         }
 
-        // if no deny happened we return the default
+        // if no un default access happened we return the default
         return $default_access;
     }
 
@@ -67,13 +67,13 @@ class PermissionFactory
         foreach($permissions as $permission_name => $permission) {
             $access = $this->getPermission($permission_name)->hasControllerAccess($controller_name, $action);
 
-            // if access is denied by any plugin we stop here
-            if (!$access) {
-                return FALSE;
+            // if access is other then default return it
+            if ($access != $default_access) {
+                return $access;
             }
         }
 
-        // if no deny happened we return the default
+        // if no un default access happened we return the default
         return $default_access;
     }
 }
