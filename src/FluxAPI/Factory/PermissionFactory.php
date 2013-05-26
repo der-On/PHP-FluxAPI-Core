@@ -11,8 +11,6 @@ class PermissionFactory
 
     protected $_access_override = NULL;
 
-    protected $_access_override_once = FALSE;
-
     public function __construct(\FluxAPI\Api $api)
     {
         $this->_api = $api;
@@ -47,12 +45,10 @@ class PermissionFactory
      * Overrides the access control.
      *
      * @param bool $access
-     * @param [bool $once] - If set to true the access override will be unset after next access
      */
-    public function setAccessOverride($access, $once = FALSE)
+    public function setAccessOverride($access)
     {
         $this->_access_override = ($access) ? TRUE : FALSE;
-        $this->_access_override_once = $once;
     }
 
     /**
@@ -65,20 +61,14 @@ class PermissionFactory
 
     public function hasModelAccess($model_name, \FluxAPI\Model $model = NULL, $action = NULL)
     {
+        $default_access = $this->getDefaultAccess();
+
         // access override
         if ($this->_access_override != NULL) {
-            $access = $this->_access_override;
-
-            if ($this->_access_override_once) {
-                $this->_access_override = NULL;
-                $this->_access_override_once = FALSE;
-            }
-            return $access;
+            return $this->_access_override;
         }
 
         $permissions = $this->_api['plugins']->getPlugins('Permission');
-
-        $default_access = $this->getDefaultAccess();
 
         foreach($permissions as $permission_name => $permission) {
             $access = $this->getPermission($permission_name)->hasModelAccess($model_name, $model, $action);
@@ -95,20 +85,14 @@ class PermissionFactory
 
     public function hasControllerAccess($controller_name, $action = NULL)
     {
+        $default_access = $this->getDefaultAccess();
+
         // access override
         if ($this->_access_override != NULL) {
-            $access = $this->_access_override;
-
-            if ($this->_access_override_once) {
-                $this->_access_override = NULL;
-                $this->_access_override_once = FALSE;
-            }
-            return $access;
+            return $this->_access_override;
         }
 
         $permissions = $this->_api['plugins']->getPlugins('Permission');
-
-        $default_access = $this->getDefaultAccess();
 
         foreach($permissions as $permission_name => $permission) {
             $access = $this->getPermission($permission_name)->hasControllerAccess($controller_name, $action);
