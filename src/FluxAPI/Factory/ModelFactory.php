@@ -314,7 +314,7 @@ class ModelFactory extends \Pimple
      */
     public function count($model_name, \FluxAPI\Query $query = NULL)
     {
-        $storage = $this->_api['storeages']->get($model_name);
+        $storage = $this->_api['storages']->get($model_name);
         $return = $storage->count($model_name, $query);
         return $return || 0;
     }

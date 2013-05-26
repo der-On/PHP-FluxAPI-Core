@@ -69,7 +69,7 @@ class ControllerFactory
                 $instance = $this->getController($controller_name);
 
                 // params are an assoc array, convert them to an indexed array
-                if (count(array_keys($params)) > 0) {
+                if ((bool) count(array_filter(array_keys($params), 'is_string'))) {
                     $params = $this->_getIndexedParams($params, $controller, $action);
                 }
 

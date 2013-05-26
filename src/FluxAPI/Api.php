@@ -135,6 +135,7 @@ class Api extends \Pimple
         return array(
             'plugins_path' => realpath(__DIR__ . '/../../../../../Plugins'),
             'extends_path' => realpath(__DIR__ . '/../../../../../extends'),
+            'temp_path' => realpath(__DIR__ . '/../../../../../tmp'),
             'base_route' => '/',
             'storage.plugin' => 'MySql',
             'storage.options' => array(

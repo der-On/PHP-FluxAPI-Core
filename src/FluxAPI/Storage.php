@@ -186,6 +186,7 @@ abstract class Storage implements StorageInterface
             $query = new Query();
         }
 
+        $query->setModelName($model_name);
         $query->setType(Query::TYPE_COUNT);
 
         $result = $this->executeQuery($query);

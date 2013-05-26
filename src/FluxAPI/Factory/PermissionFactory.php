@@ -9,6 +9,10 @@ class PermissionFactory
 
     protected $_permission = array();
 
+    protected $_access_override = NULL;
+
+    protected $_access_override_once = FALSE;
+
     public function __construct(\FluxAPI\Api $api)
     {
         $this->_api = $api;
@@ -39,8 +43,39 @@ class PermissionFactory
         return ($this->_api->config['permission.options']['default'] == \FluxAPI\Api::PERMISSION_ALLOW) ? TRUE : FALSE;
     }
 
+    /**
+     * Overrides the access control.
+     *
+     * @param bool $access
+     * @param [bool $once] - If set to true the access override will be unset after next access
+     */
+    public function setAccessOverride($access, $once = FALSE)
+    {
+        $this->_access_override = ($access) ? TRUE : FALSE;
+        $this->_access_override_once = $once;
+    }
+
+    /**
+     * Unsets the access override.
+     */
+    public function unsetAccessOverride()
+    {
+        $this->_access_override = NULL;
+    }
+
     public function hasModelAccess($model_name, \FluxAPI\Model $model = NULL, $action = NULL)
     {
+        // access override
+        if ($this->_access_override != NULL) {
+            $access = $this->_access_override;
+
+            if ($this->_access_override_once) {
+                $this->_access_override = NULL;
+                $this->_access_override_once = FALSE;
+            }
+            return $access;
+        }
+
         $permissions = $this->_api['plugins']->getPlugins('Permission');
 
         $default_access = $this->getDefaultAccess();
@@ -60,6 +95,17 @@ class PermissionFactory
 
     public function hasControllerAccess($controller_name, $action = NULL)
     {
+        // access override
+        if ($this->_access_override != NULL) {
+            $access = $this->_access_override;
+
+            if ($this->_access_override_once) {
+                $this->_access_override = NULL;
+                $this->_access_override_once = FALSE;
+            }
+            return $access;
+        }
+
         $permissions = $this->_api['plugins']->getPlugins('Permission');
 
         $default_access = $this->getDefaultAccess();
