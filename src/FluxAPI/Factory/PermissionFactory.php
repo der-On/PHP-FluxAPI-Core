@@ -9,7 +9,7 @@ class PermissionFactory
 
     protected $_permission = array();
 
-    protected $_access_override = NULL;
+    protected $_access_overrides = array('*' => NULL);
 
     public function __construct(\FluxAPI\Api $api)
     {
@@ -45,18 +45,90 @@ class PermissionFactory
      * Overrides the access control.
      *
      * @param bool $access
+     * @param [string $type]
+     * @param [string $name]
+     * @þaram [string $action]
      */
-    public function setAccessOverride($access)
+    public function setAccessOverride($access, $type = NULL, $name = NULL, $action = NULL)
     {
-        $this->_access_override = ($access) ? TRUE : FALSE;
+        $access = ($access) ? TRUE : FALSE;
+
+        if ($type) {
+            if ($action) {
+                if (!isset($this->_access_overrides[$type])) {
+                    $this->_access_overrides[$type] = array();
+                }
+
+                if(!isset($this->_access_overrides[$type][$name])) {
+                    $this->_access_overrides[$type][$name] = array();
+                }
+
+                $this->_access_overrides[$type][$name][$action] = $access;
+            }
+            elseif ($name && isset($this->_access_overrides[$type])) {
+                if (!isset($this->_access_overrides[$type])) {
+                    $this->_access_overrides[$type] = array();
+                }
+
+                $this->_access_overrides[$type][$name] = $access;
+            }
+            elseif($type) {
+                $this->_access_overrides[$type] = $access;
+            }
+        } else {
+            $this->_access_overrides['*'] = $access;
+        }
     }
 
     /**
      * Unsets the access override.
+     *
+     * @param [string $type]
+     * @param [string $name]
+     * @þaram [string $action]
      */
-    public function unsetAccessOverride()
+    public function unsetAccessOverride($type = NULL, $name = NULL, $action = NULL)
     {
-        $this->_access_override = NULL;
+        if ($type) {
+            if ($action && isset($this->_access_overrides[$type]) && isset($this->_access_overrides[$type][$name])) {
+                $this->_access_overrides[$type][$name][$action] = NULL;
+            }
+            elseif ($name && isset($this->_access_overrides[$type])) {
+                $this->_access_overrides[$type][$name] = NULL;
+            }
+            elseif($type) {
+                $this->_access_overrides[$type] = NULL;
+            }
+        } else {
+            $this->_access_overrides['*'] = NULL;
+        }
+    }
+
+    /**
+     * Returns the access override for a given scope
+     *
+     * @param [string $type]
+     * @param [string $name]
+     * @þaram [string $action]
+     * @return mixed - null or bool
+     */
+    public function getAccessOverride($type = NULL, $name = NULL, $action = NULL)
+    {
+        if ($type) {
+            if ($action && isset($this->_access_overrides[$type]) && isset($this->_access_overrides[$type][$name]) && isset($this->_access_overrides[$type][$name][$action]) && $this->_access_overrides[$type][$name][$action] != NULL) {
+                return $this->_access_overrides[$type][$name][$action];
+            }
+            elseif ($name && isset($this->_access_overrides[$type]) && isset($this->_access_overrides[$type][$name]) && $this->_access_overrides[$type][$name] != NULL) {
+                return $this->_access_overrides[$type][$name];
+            }
+            elseif($type && isset($this->_access_overrides[$type]) && $this->_access_overrides[$type] != NULL) {
+                return $this->_access_overrides[$type];
+            } else {
+                $this->_access_overrides['*'];
+            }
+        } else {
+            return $this->_access_overrides['*'];
+        }
     }
 
     public function hasModelAccess($model_name, \FluxAPI\Model $model = NULL, $action = NULL)
@@ -64,8 +136,9 @@ class PermissionFactory
         $default_access = $this->getDefaultAccess();
 
         // access override
-        if ($this->_access_override != NULL) {
-            return $this->_access_override;
+        $access_override = $this->getAccessOverride('Model', $model_name, $action);
+        if ($access_override != NULL) {
+            return $access_override;
         }
 
         $permissions = $this->_api['plugins']->getPlugins('Permission');
@@ -88,8 +161,9 @@ class PermissionFactory
         $default_access = $this->getDefaultAccess();
 
         // access override
-        if ($this->_access_override != NULL) {
-            return $this->_access_override;
+        $access_override = $this->getAccessOverride('Controller', $controller_name, $action);
+        if ($access_override != NULL) {
+            return $access_override;
         }
 
         $permissions = $this->_api['plugins']->getPlugins('Permission');

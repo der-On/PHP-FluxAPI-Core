@@ -219,12 +219,11 @@ abstract class Model
     {
         // lazy loading of relations
         if ($this->hasField($name) && $this->getField($name)->type == Field::TYPE_RELATION) {
-
             // relation has already been loaded so return it
             if (in_array($name, $this->_loaded_relations)) {
                 return isset($this->_data[$name]) ? $this->_data[$name] : NULL;
             } else { // relations needs to be loaded
-                $this->_data[$name] = $this->_api['storages']->get($this->getModelName())->loadRelation($this,$name);
+                $this->_data[$name] = $this->_api['storages']->get($this->getModelName())->loadRelation($this, $name);
                 $this->_loaded_relations[] = $name;
 
                 return isset($this->_data[$name]) ? $this->_data[$name] : NULL;
@@ -253,6 +252,15 @@ abstract class Model
         }
     }
 
+    private function _addRelation($name, $model)
+    {
+        if (!in_array($name, $this->_loaded_relations)) {
+            $this->_loaded_relations[] = $name;
+        }
+
+        $this->_data[$name][] = $model;
+    }
+
     /**
      * Checks if a magic property (a fields value) isset
      *
@@ -261,7 +269,12 @@ abstract class Model
      */
     public function __isset($name)
     {
-        return isset($this->_data[$name]);
+        // return true for lazy loading relations
+        if ($this->hasField($name) && $this->getField($name)->type == Field::TYPE_RELATION) {
+            return TRUE;
+        } else {
+            return isset($this->_data[$name]);
+        }
     }
 
     /**
@@ -281,6 +294,40 @@ abstract class Model
     public function __toString()
     {
         return $this->toString();
+    }
+
+    /**
+     * Provides magic getters and setters
+     *
+     * @param $name
+     * @param $args
+     * @return mixed|null
+     */
+    public function __call($name, $args)
+    {
+        if (strpos($name, 'get') === 0) {
+            $prop = lcfirst(substr($name, 3));
+
+            if (isset($this->_data[$prop])) {
+                return $this->$prop;
+            }
+        }
+        elseif (strpos($name, 'set') === 0) {
+            $prop = lcfirst(substr($name, 3));
+
+            if (isset($this->_data[$prop])) {
+                $this->$prop = $args[0];
+            }
+        }
+        elseif (strpos($name,'addTo') === 0) {
+            $prop = lcfirst(substr($name, 5));
+
+            $field = $this->getField($prop);
+
+            if ($field && $field->type == Field::TYPE_RELATION && in_array($field->relationType, array(Field::HAS_MANY, Field::BELONGS_TO_MANY))) {
+                $this->_addRelation($prop, $args[0]);
+            }
+        }
     }
 
     /**

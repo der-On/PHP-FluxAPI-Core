@@ -332,6 +332,8 @@ abstract class Storage implements StorageInterface
         $query->setType(Query::TYPE_DELETE);
         $query->setModelName($model_name);
 
+        // TODO: clear relations table too
+
         return $this->executeQuery($query);
     }
 
