@@ -107,6 +107,13 @@ class PluginFactory
                     elseif (is_file($plugin_dir_path) && substr($plugin_type,-strlen('.php')) == '.php') {
                         $plugin_name = ucfirst(basename($plugin_type,'.php'));
 
+                        $plugin_rel_path = $plugin . '/' . $plugin_name;
+
+                        // skip disabled base plugin for this plugin root
+                        if (in_array($plugin_rel_path, $this->_api->config['plugin.options']['disabled'])) {
+                            continue;
+                        }
+
                         if ($plugin_name == ucfirst($plugin)) {
                             $plugin_class_name = 'Plugins\\'.ucfirst($plugin).'\\'.$plugin_name;
 
@@ -119,6 +126,13 @@ class PluginFactory
 
         foreach($this->_base_plugins as $plugin => $plugin_class_name) {
             $plugin_class_name::register($this->_api);
+        }
+    }
+
+    public function disablePlugin($type, $name)
+    {
+        if ($this->hasPlugin($type ,$name)) {
+            unset($this->_plugins[$type][$name]);
         }
     }
 
