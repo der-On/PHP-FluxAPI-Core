@@ -308,16 +308,12 @@ abstract class Model
         if (strpos($name, 'get') === 0) {
             $prop = lcfirst(substr($name, 3));
 
-            if (isset($this->_data[$prop])) {
-                return $this->$prop;
-            }
+            return $this->$prop;
         }
         elseif (strpos($name, 'set') === 0) {
             $prop = lcfirst(substr($name, 3));
 
-            if (isset($this->_data[$prop])) {
-                $this->$prop = $args[0];
-            }
+            $this->$prop = $args[0];
         }
         elseif (strpos($name,'addTo') === 0) {
             $prop = lcfirst(substr($name, 5));
