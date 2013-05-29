@@ -49,12 +49,13 @@ class ControllerFactory
     /**
      * Calls the action of a controller if both are registered.
      *
-     * @param string $controller_name
-     * @param string $action
-     * @param [array $params]
+     * @param string $controller_name - name of the controller
+     * @param string $action - name of the action
+     * @param [array $params] - Parameters passed to the controller action
+     * @param [array $context] - Context passed to the controller for the action call
      * @return mixed
      */
-    public function call($controller_name, $action, $params = array())
+    public function call($controller_name, $action, array $params = NULL, array $context = NULL)
     {
         // abort if access is denied
         if (!$this->_api['permissions']->hasControllerAccess($controller_name, $action)) {
@@ -68,9 +69,23 @@ class ControllerFactory
             if ($controller::hasAction($action)) {
                 $instance = $this->getController($controller_name);
 
-                // params are an assoc array, convert them to an indexed array
+                if ($params === NULL) {
+                    $params = array();
+                }
+
+                // if params are an assoc array, convert them to an indexed array
                 if ((bool) count(array_filter(array_keys($params), 'is_string'))) {
                     $params = $this->_getIndexedParams($params, $controller, $action);
+                }
+
+                // clear context before the call
+                $instance->clearContext();
+
+                // and set it eventually
+                if ($context !== NULL) {
+                    foreach($context as $key => $value) {
+                        $instance->setContext($key, $value);
+                    }
                 }
 
                 return call_user_func_array(array($instance, $action), $params);
