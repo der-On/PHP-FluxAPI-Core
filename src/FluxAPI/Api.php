@@ -350,7 +350,7 @@ class Api extends \Pimple
         $actions = $this['controllers']->getActions($controller_name);
 
         // create methods in the form of ->controllerName_actionName()
-        foreach($actions as $action) {
+        foreach($actions as $action => $options) {
             $this['methods']->registerMethod(
                 lcfirst($controller_name) . '_' . lcfirst($action),
                 function() use ($controller_name, $action, $self) {

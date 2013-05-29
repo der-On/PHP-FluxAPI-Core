@@ -12,6 +12,7 @@ interface ControllerInterface
 
     /**
      * Returns a list of method names that are considered to be actions known to the API.
+     * To populate options together with the action use the method name as key and an assoc array as value.
      * Override this in your Controller.
      *
      * @return array

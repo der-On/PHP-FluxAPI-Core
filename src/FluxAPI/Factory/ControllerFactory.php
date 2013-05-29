@@ -96,6 +96,19 @@ class ControllerFactory
         }
     }
 
+    protected function _getNormalizedActions($actions)
+    {
+        // normalize actions to assoc arrays
+        foreach($actions as $key => $value) {
+            if (is_numeric($key)) {
+                $actions[$value] = array();
+                unset($actions[$key]);
+            }
+        }
+
+        return $actions;
+    }
+
     /**
      * Returns all actions for all controllers or a single controller.
      *
@@ -110,7 +123,7 @@ class ControllerFactory
             $actions = array();
 
             foreach($controllers as $name => $controller) {
-                $actions[$name] = $controller::getActions();
+                $actions[$name] = $this->_getNormalizedActions($controller::getActions());
             }
 
             return $actions;
@@ -118,7 +131,7 @@ class ControllerFactory
             $controller = $this->_api['plugins']->getPluginClass('Controller', $controller_name);
 
             if ($controller) {
-                return $controller::getActions();
+                return $this->_getNormalizedActions($controller::getActions());
             }
         }
 

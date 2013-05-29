@@ -29,7 +29,8 @@ abstract class Controller implements ControllerInterface
     public static function hasAction($action)
     {
         $class = get_called_class();
-        return (in_array($action, $class::getActions()));
+        $actions = $class::getActions();
+        return (in_array($action, $actions) || in_array($action, array_keys($actions)));
     }
 
     /**
