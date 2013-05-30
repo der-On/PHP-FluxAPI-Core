@@ -194,6 +194,17 @@ class Query
     }
 
     /**
+     * Sets only a specifique field in the query data.
+     *
+     * @param $name
+     * @param $value
+     */
+    public function setDataField($name, $value)
+    {
+        $this->_data[$name] = $value;
+    }
+
+    /**
      * Checks if this query has values
      *
      * @param [string $field] if set it will check if a value for a given field name is present
