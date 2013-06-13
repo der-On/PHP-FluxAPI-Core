@@ -2,7 +2,7 @@
 
 namespace FluxAPI\Factory;
 
-
+use \FluxAPI\Event\ControllerEvent;
 use FluxAPI\Exception\AccessDeniedException;
 
 class ControllerFactory
@@ -65,6 +65,8 @@ class ControllerFactory
 
         $controller = $this->getControllerClass($controller_name);
 
+        $this->_api['dispatcher']->dispatch(ControllerEvent::BEFORE_CALL, new ControlleEvent($controller_name, $controller, $action));
+
         if ($controller) {
             if ($controller::hasAction($action)) {
                 $instance = $this->getController($controller_name);
@@ -88,7 +90,10 @@ class ControllerFactory
                     }
                 }
 
-                return call_user_func_array(array($instance, $action), $params);
+                $return = call_user_func_array(array($instance, $action), $params);
+                $this->_api['dispatcher']->dispatch(ControllerEvent::CALL, new ControlleEvent($controller_name, $controller, $action));
+
+                return $return;
             }
         } else {
             throw new \RuntimeException(sprintf('Controller "%s" is not registered.', $controller_name));
