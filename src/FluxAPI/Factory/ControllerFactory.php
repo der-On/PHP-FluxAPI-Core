@@ -88,11 +88,11 @@ class ControllerFactory
                     }
                 }
 
-                $this->_api['dispatcher']->dispatch(ControllerEvent::BEFORE_CALL, new ControlleEvent($controller_name, $controller, $action, $params));
+                $this->_api['dispatcher']->dispatch(ControllerEvent::BEFORE_CALL, new ControlleEvent($controller_name, $instance, $action, $params));
 
                 $return = call_user_func_array(array($instance, $action), $params);
 
-                $this->_api['dispatcher']->dispatch(ControllerEvent::CALL, new ControlleEvent($controller_name, $controller, $action, $params));
+                $this->_api['dispatcher']->dispatch(ControllerEvent::CALL, new ControlleEvent($controller_name, $instance, $action, $params));
 
                 return $return;
             }
