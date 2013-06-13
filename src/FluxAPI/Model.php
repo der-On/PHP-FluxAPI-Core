@@ -255,7 +255,8 @@ abstract class Model
     private function _addRelation($name, $model)
     {
         if (!in_array($name, $this->_loaded_relations)) {
-            $this->_loaded_relations[] = $name;
+            // force lazy loading
+            $models = $this->$name;
         }
 
         $this->_data[$name][] = $model;
