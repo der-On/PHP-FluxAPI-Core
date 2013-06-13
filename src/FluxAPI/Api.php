@@ -260,7 +260,6 @@ class Api extends \Pimple
         $this['methods']->registerMethod('delete'.$model_name, function($query) use ($model_name, $self) {
             if (is_object($query) && is_subclass_of($query, '\FluxAPI\\Model')) {
                 $query = $query->id;
-
             }
 
             if (is_string($query)) {
