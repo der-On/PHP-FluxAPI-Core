@@ -270,8 +270,6 @@ class Api extends \Pimple
                 $query->filter('equal',array('id',$id));
             }
 
-
-
             $limit_filters = $query->getFilters('limit');
             if (count($limit_filters) == 0) {
                 $query->filter('limit',array(0,1));
