@@ -18,7 +18,7 @@ class ModelTest extends FluxApi_Database_TestCase
     public function testToArray()
     {
         $data = $this->getNodeData();
-        $node = new \Plugins\FluxAPI\Model\Node(self::$fluxApi, $data);
+        $node = new \Plugins\FluxAPI\Core\Model\Node(self::$fluxApi, $data);
 
         $array = $node->toArray();
         $this->assertEquals($array,$data);
@@ -27,7 +27,7 @@ class ModelTest extends FluxApi_Database_TestCase
     public function testToString()
     {
         $data = $this->getNodeData();
-        $node = new \Plugins\FluxAPI\Model\Node(self::$fluxApi, $data);
+        $node = new \Plugins\FluxAPI\Core\Model\Node(self::$fluxApi, $data);
 
         $string = $node->toString();
         $this->assertJsonStringEqualsJsonString(json_encode($data,4), $string);

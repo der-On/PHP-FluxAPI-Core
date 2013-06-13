@@ -40,84 +40,102 @@ class PluginFactory
      */
     public function registerPlugins()
     {
-        $plugins = scandir($this->_api->config['plugins_path']);
-
         $allowed_plugin_types = array_keys($this->_plugins);
+        $namespaces = scandir($this->_api->config['plugins_path']);
 
-        foreach($plugins  as $plugin) {
-            if (in_array($plugin, array('.', '..'))) {
+        // loop through vendor namespaces
+        foreach($namespaces as $namespace) {
+            $namespace_path = $this->_api->config['plugins_path'] . '/' . $namespace;
+
+            // ignore files and parent dirs
+            if (!is_dir($namespace_path) || in_array($namespace, array('.', '..'))) {
                 continue;
             }
 
-            $plugin_base_path = $this->_api->config['plugins_path'].'/'.$plugin;
-
-            // skip disabled root plugins
-            if (in_array($plugin, $this->_api->config['plugin.options']['disabled'])) {
+            // skip disabled vendors
+            if (in_array($namespace, $this->_api->config['plugin.options']['disabled'])) {
                 continue;
             }
 
-            if (is_dir($plugin_base_path)) {
+            // loop through plugin suites
+            $plugins = scandir($namespace_path);
 
-                $plugin_dirs = scandir($plugin_base_path);
+            foreach($plugins  as $plugin) {
+                if (in_array($plugin, array('.', '..'))) {
+                    continue;
+                }
 
-                foreach($plugin_dirs as $plugin_type) {
-                    if (in_array($plugin_type, array('.', '..'))) {
-                        continue;
-                    }
+                $plugin_base_path = $namespace_path . '/' . $plugin;
 
-                    $plugin_rel_path = $plugin . '/' . $plugin_type;
+                // skip disabled root plugins
+                if (in_array($namespace . '/' . $plugin, $this->_api->config['plugin.options']['disabled'])) {
+                    continue;
+                }
 
-                    // skip disabled plugin types for this plugin root
-                    if (in_array($plugin_rel_path, $this->_api->config['plugin.options']['disabled'])) {
-                        continue;
-                    }
+                if (is_dir($plugin_base_path)) {
 
-                    $plugin_dir_path = $plugin_base_path.'/'.$plugin_type;
+                    // loop through plugins
+                    $plugin_dirs = scandir($plugin_base_path);
 
-                    // directories
-                    if (is_dir($plugin_dir_path) && in_array($plugin_type,$allowed_plugin_types)) {
-
-                        $plugin_files = scandir($plugin_dir_path);
-
-                        foreach($plugin_files as $plugin_file) {
-                            if (in_array($plugin_file, array('.', '..'))) {
-                                continue;
-                            }
-
-                            $plugin_file_rel_path = $plugin_rel_path . '/' . str_replace('.php','', $plugin_file);
-
-                            // skip disabled plugin files
-                            if (in_array($plugin_file_rel_path, $this->_api->config['plugin.options']['disabled'])) {
-                                continue;
-                            }
-
-                            $plugin_file_path = $plugin_dir_path.'/'.$plugin_file;
-
-                            if (is_file($plugin_file_path) && substr($plugin_file,-strlen('.php')) == '.php') {
-
-                                $plugin_name = ucfirst(basename($plugin_file,'.php'));
-                                $plugin_class_name = 'Plugins\\'.ucfirst($plugin).'\\'.ucfirst($plugin_type).'\\'.$plugin_name;
-
-                                $this->_plugins[$plugin_type][$plugin_name] = $plugin_class_name;
-
-                                $this->_api->registerPluginMethods($plugin_type,$plugin_name);
-                            }
+                    foreach($plugin_dirs as $plugin_type) {
+                        if (in_array($plugin_type, array('.', '..'))) {
+                            continue;
                         }
-                    } // files
-                    elseif (is_file($plugin_dir_path) && substr($plugin_type,-strlen('.php')) == '.php') {
-                        $plugin_name = ucfirst(basename($plugin_type,'.php'));
 
-                        $plugin_rel_path = $plugin . '/' . $plugin_name;
+                        $plugin_rel_path = $namespace . '/' . $plugin . '/' . $plugin_type;
 
-                        // skip disabled base plugin for this plugin root
+                        // skip disabled plugin types for this plugin root
                         if (in_array($plugin_rel_path, $this->_api->config['plugin.options']['disabled'])) {
                             continue;
                         }
 
-                        if ($plugin_name == ucfirst($plugin)) {
-                            $plugin_class_name = 'Plugins\\'.ucfirst($plugin).'\\'.$plugin_name;
+                        $plugin_dir_path = $plugin_base_path.'/'.$plugin_type;
 
-                            $this->_base_plugins[$plugin] = $plugin_class_name;
+                        // directories
+                        if (is_dir($plugin_dir_path) && in_array($plugin_type,$allowed_plugin_types)) {
+
+                            $plugin_files = scandir($plugin_dir_path);
+
+                            foreach($plugin_files as $plugin_file) {
+                                if (in_array($plugin_file, array('.', '..'))) {
+                                    continue;
+                                }
+
+                                $plugin_file_rel_path = $plugin_rel_path . '/' . str_replace('.php','', $plugin_file);
+
+                                // skip disabled plugin files
+                                if (in_array($plugin_file_rel_path, $this->_api->config['plugin.options']['disabled'])) {
+                                    continue;
+                                }
+
+                                $plugin_file_path = $plugin_dir_path.'/'.$plugin_file;
+
+                                if (is_file($plugin_file_path) && substr($plugin_file,-strlen('.php')) == '.php') {
+
+                                    $plugin_name = ucfirst(basename($plugin_file,'.php'));
+                                    $plugin_class_name = 'Plugins\\'.ucfirst($namespace).'\\'.ucfirst($plugin).'\\'.ucfirst($plugin_type).'\\'.$plugin_name;
+
+                                    $this->_plugins[$plugin_type][$plugin_name] = $plugin_class_name;
+
+                                    $this->_api->registerPluginMethods($plugin_type,$plugin_name);
+                                }
+                            }
+                        } // files
+                        elseif (is_file($plugin_dir_path) && substr($plugin_type,-strlen('.php')) == '.php') {
+                            $plugin_name = ucfirst(basename($plugin_type,'.php'));
+
+                            $plugin_rel_path = $plugin . '/' . $plugin_name;
+
+                            // skip disabled base plugin for this plugin root
+                            if (in_array($plugin_rel_path, $this->_api->config['plugin.options']['disabled'])) {
+                                continue;
+                            }
+
+                            if ($plugin_name == ucfirst($plugin)) {
+                                $plugin_class_name = 'Plugins\\'.ucfirst($namespace).'\\'.ucfirst($plugin).'\\'.$plugin_name;
+
+                                $this->_base_plugins[$plugin] = $plugin_class_name;
+                            }
                         }
                     }
                 }

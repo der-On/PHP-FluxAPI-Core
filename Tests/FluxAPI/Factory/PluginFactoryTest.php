@@ -9,7 +9,7 @@ class PluginFactoryTest extends FluxApi_TestCase
     {
         $config = $this->getConfig();
         $config['plugin.options'] = array(
-            'disabled' => array("FluxAPI/Model/UserGroup","FluxAPI/Model/User")
+            'disabled' => array("FluxAPI/Core/Model/UserGroup","FluxAPI/Core/Model/User")
         );
 
         $fluxApi = $this->getFluxApi($config);
@@ -23,7 +23,7 @@ class PluginFactoryTest extends FluxApi_TestCase
     {
         $config = $this->getConfig();
         $config['plugin.options'] = array(
-            'disabled' => array("FluxAPI/Model","FluxAPI/Format")
+            'disabled' => array("FluxAPI/Core/Model","FluxAPI/Core/Format")
         );
 
         $fluxApi = $this->getFluxApi($config);
@@ -37,7 +37,7 @@ class PluginFactoryTest extends FluxApi_TestCase
     {
         $config = $this->getConfig();
         $config['plugin.options'] = array(
-            'disabled' => array("FluxAPI")
+            'disabled' => array("FluxAPI/Core")
         );
 
         $fluxApi = $this->getFluxApi($config);
