@@ -78,6 +78,9 @@ class PluginFactory
                     $plugin_dirs = scandir($plugin_base_path);
 
                     foreach($plugin_dirs as $plugin_type) {
+                        $plugin_dir_path = $plugin_base_path . '/' . $plugin_type;
+
+                        // skip parent dirs
                         if (in_array($plugin_type, array('.', '..'))) {
                             continue;
                         }
@@ -88,8 +91,6 @@ class PluginFactory
                         if (in_array($plugin_rel_path, $this->_api->config['plugin.options']['disabled'])) {
                             continue;
                         }
-
-                        $plugin_dir_path = $plugin_base_path.'/'.$plugin_type;
 
                         // directories
                         if (is_dir($plugin_dir_path) && in_array($plugin_type,$allowed_plugin_types)) {
@@ -134,7 +135,7 @@ class PluginFactory
                             if ($plugin_name == ucfirst($plugin)) {
                                 $plugin_class_name = 'Plugins\\'.ucfirst($namespace).'\\'.ucfirst($plugin).'\\'.$plugin_name;
 
-                                $this->_base_plugins[$plugin] = $plugin_class_name;
+                                $this->_base_plugins[$namespace . '/' . $plugin] = $plugin_class_name;
                             }
                         }
                     }
