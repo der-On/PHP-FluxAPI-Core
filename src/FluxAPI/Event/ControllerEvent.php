@@ -11,12 +11,14 @@ class ControllerEvent  extends Event
     protected $_controller_name;
     protected $_controller;
     protected $_action;
+    protected $_params;
 
-    public function __construct($controller_name, \FluxAPI\ControllerInterface $controller = NULL, $action = NULL)
+    public function __construct($controller_name, \FluxAPI\ControllerInterface $controller = NULL, $action = NULL, $params = NULL)
     {
         $this->_controller_name = $controller_name;
         $this->_controller = $controller;
         $this->_action = $action;
+        $this->_params = $params;
     }
 
     public function getControllerName()
@@ -32,5 +34,10 @@ class ControllerEvent  extends Event
     public function getAction()
     {
         return $this->_action;
+    }
+
+    public function getParams()
+    {
+        return $this->_params;
     }
 }

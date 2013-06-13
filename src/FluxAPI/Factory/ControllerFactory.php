@@ -65,8 +65,6 @@ class ControllerFactory
 
         $controller = $this->getControllerClass($controller_name);
 
-        $this->_api['dispatcher']->dispatch(ControllerEvent::BEFORE_CALL, new ControlleEvent($controller_name, $controller, $action));
-
         if ($controller) {
             if ($controller::hasAction($action)) {
                 $instance = $this->getController($controller_name);
@@ -90,8 +88,11 @@ class ControllerFactory
                     }
                 }
 
+                $this->_api['dispatcher']->dispatch(ControllerEvent::BEFORE_CALL, new ControlleEvent($controller_name, $controller, $action, $params));
+
                 $return = call_user_func_array(array($instance, $action), $params);
-                $this->_api['dispatcher']->dispatch(ControllerEvent::CALL, new ControlleEvent($controller_name, $controller, $action));
+
+                $this->_api['dispatcher']->dispatch(ControllerEvent::CALL, new ControlleEvent($controller_name, $controller, $action, $params));
 
                 return $return;
             }
