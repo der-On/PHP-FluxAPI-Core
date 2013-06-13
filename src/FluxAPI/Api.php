@@ -258,12 +258,19 @@ class Api extends \Pimple
 
         // delete a single model instance
         $this['methods']->registerMethod('delete'.$model_name, function($query) use ($model_name, $self) {
+            if (is_object($query) && is_subclass_of($query, '\FluxAPI\\Model')) {
+                $query = $query->id;
+
+            }
+
             if (is_string($query)) {
                 $id = $query;
                 $query = new Query();
 
                 $query->filter('equal',array('id',$id));
             }
+
+
 
             $limit_filters = $query->getFilters('limit');
             if (count($limit_filters) == 0) {
