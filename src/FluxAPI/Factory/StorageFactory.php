@@ -20,7 +20,7 @@ class StorageFactory extends \Pimple
      * @param [string $model_name] if not set the default storage will be returned
      * @return Storage
      */
-    public function get($model_name = NULL)
+    public function getStorage($model_name = NULL)
     {
         $storagePlugins = $this->_api['plugins']->getPlugins('Storage');
 

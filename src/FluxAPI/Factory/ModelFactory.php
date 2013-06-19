@@ -157,7 +157,7 @@ class ModelFactory extends \Pimple
         $models = $this->_api['plugins']->getPlugins('Model');
 
         if (isset($models[$model_name])) {
-            $instances = $this->_api['storages']->get($model_name)->load($model_name,$query);
+            $instances = $this->_api['storages']->getStorage($model_name)->load($model_name,$query);
 
             foreach($instances as &$instance) {
                 $this->_api['dispatcher']->dispatch(ModelEvent::LOAD, new ModelEvent($model_name, $query, $instance));
@@ -223,7 +223,7 @@ class ModelFactory extends \Pimple
                 return FALSE;
             }
 
-            $storage = $this->_api['storages']->get($model_name);
+            $storage = $this->_api['storages']->getStorage($model_name);
 
             if (is_array($instances)) {
                 foreach($instances as &$instance) {
@@ -269,7 +269,7 @@ class ModelFactory extends \Pimple
 
         $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_UPDATE, new ModelEvent($model_name, $query));
 
-        $storage = $this->_api['storages']->get($model_name);
+        $storage = $this->_api['storages']->getStorage($model_name);
 
         $return = $storage->update($model_name, $query, $data);
         $this->_api['dispatcher']->dispatch(ModelEvent::UPDATE, new ModelEvent($model_name, $query));
@@ -296,7 +296,7 @@ class ModelFactory extends \Pimple
         $models = $this->_api['plugins']->getPlugins('Model');
 
         if (isset($models[$model_name])) {
-            $storage = $this->_api['storages']->get($model_name);
+            $storage = $this->_api['storages']->getStorage($model_name);
             $return = $storage->delete($model_name, $query);
             $this->_api['dispatcher']->dispatch(ModelEvent::DELETE, new ModelEvent($model_name, $query));
             return $return;
@@ -314,7 +314,7 @@ class ModelFactory extends \Pimple
      */
     public function count($model_name, \FluxAPI\Query $query = NULL)
     {
-        $storage = $this->_api['storages']->get($model_name);
+        $storage = $this->_api['storages']->getStorage($model_name);
         $return = $storage->count($model_name, $query);
         return $return || 0;
     }

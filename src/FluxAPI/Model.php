@@ -223,7 +223,7 @@ abstract class Model
             if (in_array($name, $this->_loaded_relations)) {
                 return isset($this->_data[$name]) ? $this->_data[$name] : NULL;
             } elseif(!$this->isNew()) { // relations needs to be loaded (but only on already saved models)
-                $this->_data[$name] = $this->_api['storages']->get($this->getModelName())->loadRelation($this, $name);
+                $this->_data[$name] = $this->_api['storages']->getStorage($this->getModelName())->loadRelation($this, $name);
                 $this->_loaded_relations[] = $name;
 
                 return isset($this->_data[$name]) ? $this->_data[$name] : NULL;
