@@ -10,27 +10,27 @@ class Field
     /**
      * @var string Name of the field as stored in the storage
      */
-    public $name = NULL;
+    public $name = null;
 
     /**
      * @var string Datatype of the field
      */
-    public $type = NULL;
+    public $type = null;
 
     /**
      * @var bool Signed or unsigned (used for integers and floats)
      */
-    public $unsigned = FALSE;
+    public $unsigned = false;
 
     /**
      * @var int Maximum length of the fields value
      */
-    public $length = NULL;
+    public $length = null;
 
     /**
      * @var mixed Default field value
      */
-    public $default = NULL;
+    public $default = null;
 
     /**
      * @var array
@@ -40,23 +40,34 @@ class Field
     /**
      * @var bool Flag if field is primary (mostly used for IDs)
      */
-    public $primary = FALSE;
+    public $primary = false;
 
     /**
      * @var bool Flag if field value must be unique
      */
-    public $unique = FALSE;
+    public $unique = false;
 
     /**
      * @var bool Flag to set field values to automaticly increase
      */
-    public $autoIncrement = FALSE;
+    public $autoIncrement = false;
 
     /**
      * @var string If the $type is of Field::TYPE_RELATION this must be set to the relation type: Field::HAS_ONE, Field::BELONGS_TO_ONE, Field::HAS_MANY, Field::BELONGS_TO_MANY
      */
-    public $relationType = NULL;
-    public $relationModel = NULL;
+    public $relationType = null;
+
+    /**
+     * Model name of the relation
+     * @var string
+     */
+    public $relationModel = null;
+
+    /**
+     * Field name for BELONGS-TO-Relations. This must be the name of the HAS-Relation field in the related model.
+     * @var string
+     */
+    public $relationField = null;
 
     const TYPE_STRING = 'string';
     const TYPE_BINARY = 'binary';
