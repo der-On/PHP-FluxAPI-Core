@@ -430,7 +430,7 @@ class ApiTest extends FluxApi_Database_TestCase
         $parent_node = self::$fluxApi->loadNode($query);
 
         $query = new \FluxAPI\Query();
-        $query->filter('limit', array(2, 8))
+        $query->filter('limit', array(3, 7))
             ->filter('order', array('title'));
         $child_nodes = self::$fluxApi->loadNodes($query);
 
@@ -445,12 +445,13 @@ class ApiTest extends FluxApi_Database_TestCase
         $node = self::$fluxApi->loadNode($query);
 
         $this->assertNotEmpty($node->parent);
+
         $this->assertEquals($node->parent->title, 'Node 2');
 
         $this->assertNotEmpty($node->children);
-        $this->assertCount(8,$node->children);
+        $this->assertCount(7,$node->children);
 
-        $titles = array('Node 2','Node 3','Node 4','Node 5','Node 6','Node 7','Node 8','Node 9');
+        $titles = array('Node 3','Node 4','Node 5','Node 6','Node 7','Node 8','Node 9');
 
         foreach($node->children as $child_node) {
             $this->assertContains($child_node->title,$titles);
@@ -494,7 +495,7 @@ class ApiTest extends FluxApi_Database_TestCase
         $this->assertNotEmpty($node->parent);
 
         $this->assertNotEmpty($node->children);
-        $this->assertCount(8,$node->children);
+        $this->assertCount(7,$node->children);
 
         unset($node->parent);
 
