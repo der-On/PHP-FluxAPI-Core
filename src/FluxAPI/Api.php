@@ -385,7 +385,7 @@ class Api extends \Pimple
      */
     public function migrate($model_name = NULL)
     {
-        $storage = $this['storages']->get($model_name);
+        $storage = $this['storages']->getStorage($model_name);
         $storage->migrate($model_name);
     }
 
