@@ -215,7 +215,7 @@ abstract class Model
      * @param string $name
      * @return null|mixed
      */
-    public function __get($name)
+    public function get($name)
     {
         // lazy loading of relations
         if ($this->hasField($name) && $this->getField($name)->type == Field::TYPE_RELATION) {
@@ -236,12 +236,23 @@ abstract class Model
     }
 
     /**
+     * Returns a magic property (a fields value)
+     *
+     * @param string $name
+     * @return null|mixed
+     */
+    public function __get($name)
+    {
+        return $this->get($name);
+    }
+
+    /**
      * Sets a magic property (a fields value)
      *
      * @param string $name
      * @param mixed $value
      */
-    public function __set($name,$value)
+    public function set($name, $value)
     {
         if ($this->_data[$name] != $value) {
             $this->_modified = TRUE;
@@ -252,6 +263,17 @@ abstract class Model
         if ($this->hasField($name) && $this->getField($name)->type == Field::TYPE_RELATION && !in_array($name,$this->_loaded_relations)) {
             $this->_loaded_relations[] = $name;
         }
+    }
+
+    /**
+     * Sets a magic property (a fields value)
+     *
+     * @param string $name
+     * @param mixed $value
+     */
+    public function __set($name,$value)
+    {
+        $this->set($name, $value);
     }
 
     private function _addRelation($name, $model)
