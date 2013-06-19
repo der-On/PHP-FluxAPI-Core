@@ -106,7 +106,9 @@ abstract class Storage implements StorageInterface
             ->addFilter('limit','filterLimit')
             ->addFilter('count','filterCount')
             ->addFilter('like','filterLike')
-            ->addFilter('in','filterIn');
+            ->addFilter('in','filterIn')
+            ->addFilter('distinct', 'filterDistinct')
+            ;
     }
 
     /**

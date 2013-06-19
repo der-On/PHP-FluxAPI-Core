@@ -151,6 +151,14 @@ interface StorageInterface
     public function filterIn(&$qb, array $params);
 
     /**
+     * 'distinct' filter implementation
+     *
+     * @param $qb some kind of query builder object
+     * @param array $params
+     */
+    public function filterDistinct(&$qb, array $params);
+
+    /**
      * Loads a single or a list of related models of a model instance.
      *
      * Override this in your storage plugin.
@@ -231,7 +239,7 @@ interface StorageInterface
      *
      * @param [string $model]
      */
-    public function migrate($model_name = NULL);
+    public function migrate($model_name = null);
 
     /**
      * Adds/registers a new filter
@@ -282,7 +290,7 @@ interface StorageInterface
      * @param [Query $query]
      * @return int
      */
-    public function count($model_name, Query $query = NULL);
+    public function count($model_name, Query $query = null);
 
     /**
      * Checks if a given model instance already exists in the storage
@@ -309,7 +317,7 @@ interface StorageInterface
      * @param [Query $query] if not set all model instances will be loaded
      * @return array
      */
-    public function load($model_name, Query $query = NULL);
+    public function load($model_name, Query $query = null);
 
     /**
      * Updates a list of models in the storage with given data
@@ -319,7 +327,7 @@ interface StorageInterface
      * @param array $data
      * @return bool
      */
-    public function update($model_name, Query $query = NULL, array $data = array());
+    public function update($model_name, Query $query = null, array $data = array());
 
     /**
      * Deletes a list of models from the storage
@@ -328,7 +336,7 @@ interface StorageInterface
      * @param [Query $query] if null all models will be deleted
      * @return bool
      */
-    public function delete($model_name, Query $query = NULL);
+    public function delete($model_name, Query $query = null);
 
     /**
      * Executes a query
