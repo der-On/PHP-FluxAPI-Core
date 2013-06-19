@@ -69,6 +69,12 @@ class Field
      */
     public $relationField = null;
 
+    /**
+     * Order in which to load MANY-Relations. If set it is an array where the keys are fields and values can be one of Field::ORDER_ASC or Field::ORDER_DESC
+     * @var array | null
+     */
+    public $relationOrder = null;
+
     const TYPE_STRING = 'string';
     const TYPE_BINARY = 'binary';
     const TYPE_BYTEARRAY = 'bitearray';
@@ -87,6 +93,9 @@ class Field
     const HAS_MANY = 'has_many';
     const BELONGS_TO_ONE = 'belongs_to_one';
     const BELONGS_TO_MANY = 'belongs_to_many';
+
+    const ORDER_ASC = 'ASC';
+    const ORDER_DESC = 'DESC';
 
     /**
      * Constructor
