@@ -2,6 +2,7 @@
 namespace FluxAPI;
 
 use \Doctrine\DBAL\Query\QueryBuilder;
+use \FluxAPI\Field;
 
 /**
  * Data storage plugin
@@ -254,6 +255,11 @@ abstract class Storage implements StorageInterface
 
             $field_name = $relation_field->name;
 
+            // remove relations that have been there before (this only works for HAS-Relations)
+            if (in_array($relation_field->relationType, array(Field::HAS_MANY, Field::HAS_ONE))) {
+                $this->removeAllRelations($instance, $relation_field);
+            }
+
             if (isset($instance->$field_name)) { // check if the instance has one or multiple related models
 
                 if (in_array($relation_field->relationType, array(Field::BELONGS_TO_ONE,Field::HAS_ONE))) {
@@ -275,9 +281,6 @@ abstract class Storage implements StorageInterface
                     $this->addRelation($instance, $relation_instance, $relation_field); // now we can store the relation to this model
                 }
             }
-
-            // remove relations that have been there before and have not been added now
-            $this->removeAllRelations($instance,$relation_field,$added_relation_ids);
         }
 
         return $success;
