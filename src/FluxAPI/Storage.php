@@ -246,7 +246,6 @@ abstract class Storage implements StorageInterface
         $success = $this->executeQuery($query);
 
         // save relations
-
         $relation_fields = $instance->getRelationFields(); // collect all field representing a relation to another model
 
         foreach($relation_fields as $relation_field) {
@@ -254,11 +253,6 @@ abstract class Storage implements StorageInterface
             $added_relation_ids = array();
 
             $field_name = $relation_field->name;
-
-            // remove relations that have been there before (this only works for HAS-Relations)
-            if (in_array($relation_field->relationType, array(Field::HAS_MANY, Field::HAS_ONE))) {
-                $this->removeAllRelations($instance, $relation_field);
-            }
 
             if (isset($instance->$field_name)) { // check if the instance has one or multiple related models
 
@@ -286,6 +280,11 @@ abstract class Storage implements StorageInterface
 
                     $this->addRelation($instance, $relation_instance, $relation_field); // now we can store the relation to this model
                 }
+            }
+
+            // remove relations that have been there before (this only works for HAS-Relations)
+            if (in_array($relation_field->relationType, array(Field::HAS_MANY, Field::HAS_ONE))) {
+                $this->removeAllRelations($instance, $relation_field, $added_relation_ids);
             }
         }
 
@@ -325,7 +324,15 @@ abstract class Storage implements StorageInterface
         $query->setType(Query::TYPE_UPDATE);
         $query->setModelName($model_name);
         $query->setData($data);
-        return $this->executeQuery($query);
+
+        $models = $this->load($model_name, $query);
+
+        foreach($models as $model) {
+            $model->populate($query->getData());
+            $this->save($model_name, $model);
+        }
+
+        return $models;
     }
 
     /**

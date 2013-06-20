@@ -302,7 +302,13 @@ class Api extends \Pimple
             }
             $query->filter('limit',array(0,1));
 
-            return $self['models']->update($model_name, $query, $data, $format);
+            $result = $self['models']->update($model_name, $query, $data, $format);
+
+            if (count($result) > 0) {
+                return $result[0];
+            } else {
+                return NULL;
+            }
         });
 
         // create a model instance
