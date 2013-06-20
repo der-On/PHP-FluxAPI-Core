@@ -227,7 +227,6 @@ abstract class Storage implements StorageInterface
      */
     public function save($model_name, Model $instance)
     {
-        ini_set('html_errors','0');
         // if the model is new we have to set it's ID
         if ($instance->isNew()) {
             $instance->id = $this->getNewId();
