@@ -114,10 +114,10 @@ class ModelFactory extends \Pimple
         foreach($model->getFields() as $field) {
             $field_name = $field->name;
 
-            foreach($field->getValidators() as $validator_name) {
+            foreach($field->getValidators() as $key => $validator_name) {
                 if (is_array($validator_name)) {
-                    $validator_options = $validator_name[1];
-                    $validator_name = $validator_name[0];
+                    $validator_options = $validator_name;
+                    $validator_name = $key;
                 } else {
                     $validator_options = array();
                 }
