@@ -227,6 +227,7 @@ abstract class Storage implements StorageInterface
      */
     public function save($model_name, Model $instance)
     {
+        ini_set('html_errors','0');
         // if the model is new we have to set it's ID
         if ($instance->isNew()) {
             $instance->id = $this->getNewId();
@@ -272,7 +273,7 @@ abstract class Storage implements StorageInterface
             // after all related models have been collected we need to store the relation
             foreach($relation_instances as $i => $relation_instance) {
                 // if no object is found an ID was passed, so we try to load the model instance
-                if (!is_object($relation_instance) && is_string($relation_instance) || is_numeric($relation_instance)) {
+                if (is_string($relation_instance) || is_numeric($relation_instance)) {
                     $loadMethod = 'load' . ucfirst($relation_field->relationModel);
                     $relation_instance = $this->_api->$loadMethod($relation_instance);
                 }
