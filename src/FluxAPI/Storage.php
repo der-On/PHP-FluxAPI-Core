@@ -271,6 +271,12 @@ abstract class Storage implements StorageInterface
 
             // after all related models have been collected we need to store the relation
             foreach($relation_instances as $i => $relation_instance) {
+                // if no object is found an ID was passed, so we try to load the model instance
+                if (!is_object($relation_instance) && is_string($relation_instance) || is_numeric($relation_instance)) {
+                    $loadMethod = 'load' . ucfirst($relation_field->relationModel);
+                    $relation_instance = $this->_api->$loadMethod($relation_instance);
+                }
+
                 if (!empty($relation_instance)) {
                     if ($relation_instance->isNew() || $relation_instance->isModified()) { // if the related model instance is new, it needs to be saved first
                         $this->save($relation_instance->getModelName(),$relation_instance);

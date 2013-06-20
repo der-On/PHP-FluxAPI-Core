@@ -107,12 +107,18 @@ class ModelFactory extends \Pimple
      * Validates a model instance
      *
      * @param \FluxAPI\Model $model
+     * @param array $explicit_fields - if set only this fields will be validated
      * @return bool - true if model is valid, else false
      */
-    protected function _validate(\FluxAPI\Model $model)
+    protected function _validate(\FluxAPI\Model $model, array $explicit_fields = NULL)
     {
         foreach($model->getFields() as $field) {
             $field_name = $field->name;
+
+            // ignore field if it is not in explicit
+            if (is_array($explicit_fields) && count($explicit_fields) > 0 && !in_array($field_name, $explicit_fields)) {
+                continue;
+            }
 
             foreach($field->getValidators() as $key => $validator_name) {
                 if (is_array($validator_name)) {
@@ -271,9 +277,24 @@ class ModelFactory extends \Pimple
 
         $storage = $this->_api['storages']->getStorage($model_name);
 
-        $return = $storage->update($model_name, $query, $data);
-        $this->_api['dispatcher']->dispatch(ModelEvent::UPDATE, new ModelEvent($model_name, $query));
-        return $return;
+        // validate data
+        $createMethod = 'create' . ucfirst($model_name);
+        $model_instance = $this->_api->$createMethod($data);
+
+        if ($this->_validate($model_instance, array_keys($data))) {
+
+            foreach($data as $key => $value) {
+                $data[$key] = $model_instance->$key;
+            }
+
+            $return = $storage->update($model_name, $query, $data);
+            $this->_api['dispatcher']->dispatch(ModelEvent::UPDATE, new ModelEvent($model_name, $query));
+
+            return $return;
+        } else {
+            throw new \InvalidArgumentException(sprintf('The %s model is invalid.', $model_name));
+            return NULL;
+        }
     }
 
     /**
