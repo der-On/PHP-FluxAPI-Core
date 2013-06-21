@@ -263,6 +263,11 @@ abstract class Storage implements StorageInterface
                 }
             }
 
+            // HAS-ONE relation has to be removed before an update to prevent duplicate entries of same relation in the database
+            if($relation_field->relationType == Field::HAS_ONE) {
+                $this->removeAllRelations($instance, $relation_field);
+            }
+
             // after all related models have been collected we need to store the relation
             foreach($relation_instances as $i => $relation_instance) {
                 if ($relation_instance !== FALSE && !empty($relation_instance) && (is_string($relation_instance) || is_numeric($relation_instance))) {
@@ -281,8 +286,8 @@ abstract class Storage implements StorageInterface
                 }
             }
 
-            // remove relations that have been there before (this only works for HAS-Relations)
-            if (in_array($relation_field->relationType, array(Field::HAS_MANY, Field::HAS_ONE))) {
+            // remove has-many relations that have been there before but keep the currently added
+            if (in_array($relation_field->relationType, array(Field::HAS_MANY))) {
                 $this->removeAllRelations($instance, $relation_field, $added_relation_ids);
             }
         }
@@ -317,11 +322,11 @@ abstract class Storage implements StorageInterface
      */
     public function update($model_name, Query $query = NULL, array $data = array())
     {
+        $this->config['debug_sql'] = true;
         if (empty($query)) {
             $query = new Query();
         }
-        $query->setType(Query::TYPE_UPDATE);
-        $query->setModelName($model_name);
+
         $query->setData($data);
 
         $models = $this->load($model_name, $query);
