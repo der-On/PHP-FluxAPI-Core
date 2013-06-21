@@ -167,7 +167,7 @@ abstract class Model
             {
                 $this->_data[$name] = $value;
 
-                if ($this->hasField($name) && $this->getField($name)->type == Field::TYPE_RELATION && !empty($value)) {
+                if ($this->hasField($name) && $this->getField($name)->type == Field::TYPE_RELATION) {
                     $this->_loaded_relations[] = $name;
                 }
             }
