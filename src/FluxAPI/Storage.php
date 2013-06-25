@@ -322,7 +322,6 @@ abstract class Storage implements StorageInterface
      */
     public function update($model_name, Query $query = NULL, array $data = array())
     {
-        $this->config['debug_sql'] = true;
         if (empty($query)) {
             $query = new Query();
         }
