@@ -88,6 +88,7 @@ class Field
     const TYPE_ARRAY = 'array';
     const TYPE_OBJECT = 'object';
     const TYPE_RELATION = 'relation';
+    const TYPE_META = 'meta';
 
     const HAS_ONE = 'has_one';
     const HAS_MANY = 'has_many';

@@ -223,9 +223,10 @@ abstract class Storage implements StorageInterface
      *
      * @param string $model_name
      * @param Model $instance
+     * @param array $relations_to_save if set, a list of relation field names to save
      * @return bool
      */
-    public function save($model_name, Model $instance)
+    public function save($model_name, Model $instance, array $relations_to_save = NULL)
     {
         // if the model is new we have to set it's ID
         if ($instance->isNew()) {
@@ -241,7 +242,24 @@ abstract class Storage implements StorageInterface
         }
 
         $query->setModelName($model_name);
-        $query->setData($instance->toArray());
+
+        // only save modified properties
+        $modified_properties = $instance->getModifiedProperties();
+
+        // if nothing was modified we do not need to save the model at all
+        if (count($modified_properties) == 0) {
+            return TRUE;
+        }
+
+        $data = $instance->toArray();
+
+        foreach($data as $name) {
+            if (!in_array($name, $modified_properties)) {
+                unset($data[$name]);
+            }
+        }
+
+        $query->setData($data);
 
         $success = $this->executeQuery($query);
 
@@ -249,6 +267,16 @@ abstract class Storage implements StorageInterface
         $relation_fields = $instance->getRelationFields(); // collect all field representing a relation to another model
 
         foreach($relation_fields as $relation_field) {
+            // skip relations that should not be saved
+            if ($relations_to_save !== NULL && !in_array($relation_field->name, $relations_to_save)) {
+                continue;
+            }
+
+            // do not save unmodified relations
+            if (!in_array($relation_field->name, $modified_properties)) {
+                continue;
+            }
+
             $relation_instances = array();
             $added_relation_ids = array();
 
@@ -292,6 +320,8 @@ abstract class Storage implements StorageInterface
             }
         }
 
+        $instance->notNew();
+
         return $success;
     }
 
@@ -309,7 +339,14 @@ abstract class Storage implements StorageInterface
         }
         $query->setType(Query::TYPE_SELECT);
         $query->setModelName($model_name);
-        return $this->executeQuery($query);
+
+        $instances = $this->executeQuery($query);
+
+        foreach($instances as $instance) {
+            $instance->notNew();
+        }
+
+        return $instances;
     }
 
     /**
@@ -327,12 +364,25 @@ abstract class Storage implements StorageInterface
         }
 
         $query->setData($data);
-
         $models = $this->load($model_name, $query);
+
+        // only save relations if there are relation fields in the given data
+        $relations_to_save = array();
+        $data_keys = array_keys($data);
+
+        if (count($models) > 0) {
+            $relation_fields = $models[0]->getRelationFields();
+
+            foreach($relation_fields as $relation_field) {
+                if (in_array($relation_field->name, $data_keys)) {
+                    $relations_to_save[] = $relation_field->name;
+                }
+            }
+        }
 
         foreach($models as $model) {
             $model->populate($query->getData());
-            $this->save($model_name, $model);
+            $this->save($model_name, $model, $relations_to_save);
         }
 
         return $models;

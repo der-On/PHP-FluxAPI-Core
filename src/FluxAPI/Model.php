@@ -16,6 +16,11 @@ abstract class Model
     private $_data = array();
 
     /**
+     * @var array Internal shadow copy of the data
+     */
+    private $_shadow_data = array();
+
+    /**
      * @var array Internal lookup of already (lazy) loaded relation fields
      */
     private $_loaded_relations = array();
@@ -29,6 +34,11 @@ abstract class Model
      * @var bool Internal flag that's true if the model instance was modified since it was loaded
      */
     private $_modified = false;
+
+    /**
+     * @var bool Internal flag that's false if the model already exists in storage
+     */
+    private $_new = true;
 
     /**
      * @var Api Api instance
@@ -170,6 +180,11 @@ abstract class Model
                 if ($this->hasField($name) && $this->getField($name)->type == Field::TYPE_RELATION) {
                     $this->_loaded_relations[] = $name;
                 }
+
+                // create initial shadow copy
+                if (!isset($this->_shadow_data[$name])) {
+                    $this->_shadow_data[$name] = $value;
+                }
             }
         }
     }
@@ -201,7 +216,7 @@ abstract class Model
      */
     public function isNew()
     {
-        return (empty($this->id));
+        return $this->_new;
     }
 
     /**
@@ -262,11 +277,11 @@ abstract class Model
             $this->_modified = TRUE;
         }
 
-        $this->_data[$name] = $value;
-
         if ($this->hasField($name) && $this->getField($name)->type == Field::TYPE_RELATION && !in_array($name,$this->_loaded_relations)) {
             $this->_loaded_relations[] = $name;
         }
+
+        $this->_data[$name] = $value;
     }
 
     /**
@@ -353,6 +368,88 @@ abstract class Model
                 $this->_addRelation($prop, $args[0]);
             }
         }
+    }
+
+    /**
+     * Checks if a property was modified since the initial population of the model.
+     *
+     * @param string $name name of the property
+     * @return bool true if property was modified, else false
+     */
+    public function isPropertyModified($name)
+    {
+        if ($this->isNew()) {
+            return TRUE;
+        }
+
+        // property was set initially, so we have to check further
+        if (isset($this->_shadow_data[$name])) {
+
+            // property is a relation field
+            if ($this->hasField($name) && $this->getField($name)->type == Field::TYPE_RELATION) {
+                // MANY-relation
+                if (is_array($this->_data[$name])) {
+
+                    // count has changed, so definitely modified
+                    if (count($this->_data[$name]) != count($this->_shadow_data[$name])) {
+                        return TRUE;
+                    }
+                    // count is the same, so maybe some instances have changed
+                    else {
+                        foreach($this->_data[$name] as $i => $relation_instance) {
+                            $id = (is_object($relation_instance)) ? $relation_instance->id : $relation_instance;
+                            $shadow_id = (is_object($this->_shadow_data[$name][$i])) ? $this->_shadow_data[$name][$i]->id : $this->_shadow_data[$name][$i];
+
+                            // as soon as one instance is different, return TRUE
+                            if ($id != $shadow_id) {
+                                return TRUE;
+                            }
+                        }
+                    }
+                }
+                // ONE-relation
+                else {
+                    $id = (is_object($this->_data[$name])) ? $this->_data[$name]->id : $this->_data[$name];
+                    $shadow_id = (is_object($this->_shadow_data[$name])) ? $this->_shadow_data[$name]->id : $this->_shadow_data[$name];
+
+                    // compare IDs, if they do not match, relation was modified
+                    return $id != $shadow_id;
+                }
+            } else {
+                return $this->_data[$name] != $this->_shadow_data[$name];
+            }
+        }
+        // if property is not in the initial copy it is definitely modified
+        else {
+            return TRUE;
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * Return a list of properties that have been modified since the initial population of the model.
+     *
+     * @return array list of property names
+     */
+    public function getModifiedProperties()
+    {
+        $modified = array();
+
+        $fields = $this->getFields();
+
+        foreach($fields as $field) {
+            if ($this->isPropertyModified($field->name)) {
+                $modified[] = $field->name;
+            }
+        }
+
+        return $modified;
+    }
+
+    public function notNew()
+    {
+        $this->_new = false;
     }
 
     /**
