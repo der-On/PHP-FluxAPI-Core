@@ -1,6 +1,7 @@
 <?php
 namespace FluxAPI\Factory;
 
+use \FluxAPI\Cache;
 use \FluxAPI\Cache\CachOptions;
 use \FluxAPI\Cache\CacheSource;
 
@@ -99,7 +100,7 @@ class CacheFactory
     }
 
     /**
-     * Clears the entire cache
+     * Clears the entire cache of a type
      *
      * @param string $type
      */
@@ -111,6 +112,18 @@ class CacheFactory
             $cache = $this->getCache($cache_name);
 
             $cache->clear($type);
+        }
+    }
+
+    /**
+     * Clears all caches
+     */
+    public function clearAll()
+    {
+        $types = array(Cache::TYPE_PERMISSION, Cache::TYPE_MODEL, Cache::TYPE_CONTROLLER_ACTION, Cache::TYPE_QUERY, Cache::TYPE_RESPONSE);
+
+        foreach($types as $type) {
+            $this->clear($type);
         }
     }
 }

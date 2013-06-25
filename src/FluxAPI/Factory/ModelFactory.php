@@ -150,7 +150,9 @@ class ModelFactory extends \Pimple
     public function getCachedModels($model_name, \FluxAPI\Query $query = NULL)
     {
         $source = new \FluxAPI\Cache\ModelSource($model_name, $query);
-        return $this->_api['caches']->getCached(\FluxAPI\Cache::TYPE_MODEL, $source);
+        $instances = $this->_api['caches']->getCached(\FluxAPI\Cache::TYPE_MODEL, $source);
+
+        return $instances;
     }
 
     public function cacheModels($model_name, \FluxAPI\Query $query = NULL, array $instances)
@@ -186,9 +188,11 @@ class ModelFactory extends \Pimple
         $models = $this->_api['plugins']->getPlugins('Model');
 
         if (isset($models[$model_name])) {
+            $cached = TRUE;
             $instances = $this->getCachedModels($model_name, $query);
 
             if ($instances === NULL) {
+                $cached = FALSE;
                 $instances = $this->_api['storages']->getStorage($model_name)->load($model_name,$query);
             }
 
@@ -196,7 +200,7 @@ class ModelFactory extends \Pimple
                 $this->_api['dispatcher']->dispatch(ModelEvent::LOAD, new ModelEvent($model_name, $query, $instance));
             }
 
-            $this->cacheModels($model_name, $query, $instances);
+            if (!$cached) $this->cacheModels($model_name, $query, $instances);
 
             return $this->_modelsToFormat($model_name, $instances, $format);
         }
