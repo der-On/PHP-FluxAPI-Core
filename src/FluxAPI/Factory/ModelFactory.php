@@ -143,6 +143,29 @@ class ModelFactory extends \Pimple
     }
 
     /**
+     * @param string $model_name
+     * @param \FluxAPI\Query $query
+     * @return null|array
+     */
+    public function getCachedModels($model_name, \FluxAPI\Query $query = NULL)
+    {
+        $source = new \FluxAPI\Cache\ModelSource($model_name, $query);
+        return $this->_api['caches']->getCached(\FluxAPI\Cache::TYPE_MODEL, $source);
+    }
+
+    public function cacheModels($model_name, \FluxAPI\Query $query = NULL, array $instances)
+    {
+        $source = new \FluxAPI\Cache\ModelSource($model_name, $query, $instances);
+        $this->_api['caches']->store(\FluxAPI\Cache::TYPE_MODEL, $source, $instances);
+    }
+
+    public function removeCachedModels($model_name, array $instances)
+    {
+        $source = new \FluxAPI\Cache\ModelSource($model_name, NULL, $instances);
+        $this->_api['caches']->remove(\FluxAPI\Cache::TYPE_MODEL, $source);
+    }
+
+    /**
      * Loads and returns a list of Model instances
      *
      * @param string $model_name
@@ -163,11 +186,17 @@ class ModelFactory extends \Pimple
         $models = $this->_api['plugins']->getPlugins('Model');
 
         if (isset($models[$model_name])) {
-            $instances = $this->_api['storages']->getStorage($model_name)->load($model_name,$query);
+            $instances = $this->getCachedModels($model_name, $query);
 
-            foreach($instances as &$instance) {
+            if ($instances === NULL) {
+                $instances = $this->_api['storages']->getStorage($model_name)->load($model_name,$query);
+            }
+
+            foreach($instances as $instance) {
                 $this->_api['dispatcher']->dispatch(ModelEvent::LOAD, new ModelEvent($model_name, $query, $instance));
             }
+
+            $this->cacheModels($model_name, $query, $instances);
 
             return $this->_modelsToFormat($model_name, $instances, $format);
         }
@@ -236,15 +265,22 @@ class ModelFactory extends \Pimple
                     if ($this->_validate($instance)) {
                         $storage->save($model_name,$instance);
                         $this->_api['dispatcher']->dispatch(ModelEvent::SAVE, new ModelEvent($model_name, NULL, $instance));
+
+                        // update cache
+                        $this->cacheModels($model_name, array($instance));
                     } else {
                         throw new \InvalidArgumentException(sprintf('The %s model is invalid.', $model_name));
                     }
                 }
+
                 return TRUE;
             } else {
                 if ($this->_validate($instances)) {
                     $return = $storage->save($model_name,$instances);
                     $this->_api['dispatcher']->dispatch(ModelEvent::SAVE, new ModelEvent($model_name, NULL, $instances));
+
+                    // update cache
+                    $this->cacheModels($model_name, array($instances));
                     return $return;
                 } else {
                     throw new \InvalidArgumentException(sprintf('The %s model is invalid.', $model_name));
@@ -318,8 +354,14 @@ class ModelFactory extends \Pimple
 
         if (isset($models[$model_name])) {
             $storage = $this->_api['storages']->getStorage($model_name);
+            $instances = $storage->load($model_name, $query);
+
             $return = $storage->delete($model_name, $query);
+
             $this->_api['dispatcher']->dispatch(ModelEvent::DELETE, new ModelEvent($model_name, $query));
+
+            // remove from cache
+            $this->removeCachedModels($model_name, $instances);
             return $return;
         }
 

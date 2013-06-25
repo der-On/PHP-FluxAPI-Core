@@ -105,6 +105,31 @@ class PermissionFactory
     }
 
     /**
+     * @param string $model_name
+     * @param \FluxAPI\Model $model
+     * @param string $action
+     * @return null|bool
+     */
+    public function getCachedModelAccess($model_name , \FluxAPI\Model $model = NULL, $action = NULL)
+    {
+        $source = new \FluxAPI\Cache\ModelPermissionSource($model_name, $model, $action);
+
+        return $this->_api['caches']->getCached(\FluxAPI\Cache::TYPE_PERMISSION, $source);
+    }
+
+    /**
+     * @param string $controller_name
+     * @param string $action
+     * @return null|bool
+     */
+    public function getCachedControllerAccess($controller_name , $action = NULL)
+    {
+        $source = new \FluxAPI\Cache\ControllerPermissionSource($controller_name, $action);
+
+        return $this->_api['caches']->getCached(\FluxAPI\Cache::TYPE_PERMISSION, $source);
+    }
+
+    /**
      * Returns the access override for a given scope
      *
      * @param [string $type]
@@ -144,7 +169,11 @@ class PermissionFactory
         $permissions = $this->_api['plugins']->getPlugins('Permission');
 
         foreach($permissions as $permission_name => $permission) {
-            $access = $this->getPermission($permission_name)->hasModelAccess($model_name, $model, $action);
+            $access = $this->getCachedModelAccess($model_name, $model, $action);
+
+            if ($access === NULL) {
+                $access = $this->getPermission($permission_name)->hasModelAccess($model_name, $model, $action);
+            }
 
             // if access is other then default return it
             if ($access != $default_access) {
@@ -169,7 +198,11 @@ class PermissionFactory
         $permissions = $this->_api['plugins']->getPlugins('Permission');
 
         foreach($permissions as $permission_name => $permission) {
-            $access = $this->getPermission($permission_name)->hasControllerAccess($controller_name, $action);
+            $access = $this->getCachedControllerAccess($controller_name, $action);
+
+            if ($access === NULL) {
+                $access = $this->getPermission($permission_name)->hasControllerAccess($controller_name, $action);
+            }
 
             // if access is other then default return it
             if ($access != $default_access) {

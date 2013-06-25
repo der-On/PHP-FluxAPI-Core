@@ -61,6 +61,14 @@ class Api extends \Pimple
 
         $this['logger'] = NULL;
 
+        $this['caches'] = $this->share(function() use ($api) {
+            return $api['cache_factory'];
+        });
+
+        $this['cache_factory'] = function() use ($api) {
+            return new Factory\CacheFactory($api);
+        };
+
         $this['models'] = $this->share(function() use ($api) {
            return $api['model_factory'];
         });
