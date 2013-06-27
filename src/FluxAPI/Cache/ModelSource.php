@@ -21,6 +21,10 @@ class ModelSource extends CacheSource
      */
     public function toHash()
     {
-        return md5($this->model_name . serialize($this->query->getFilters()));
+        if ($this->query) {
+            return md5($this->model_name . serialize($this->query->getFilters()));
+        } else {
+            return md5($this->model_name);
+        }
     }
 }

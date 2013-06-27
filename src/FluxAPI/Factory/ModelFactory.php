@@ -271,7 +271,7 @@ class ModelFactory extends \Pimple
                         $this->_api['dispatcher']->dispatch(ModelEvent::SAVE, new ModelEvent($model_name, NULL, $instance));
 
                         // update cache
-                        $this->cacheModels($model_name, array($instance));
+                        $this->cacheModels($model_name, NULL, array($instance));
                     } else {
                         throw new \InvalidArgumentException(sprintf('The %s model is invalid.', $model_name));
                     }
@@ -284,7 +284,7 @@ class ModelFactory extends \Pimple
                     $this->_api['dispatcher']->dispatch(ModelEvent::SAVE, new ModelEvent($model_name, NULL, $instances));
 
                     // update cache
-                    $this->cacheModels($model_name, array($instances));
+                    $this->cacheModels($model_name, NULL, array($instances));
                     return $return;
                 } else {
                     throw new \InvalidArgumentException(sprintf('The %s model is invalid.', $model_name));

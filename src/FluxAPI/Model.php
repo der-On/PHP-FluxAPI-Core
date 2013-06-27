@@ -41,6 +41,11 @@ abstract class Model
     private $_new = true;
 
     /**
+     * @var bool Internal flag that's true if the model got initially populated
+     */
+    private $_populated = false;
+
+    /**
      * @var Api Api instance
      */
     protected $_api;
@@ -182,9 +187,13 @@ abstract class Model
                 }
 
                 // create initial shadow copy
-                if (!isset($this->_shadow_data[$name])) {
+                if (!$this->_populated && !isset($this->_shadow_data[$name])) {
                     $this->_shadow_data[$name] = $value;
                 }
+            }
+
+            if (!$this->_populated) {
+                $this->_populated = true;
             }
         }
     }
@@ -389,7 +398,6 @@ abstract class Model
             if ($this->hasField($name) && $this->getField($name)->type == Field::TYPE_RELATION) {
                 // MANY-relation
                 if (is_array($this->_data[$name])) {
-
                     // count has changed, so definitely modified
                     if (count($this->_data[$name]) != count($this->_shadow_data[$name])) {
                         return TRUE;
@@ -415,7 +423,9 @@ abstract class Model
                     // compare IDs, if they do not match, relation was modified
                     return $id != $shadow_id;
                 }
-            } else {
+            }
+            // property is a regular field so compare values
+            else {
                 return $this->_data[$name] != $this->_shadow_data[$name];
             }
         }
@@ -425,6 +435,24 @@ abstract class Model
         }
 
         return FALSE;
+    }
+
+    /**
+     * Set modified state of a property
+     *
+     * @param string $name
+     * @param bool $modified
+     */
+    public function setPropertyModified($name, $modified)
+    {
+        if ($modified) {
+            if (isset($this->_shadow_data[$name])) {
+                unset($this->_shadow_data[$name]);
+            }
+        }
+        else {
+            $this->_shadow_data[$name] = $this->_data[$name];
+        }
     }
 
     /**

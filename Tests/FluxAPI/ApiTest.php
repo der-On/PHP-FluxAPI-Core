@@ -497,15 +497,23 @@ class ApiTest extends FluxApi_Database_TestCase
         $this->assertNotEmpty($node->children);
         $this->assertCount(7,$node->children);
 
+        // as parent is a belongs-to relation we have to remove it from parents children
+        $parent = $node->parent;
+        $parent->children = array();
+
+        // to prevent re-adding the node to the parents children we have to remove the parent from the node too
         unset($node->parent);
 
+        // now we remove the children
         $node->children = array();
 
+        // and save both, the parent and the node
+        self::$fluxApi->saveNode($parent);
         self::$fluxApi->saveNode($node);
 
         $node = self::$fluxApi->loadNode($query);
 
         $this->assertEmpty($node->parent);
-        $this->assertEmpty($node->children);
+        $this->assertCount(0, $node->children);
     }
 }

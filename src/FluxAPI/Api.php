@@ -215,6 +215,203 @@ class Api extends \Pimple
     }
 
     /**
+     * Loads a list of models of same type
+     *
+     * @param string $model_name
+     * @param null|Query $query
+     * @param null|string $format
+     * @return mixed
+     */
+    public function load($model_name, $query = NULL, $format = NULL)
+    {
+        $models =  $this['models']->load($model_name, $query, $format);
+        return $models;
+    }
+
+    /**
+     * Loads one model
+     *
+     * @param string $model_name
+     * @param null|Query $query
+     * @param null|string $format
+     * @return mixed
+     */
+    public function loadFirst($model_name, $query = NULL, $format = NULL)
+    {
+        if (empty($query)) {
+            $query = new Query();
+        }
+
+        if (is_string($query)) {
+            $id = $query;
+            $query = new Query();
+            $query->filter('equal',array('id',$id));
+        }
+
+        if (!$query->hasFilter('limit')) {
+            $query->filter('limit',array(0,1));
+        }
+
+        $model = $this['models']->loadFirst($model_name, $query, $format);
+
+        return $model;
+    }
+
+    /**
+     * Saves a single model instance
+     *
+     * @param string $model_name
+     * @param Model $instance
+     * @return mixed
+     */
+    public function save($model_name, $instance)
+    {
+        return $this['models']->save($model_name, $instance);
+    }
+
+    /**
+     * Deletes all models of same type (matching a query)
+     *
+     * @param string $model_name
+     * @param null|Query $query
+     * @return mixed
+     */
+    public function delete($model_name, $query = NULL)
+    {
+        return $this['models']->delete($model_name, $query);
+    }
+
+    /**
+     * Deletes one model (matching a query)
+     *
+     * @param string $model_name
+     * @param Query $query
+     */
+    public function deleteFirst($model_name, $query)
+    {
+        if (is_object($query) && is_subclass_of($query, '\FluxAPI\\Model')) {
+            $query = $query->id;
+        }
+
+        if (is_string($query)) {
+            $id = $query;
+            $query = new Query();
+
+            $query->filter('equal',array('id',$id));
+        }
+
+        $limit_filters = $query->getFilters('limit');
+        if (count($limit_filters) == 0) {
+            $query->filter('limit',array(0,1));
+        } else {
+            foreach($limit_filters as &$filter) {
+                $filter[1][1] = 1;
+            }
+        }
+
+        return $this['models']->delete($model_name, $query);
+    }
+
+    /**
+     * Updates all models (matching a query)
+     *
+     * @param string $model_name
+     * @param Query $query
+     * @param array $data
+     * @param string $format
+     * @return mixed
+     */
+    public function update($model_name, $query, array $data = array(), $format = Api::DATA_FORMAT_ARRAY)
+    {
+        if (is_array($query)) {
+            $ids = $query;
+
+            $query = new Query();
+            $query->filter('in',array('id',$ids));
+        }
+        return $this['models']->update($model_name, $query, $data, $format);
+    }
+
+    /**
+     * Updates one model (matching a query)
+     *
+     * @param string $model_name
+     * @param Query $query
+     * @param array $data
+     * @param string $format
+     * @return null
+     */
+    public function updateFirst($model_name, $query, array $data = array(), $format = Api::DATA_FORMAT_ARRAY)
+    {
+        if (is_string($query)) {
+            $id = $query;
+
+            $query = new Query();
+            $query->filter('equal',array('id',$id));
+        }
+        $query->filter('limit',array(0,1));
+
+        $result = $this['models']->update($model_name, $query, $data, $format);
+
+        if (count($result) > 0) {
+            return $result[0];
+        } else {
+            return NULL;
+        }
+    }
+
+    /**
+     * Creates a model instance
+     *
+     * @param string $model_name
+     * @param array $data
+     * @param string $format
+     * @return mixed
+     */
+    public function create($model_name, $data = array(), $format = Api::DATA_FORMAT_ARRAY)
+    {
+        return $this['models']->create($model_name, $data, $format);
+    }
+
+    /**
+     * Extends an existing model type
+     *
+     * @param string $model_name
+     * @param array $fields
+     * @param string $format
+     * @return mixed
+     */
+    public function extendModel($model_name, $fields = array(), $format = self::DATA_FORMAT_ARRAY)
+    {
+        return $this['plugins']->extendModel($model_name, $fields, $format);
+    }
+
+    /**
+     * Reduces a model type
+     *
+     * @param string $model_name
+     * @param null|array $fields
+     * @param string $format
+     * @return mixed
+     */
+    public function reduceModel($model_name, $fields = NULL, $format = self::DATA_FORMAT_ARRAY)
+    {
+        return $this['plugins']->reduceModel($model_name, $fields, $format);
+    }
+
+    /**
+     * Counts the number of models (matching a query)
+     *
+     * @param string $model_name
+     * @param Query $query
+     * @return int
+     */
+    public function count($model_name, Query $query = NULL)
+    {
+        return $this['models']->count($model_name, $query);
+    }
+
+    /**
      * Registers all magic methods for a registered model
      *
      * @param string $model_name
@@ -227,116 +424,57 @@ class Api extends \Pimple
 
         // load multiple model instances
         $this['methods']->registerMethod('load'.$model_name.'s', function($query = NULL, $format = NULL) use ($model_name, $self) {
-            $models =  $self['models']->load($model_name, $query, $format);
-
-            return $models;
+            return $self->load($model_name, $query, $format);
         });
 
         // load single model instance
         $this['methods']->registerMethod('load'.$model_name, function($query = NULL, $format = NULL) use ($model_name, $self) {
-
-            if (empty($query)) {
-                $query = new Query();
-            }
-
-            if (is_string($query)) {
-                $id = $query;
-                $query = new Query();
-                $query->filter('equal',array('id',$id));
-            }
-
-            if (!$query->hasFilter('limit')) {
-                $query->filter('limit',array(0,1));
-            }
-
-            $model = $self['models']->loadFirst($model_name, $query, $format);
-
-            return $model;
+            return $self->loadFirst($model_name, $query, $format);
         });
 
         // save a model instance
         $this['methods']->registerMethod('save'.$model_name, function($instance) use ($model_name, $self) {
-            return $self['models']->save($model_name,$instance);
+            return $self->save($model_name, $instance);
         });
 
         // delete model multiple instances
         $this['methods']->registerMethod('delete'.$model_name.'s', function($query = NULL) use ($model_name, $self) {
-            return $self['models']->delete($model_name, $query);
+            return $self->delete($model_name, $query);
         });
 
         // delete a single model instance
         $this['methods']->registerMethod('delete'.$model_name, function($query) use ($model_name, $self) {
-            if (is_object($query) && is_subclass_of($query, '\FluxAPI\\Model')) {
-                $query = $query->id;
-            }
-
-            if (is_string($query)) {
-                $id = $query;
-                $query = new Query();
-
-                $query->filter('equal',array('id',$id));
-            }
-
-            $limit_filters = $query->getFilters('limit');
-            if (count($limit_filters) == 0) {
-                $query->filter('limit',array(0,1));
-            } else {
-                foreach($limit_filters as &$filter) {
-                    $filter[1][1] = 1;
-                }
-            }
-
-            return $self['models']->delete($model_name, $query);
+            return $self->deleteFirst($model_name, $query);
         });
 
         // update multiple model instances
         $this['methods']->registerMethod('update'.$model_name.'s', function($query, array $data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model_name, $self) {
-            if (is_array($query)) {
-                $ids = $query;
-
-                $query = new Query();
-                $query->filter('in',array('id',$ids));
-            }
-            return $self['models']->update($model_name, $query, $data, $format);
+            return $self->update($model_name, $query, $data, $format);
         });
 
         // update a single model instance
         $this['methods']->registerMethod('update'.$model_name, function($query, array $data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model_name, $self) {
-            if (is_string($query)) {
-                $id = $query;
-
-                $query = new Query();
-                $query->filter('equal',array('id',$id));
-            }
-            $query->filter('limit',array(0,1));
-
-            $result = $self['models']->update($model_name, $query, $data, $format);
-
-            if (count($result) > 0) {
-                return $result[0];
-            } else {
-                return NULL;
-            }
+            return $self->updateFirst($model_name, $query, $data, $format);
         });
 
         // create a model instance
         $this['methods']->registerMethod('create'.$model_name, function($data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model_name, $self) {
-            return $self['models']->create($model_name, $data, $format);
+            return $self->create($model_name, $data, $format);
         });
 
         // extend an existing model
         $this['methods']->registerMethod('extend'.$model_name, function($fields = array(), $format = self::DATA_FORMAT_ARRAY) use ($model_name, $self) {
-            return $self['plugins']->extendModel($model_name, $fields, $format);
+            return $self->extendModel($model_name, $fields, $format);
         });
 
         // reduce an existing model
         $this['methods']->registerMethod('reduce'.$model_name, function($fields = NULL, $format = self::DATA_FORMAT_ARRAY) use ($model_name, $self) {
-            return $self['plugins']->reduceModel($model_name, $fields, $format);
+            return $self->reduceModel($model_name, $fields, $format);
         });
 
         // count models
         $this['methods']->registerMethod('count' . $model_name . 's', function(Query $query = NULL) use ($model_name, $self) {
-           return $self['models']->count($model_name, $query);
+           return $self->count($model_name, $query);
         });
     }
 
@@ -380,17 +518,14 @@ class Api extends \Pimple
 
     public function unregisterControllerMethods($controller_name)
     {
+        $actions = $this['controllers']->getActions($controller_name);
 
-    }
-
-    public function extendModel($model_name, array $fields, $format = self::DATA_FORMAT_ARRAY)
-    {
-        return $this['plugins']->extendModel($model_name, $fields, $format);
-    }
-
-    public function reduceModel($model_name, array $fields = NULL, $format = self::DATA_FORMAT_ARRAY)
-    {
-        return $this['plugins']->reduceModel($model_name, $fields, $format);
+        // remove methods in the form of ->controllerName_actionName()
+        foreach($actions as $action => $options) {
+            $this['methods']->unregisterMethod(
+                lcfirst($controller_name) . '_' . lcfirst($action)
+            );
+        }
     }
 
     /**

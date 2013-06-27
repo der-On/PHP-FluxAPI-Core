@@ -284,10 +284,10 @@ abstract class Storage implements StorageInterface
 
             if (isset($instance->$field_name)) { // check if the instance has one or multiple related models
 
-                if (in_array($relation_field->relationType, array(Field::BELONGS_TO_ONE,Field::HAS_ONE))) {
-                    $relation_instances[] = $instance->$field_name;
-                } else {
+                if (is_array($instance->$field_name)) {
                     $relation_instances = $instance->$field_name;
+                } else {
+                    $relation_instances[] = $instance->$field_name;
                 }
             }
 
@@ -297,15 +297,15 @@ abstract class Storage implements StorageInterface
             }
 
             // after all related models have been collected we need to store the relation
-            foreach($relation_instances as $i => $relation_instance) {
+            foreach($relation_instances as $relation_instance) {
                 if ($relation_instance !== FALSE && !empty($relation_instance) && (is_string($relation_instance) || is_numeric($relation_instance))) {
-                    $loadMethod = 'load' . ucfirst($relation_field->relationModel);
-                    $relation_instance = $this->_api->$loadMethod($relation_instance);
+
+                    $relation_instance = $this->_api->load($relation_field->relationModel, $relation_instance);
                 }
 
                 if ($relation_instance !== FALSE && !empty($relation_instance)) {
-                    if ($relation_instance->isNew() || $relation_instance->isModified()) { // if the related model instance is new, it needs to be saved first
-                        $this->save($relation_instance->getModelName(),$relation_instance);
+                    if ($relation_instance->isNew()) { // if the related model instance is new, it needs to be saved first
+                        $this->_api->save($relation_field->relationModel, $relation_instance);
                     }
 
                     $added_relation_ids[] = $relation_instance->id;
@@ -363,7 +363,6 @@ abstract class Storage implements StorageInterface
             $query = new Query();
         }
 
-        $query->setData($data);
         $models = $this->load($model_name, $query);
 
         // only save relations if there are relation fields in the given data
@@ -381,7 +380,7 @@ abstract class Storage implements StorageInterface
         }
 
         foreach($models as $model) {
-            $model->populate($query->getData());
+            $model->populate($data);
             $this->save($model_name, $model, $relations_to_save);
         }
 
