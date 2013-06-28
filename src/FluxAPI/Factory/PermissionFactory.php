@@ -140,7 +140,7 @@ class PermissionFactory
     public function getAccessOverride($type = NULL, $name = NULL, $action = NULL)
     {
         if ($type) {
-            if ($action && isset($this->_access_overrides[$type]) && isset($this->_access_overrides[$type][$name]) && isset($this->_access_overrides[$type][$name][$action]) && $this->_access_overrides[$type][$name][$action] != NULL) {
+            if ($name && $action && isset($this->_access_overrides[$type]) && isset($this->_access_overrides[$type][$name]) && isset($this->_access_overrides[$type][$name][$action]) && $this->_access_overrides[$type][$name][$action] != NULL) {
                 return $this->_access_overrides[$type][$name][$action];
             }
             elseif ($name && isset($this->_access_overrides[$type]) && isset($this->_access_overrides[$type][$name]) && $this->_access_overrides[$type][$name] != NULL) {
