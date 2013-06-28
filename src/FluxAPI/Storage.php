@@ -300,7 +300,7 @@ abstract class Storage implements StorageInterface
             foreach($relation_instances as $relation_instance) {
                 if ($relation_instance !== FALSE && !empty($relation_instance) && (is_string($relation_instance) || is_numeric($relation_instance))) {
 
-                    $relation_instance = $this->_api->load($relation_field->relationModel, $relation_instance);
+                    $relation_instance = $this->_api->loadFirst($relation_field->relationModel, $relation_instance);
                 }
 
                 if ($relation_instance !== FALSE && !empty($relation_instance)) {
