@@ -270,6 +270,14 @@ class PluginFactory
     }
 
     /**
+     * @return array
+     */
+    public function getBasePlugins()
+    {
+        return $this->_base_plugins;
+    }
+
+    /**
      * Reduces a model by removing existing fields or if no fields are given the entire model extend.
      *
      * @param string $model_name
