@@ -259,9 +259,14 @@ abstract class Storage implements StorageInterface
             }
         }
 
-        $query->setData($data);
-
-        $success = $this->executeQuery($query);
+        // do not execute query with no data to store
+        if (count($data) > 0) {
+            $query->setData($data);
+            $success = $this->executeQuery($query);
+        }
+        else {
+            $success = TRUE;
+        }
 
         // save relations
         $relation_fields = $instance->getRelationFields(); // collect all fields representing a relation to another model
@@ -283,7 +288,7 @@ abstract class Storage implements StorageInterface
             $field_name = $relation_field->name;
 
             if (isset($instance->$field_name)) { // check if the instance has one or multiple related models
-                if (\FluxAPI\Collection\ModelCollection::isCollection($instance->$field_name)) {
+                if (\FluxAPI\Collection\ModelCollection::isInstance($instance->$field_name)) {
                     $relation_instances = $instance->$field_name;
                 } else {
                     $relation_instances->push($instance->$field_name);
