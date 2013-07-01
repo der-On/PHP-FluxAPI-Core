@@ -219,7 +219,7 @@ class ModelFactory extends \Pimple
         $query->filter('limit',array(0,1));
         $models = $this->load($model_name, $query);
 
-        if (!empty($models)) {
+        if (!empty($models) && $models->count() > 0) {
             return $this->_modelToFormat($model_name, $models[0], $format);
         }
 
