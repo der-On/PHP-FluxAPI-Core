@@ -253,7 +253,7 @@ abstract class Storage implements StorageInterface
 
         $data = $instance->toArray();
 
-        foreach($data as $name) {
+        foreach($data as $name => $value) {
             if (!in_array($name, $modified_properties)) {
                 unset($data[$name]);
             }
