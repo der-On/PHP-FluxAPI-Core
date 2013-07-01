@@ -64,10 +64,10 @@ interface FormatInterface
      * You must implement this in method.
      *
      * @param $model_name
-     * @param array $models
+     * @param \FluxAPI\Collection\ModelCollection $models
      * @return mixed
      */
-    public static function encodeFromModels($model_name, array $models);
+    public static function encodeFromModels($model_name, \FluxAPI\Collection\ModelCollection $models);
 
     /**
      * Decodes encoded format for population of a single model instance.

@@ -464,9 +464,11 @@ class ApiTest extends FluxApi_Database_TestCase
 
         $node->parent = self::$fluxApi->createNode(array('title'=>'new parent Node'));
 
-        $node->children = array(
-            self::$fluxApi->createNode(array('title'=>'new child Node 1')),
-            self::$fluxApi->createNode(array('title'=>'new child Node 2')),
+        $node->children = new \FluxAPI\Collection\ModelCollection(
+            array(
+                self::$fluxApi->createNode(array('title'=>'new child Node 1')),
+                self::$fluxApi->createNode(array('title'=>'new child Node 2')),
+            )
         );
 
         self::$fluxApi->saveNode($node);
@@ -499,13 +501,13 @@ class ApiTest extends FluxApi_Database_TestCase
 
         // as parent is a belongs-to relation we have to remove it from parents children
         $parent = $node->parent;
-        $parent->children = array();
+        $parent->children->clear();
 
         // to prevent re-adding the node to the parents children we have to remove the parent from the node too
         unset($node->parent);
 
         // now we remove the children
-        $node->children = array();
+        $node->children->clear();
 
         // and save both, the parent and the node
         self::$fluxApi->saveNode($parent);

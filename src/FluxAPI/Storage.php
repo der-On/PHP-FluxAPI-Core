@@ -277,17 +277,16 @@ abstract class Storage implements StorageInterface
                 continue;
             }
 
-            $relation_instances = array();
+            $relation_instances = new \FluxAPI\Collection\ModelCollection();
             $added_relation_ids = array();
 
             $field_name = $relation_field->name;
 
             if (isset($instance->$field_name)) { // check if the instance has one or multiple related models
-
-                if (is_array($instance->$field_name)) {
+                if (\FluxAPI\Collection\ModelCollection::isCollection($instance->$field_name)) {
                     $relation_instances = $instance->$field_name;
                 } else {
-                    $relation_instances[] = $instance->$field_name;
+                    $relation_instances->push($instance->$field_name);
                 }
             }
 
@@ -298,8 +297,8 @@ abstract class Storage implements StorageInterface
 
             // after all related models have been collected we need to store the relation
             foreach($relation_instances as $relation_instance) {
+                // relation is stored as simple ID and no object so we have to load it
                 if ($relation_instance !== FALSE && !empty($relation_instance) && (is_string($relation_instance) || is_numeric($relation_instance))) {
-
                     $relation_instance = $this->_api->loadFirst($relation_field->relationModel, $relation_instance);
                 }
 

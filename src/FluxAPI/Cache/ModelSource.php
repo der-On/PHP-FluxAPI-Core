@@ -7,7 +7,7 @@ class ModelSource extends CacheSource
     public $query = NULL;
     public $instances = NULL;
 
-    public function __construct($model_name, \FluxAPI\Query $query = NULL, array $instances = NULL)
+    public function __construct($model_name, \FluxAPI\Query $query = NULL, \FluxAPI\Collection\ModelCollection $instances = NULL)
     {
         $this->model_name = $model_name;
         $this->query = $query;

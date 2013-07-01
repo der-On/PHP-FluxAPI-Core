@@ -20,7 +20,7 @@ abstract class Format implements FormatInterface
         return static::encode($model->toArray());
     }
 
-    public static function encodeFromModels($model_name, array $models)
+    public static function encodeFromModels($model_name, \FluxAPI\Collection\ModelCollection $models)
     {
         return static::encode($models);
     }
