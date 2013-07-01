@@ -311,7 +311,7 @@ abstract class Model
             $models = $this->$name;
         }
 
-        $this->_data[$name][] = $model;
+        $this->_data[$name]->push($model);
     }
 
     /**

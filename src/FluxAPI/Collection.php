@@ -36,7 +36,7 @@ abstract class Collection implements \IteratorAggregate, \ArrayAccess, \Countabl
      */
     public function getIterator()
     {
-        return new \RecursiveArrayIterator($this->_items);
+        return new \ArrayIterator($this->_items);
     }
 
     /**
@@ -98,7 +98,7 @@ abstract class Collection implements \IteratorAggregate, \ArrayAccess, \Countabl
      */
     public function offsetUnset($offset)
     {
-        $this->removeAt($offset);
+        unset($this->_items[$offset]);
     }
 
     /**

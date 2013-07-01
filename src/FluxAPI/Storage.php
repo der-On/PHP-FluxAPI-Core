@@ -264,7 +264,7 @@ abstract class Storage implements StorageInterface
         $success = $this->executeQuery($query);
 
         // save relations
-        $relation_fields = $instance->getRelationFields(); // collect all field representing a relation to another model
+        $relation_fields = $instance->getRelationFields(); // collect all fields representing a relation to another model
 
         foreach($relation_fields as $relation_field) {
             // skip relations that should not be saved
