@@ -11,6 +11,17 @@ abstract class Collection implements \IteratorAggregate, \ArrayAccess, \Countabl
     private $_items = array();
 
     /**
+     * Prepares an item for injection into the collection
+     *
+     * @param mixed $item
+     * @return $this
+     */
+    protected function _prepareItem($item)
+    {
+        return $this;
+    }
+
+    /**
      * Checks if a given variable is a collection of the same class or subclass
      *
      * @param mixed $var
@@ -121,6 +132,10 @@ abstract class Collection implements \IteratorAggregate, \ArrayAccess, \Countabl
      */
     public function set($index, $item)
     {
+        if (is_object($item)) {
+            $this->_prepareItem($item);
+        }
+
         $this->_items[$index] = $item;
 
         return $this;
@@ -213,20 +228,12 @@ abstract class Collection implements \IteratorAggregate, \ArrayAccess, \Countabl
      * @param mixed $item
      * @return $this
      */
-    public function append($item)
-    {
-        return $this->push($item);
-    }
-
-
-    /**
-     * Appends an item to the collection
-     *
-     * @param mixed $item
-     * @return $this
-     */
     public function push($item)
     {
+        if (is_object($item)) {
+            $this->_prepareItem($item);
+        }
+
         array_push($this->_items, $item);
 
         return $this;
@@ -243,10 +250,13 @@ abstract class Collection implements \IteratorAggregate, \ArrayAccess, \Countabl
      * See: http://php.net/manual/en/function.array-merge.php
      *
      * @param Colelction $collection
+     * @return $this
      */
     public function merge(Colelction $collection)
     {
         $this->_items = array_merge($this->_items, $collection->toArray());
+
+        return $this;
     }
 
     /**
@@ -308,13 +318,17 @@ abstract class Collection implements \IteratorAggregate, \ArrayAccess, \Countabl
     /**
      * Inset an item in the collection at a specific index
      *
-     * @param mixed $item
      * @param int $index
+     * @param mixed $item
      * @return $this
      */
-    public function insert($item, $index)
+    public function insertAt($index, $item)
     {
         $index = (int) $index;
+
+        if (is_object($item)) {
+            $this->_prepareItem($item);
+        }
 
         array_splice($this->_items, $index, 1, $item);
 

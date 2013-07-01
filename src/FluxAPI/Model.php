@@ -51,6 +51,13 @@ abstract class Model
     protected $_api;
 
     /**
+     * Query wich was used to retrieve this collection from the storage
+     *
+     * @var \FluxAPI\Query
+     */
+    protected $_query = NULL;
+
+    /**
      * Constructor
      *
      * @param [array $data] if set the model will contain that initial data
@@ -63,6 +70,22 @@ abstract class Model
         $this->setDefaults();
 
         $this->populate($data);
+    }
+
+    /**
+     * @param Query $query
+     */
+    public function setQuery(\FluxAPI\Query $query = NULL)
+    {
+        $this->_query = $query;
+    }
+
+    /**
+     * @return \FluxAPI\Query|null
+     */
+    public function getQuery()
+    {
+        return $this->_query;
     }
 
     /**

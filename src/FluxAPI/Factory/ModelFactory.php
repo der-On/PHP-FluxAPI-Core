@@ -148,31 +148,6 @@ class ModelFactory extends \Pimple
     }
 
     /**
-     * @param string $model_name
-     * @param \FluxAPI\Query $query
-     * @return null|array
-     */
-    public function getCachedModels($model_name, \FluxAPI\Query $query = NULL)
-    {
-        $source = new \FluxAPI\Cache\ModelSource($model_name, $query);
-        $instances = $this['caches']->getCached(\FluxAPI\Cache::TYPE_MODEL, $source);
-
-        return $instances;
-    }
-
-    public function cacheModels($model_name, \FluxAPI\Query $query = NULL, \FluxAPI\Collection\ModelCollection $instances)
-    {
-        $source = new \FluxAPI\Cache\ModelSource($model_name, $query, $instances);
-        $this['caches']->store(\FluxAPI\Cache::TYPE_MODEL, $source, $instances);
-    }
-
-    public function removeCachedModels($model_name, \FluxAPI\Collection\ModelCollection $instances)
-    {
-        $source = new \FluxAPI\Cache\ModelSource($model_name, NULL, $instances);
-        $this['caches']->remove(\FluxAPI\Cache::TYPE_MODEL, $source);
-    }
-
-    /**
      * Loads and returns a list of Model instances
      *
      * @param string $model_name
@@ -193,19 +168,11 @@ class ModelFactory extends \Pimple
         $models = $this['plugins']->getPlugins('Model');
 
         if (isset($models[$model_name])) {
-            $cached = TRUE;
-            $instances = $this->getCachedModels($model_name, $query);
-
-            if ($instances === NULL) {
-                $cached = FALSE;
-                $instances = $this['storages']->getStorage($model_name)->load($model_name,$query);
-            }
+            $instances = $this['storages']->getStorage($model_name)->load($model_name, $query);
 
             foreach($instances as $instance) {
                 $this['dispatcher']->dispatch(ModelEvent::LOAD, new ModelEvent($model_name, $query, $instance));
             }
-
-            if (!$cached) $this->cacheModels($model_name, $query, $instances);
 
             return $this->_modelsToFormat($model_name, $instances, $format);
         }
@@ -269,27 +236,25 @@ class ModelFactory extends \Pimple
 
             $storage = $this['storages']->getStorage($model_name);
 
+            // multiple model instances
             if (\FluxAPI\Collection\ModelCollection::isInstance($instances)) {
                 foreach($instances as $instance) {
                     if ($this->_validate($instance)) {
                         $storage->save($model_name, $instance);
                         $this['dispatcher']->dispatch(ModelEvent::SAVE, new ModelEvent($model_name, NULL, $instance));
-
-                        // update cache
-                        //$this->cacheModels($model_name, NULL, array($instance));
                     } else {
                         throw new \InvalidArgumentException(sprintf('The %s model is invalid.', $model_name));
                     }
                 }
 
                 return TRUE;
-            } else {
+            }
+            // single model instance
+            else {
                 if ($this->_validate($instances)) {
                     $return = $storage->save($model_name, $instances);
                     $this['dispatcher']->dispatch(ModelEvent::SAVE, new ModelEvent($model_name, NULL, $instances));
 
-                    // update cache
-                    //$this->cacheModels($model_name, NULL, array($instances));
                     return $return;
                 } else {
                     throw new \InvalidArgumentException(sprintf('The %s model is invalid.', $model_name));
@@ -363,14 +328,10 @@ class ModelFactory extends \Pimple
 
         if (isset($models[$model_name])) {
             $storage = $this['storages']->getStorage($model_name);
-            $instances = $storage->load($model_name, $query);
-
             $return = $storage->delete($model_name, $query);
 
             $this['dispatcher']->dispatch(ModelEvent::DELETE, new ModelEvent($model_name, $query));
 
-            // remove from cache
-            $this->removeCachedModels($model_name, $instances);
             return $return;
         }
 

@@ -11,7 +11,7 @@ use \FluxAPI\Field;
  *
  * @package FluxAPI
  */
-abstract class Storage implements StorageInterface
+abstract class Storage extends \Pimple implements StorageInterface
 {
     /**
      * @var Api Internal Api instance
@@ -38,6 +38,7 @@ abstract class Storage implements StorageInterface
     {
         $this->config = array_replace_recursive($this->config,$config);
         $this->_api = $api;
+        $this['caches'] = $api['caches'];
 
         $this->addFilters();
     }
@@ -219,6 +220,41 @@ abstract class Storage implements StorageInterface
     }
 
     /**
+     * @param string $model_name
+     * @param \FluxAPI\Query $query
+     * @return null|array
+     */
+    public function getCachedModels($model_name, \FluxAPI\Query $query = NULL)
+    {
+        $source = new \FluxAPI\Cache\ModelSource($model_name, $query);
+        $instances = $this['caches']->getCached(\FluxAPI\Cache::TYPE_MODEL, $source);
+
+        return $instances;
+    }
+
+    /**
+     * @param string $model_name
+     * @param Query $query
+     * @param Collection\ModelCollection $instances
+     */
+    public function cacheModels($model_name, \FluxAPI\Query $query = NULL, \FluxAPI\Collection\ModelCollection $instances)
+    {
+        $source = new \FluxAPI\Cache\ModelSource($model_name, $query, $instances);
+        $this['caches']->store(\FluxAPI\Cache::TYPE_MODEL, $source, $instances);
+    }
+
+    /**
+     * @param string $model_name
+     * @param Query $query
+     * @param Collection\ModelCollection $instances
+     */
+    public function removeCachedModels($model_name, \FluxAPI\Query $query = NULL, \FluxAPI\Collection\ModelCollection $instances = NULL)
+    {
+        $source = new \FluxAPI\Cache\ModelSource($model_name, $query, $instances);
+        $this['caches']->remove(\FluxAPI\Cache::TYPE_MODEL, $source);
+    }
+
+    /**
      * Saves/updates a given model instance to the storage
      *
      * @param string $model_name
@@ -263,6 +299,9 @@ abstract class Storage implements StorageInterface
         if (count($data) > 0) {
             $query->setData($data);
             $success = $this->executeQuery($query);
+
+            // remove from caches
+            $this->removeCachedModels($model_name, $instance->getQuery());
         }
         else {
             $success = TRUE;
@@ -344,10 +383,21 @@ abstract class Storage implements StorageInterface
         $query->setType(Query::TYPE_SELECT);
         $query->setModelName($model_name);
 
-        $instances = $this->executeQuery($query);
+        $cached = TRUE;
+        $instances = $this->getCachedModels($model_name, $query);
+
+        if ($instances === NULL) {
+            $cached = FALSE;
+            $instances = $this->executeQuery($query);
+            $instances->setQuery($query); // append query to collection
+        }
 
         foreach($instances as $instance) {
             $instance->notNew();
+        }
+
+        if (!$cached) {
+            $this->cacheModels($model_name, $query, $instances);
         }
 
         return $instances;
@@ -403,12 +453,21 @@ abstract class Storage implements StorageInterface
         if (empty($query)) {
             $query = new Query();
         }
-        $query->setType(Query::TYPE_DELETE);
+
         $query->setModelName($model_name);
+
+        $instances = $this->_api->load($model_name, $query);
+
+        $query->setType(Query::TYPE_DELETE);
 
         // TODO: clear relations table too
 
-        return $this->executeQuery($query);
+        $return = $this->executeQuery($query);
+
+        // remove from cache
+        $this->removeCachedModels($model_name, $instances->getQuery(), $instances);
+
+        return $return;
     }
 
     /**

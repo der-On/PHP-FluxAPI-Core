@@ -302,6 +302,27 @@ interface StorageInterface
     public function exists($model_name, Model $instance);
 
     /**
+     * @param string $model_name
+     * @param \FluxAPI\Query $query
+     * @return null|array
+     */
+    public function getCachedModels($model_name, \FluxAPI\Query $query = NULL);
+
+    /**
+     * @param string $model_name
+     * @param Query $query
+     * @param Collection\ModelCollection $instances
+     */
+    public function cacheModels($model_name, \FluxAPI\Query $query = NULL, \FluxAPI\Collection\ModelCollection $instances);
+
+    /**
+     * @param string $model_name
+     * @param Query $query
+     * @param Collection\ModelCollection $instances
+     */
+    public function removeCachedModels($model_name, \FluxAPI\Query $query = NULL, \FluxAPI\Collection\ModelCollection $instances);
+
+    /**
      * Saves/updates a given model instance to the storage
      *
      * @param string $model_name
