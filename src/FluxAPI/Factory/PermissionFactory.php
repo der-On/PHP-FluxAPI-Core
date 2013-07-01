@@ -20,7 +20,7 @@ class PermissionFactory extends \Pimple
         $this->_api = $api;
         $this['plugins'] = $api['plugins'];
         $this['caches'] = $api['caches'];
-        $this->config = array_merge_recursive($this->config, $api->config['permission.options']);
+        $this->config = array_merge($this->config, $api->config['permission.options']);
     }
 
     public function getPermissionClass($permission_name)
