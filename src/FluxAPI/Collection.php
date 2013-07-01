@@ -373,11 +373,30 @@ abstract class Collection implements \IteratorAggregate, \ArrayAccess, \Countabl
     }
 
     /**
+     * Returns an array represantation of this collection
+     *
+     * @param bool $recursive if true the items will be converted to an array to (as long as they have a toArray() method)
      * @return array
      */
-    public function toArray()
+    public function toArray($recursive = false)
     {
-        return $this->_items;
+        if ($recursive) {
+            $_items = array();
+
+            foreach($this->_items as $key => $item) {
+                if (is_object($item) && method_exists($item, 'toArray')) {
+                    $_items[$key] = $item->toArray();
+                }
+                else {
+                    $_items[$key] = $item;
+                }
+            }
+
+            return $_items;
+        }
+        else {
+            return $this->_items;
+        }
     }
 
     /**
