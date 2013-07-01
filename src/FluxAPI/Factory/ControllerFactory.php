@@ -5,7 +5,7 @@ namespace FluxAPI\Factory;
 use \FluxAPI\Event\ControllerEvent;
 use FluxAPI\Exception\AccessDeniedException;
 
-class ControllerFactory
+class ControllerFactory extends \Pimple
 {
     protected $_api;
 
@@ -14,21 +14,25 @@ class ControllerFactory
     public function __construct(\FluxAPI\Api $api)
     {
         $this->_api = $api;
+        $this['permissions'] = $api['permissions'];
+        $this['plugins'] = $api['plugins'];
+        $this['caches'] = $api['caches'];
+        $this['dispatcher'] = $api['dispatcher'];
     }
 
     public function getControllerClass($controller_name)
     {
-        if (!$this->_api['permissions']->hasControllerAccess($controller_name)) {
+        if (!$this['permissions']->hasControllerAccess($controller_name)) {
             throw new AccessDeniedException(sprintf('You are not allowed to use the "%s" Controller.', $controller_name));
             return NULL;
         }
 
-        return $this->_api['plugins']->getPluginClass('Controller', $controller_name);
+        return $this['plugins']->getPluginClass('Controller', $controller_name);
     }
 
     public function getController($controller_name)
     {
-        if (!$this->_api['permissions']->hasControllerAccess($controller_name)) {
+        if (!$this['permissions']->hasControllerAccess($controller_name)) {
             throw new AccessDeniedException(sprintf('You are not allowed to use the "%s" Controller.', $controller_name));
             return NULL;
         }
@@ -49,13 +53,13 @@ class ControllerFactory
     public function getCachedCall($controller_name, $action)
     {
         $source = new \FluxAPI\Cache\ControllerActionSource($controller_name, $action);
-        return $this->_api['caches']->getCached(\FluxAPI\Cache::TYPE_CONTROLLER_ACTION, $source);
+        return $this['caches']->getCached(\FluxAPI\Cache::TYPE_CONTROLLER_ACTION, $source);
     }
 
     public function cacheCall($controller_name, $action, $result = NULL)
     {
         $source = new \FluxAPI\Cache\ControllerActionSource($controller_name, $action, $result);
-        $this->_api['caches']->store(\FluxAPI\Cache::TYPE_CONTROLLER_ACTION, $source, $result);
+        $this['caches']->store(\FluxAPI\Cache::TYPE_CONTROLLER_ACTION, $source, $result);
     }
 
     /**
@@ -70,7 +74,7 @@ class ControllerFactory
     public function call($controller_name, $action, array $params = NULL, array $context = NULL)
     {
         // abort if access is denied
-        if (!$this->_api['permissions']->hasControllerAccess($controller_name, $action)) {
+        if (!$this['permissions']->hasControllerAccess($controller_name, $action)) {
             throw new AccessDeniedException(sprintf('You are not allowed to call %s->%s.', $controller_name, $action));
             return;
         }
@@ -100,7 +104,7 @@ class ControllerFactory
                     }
                 }
 
-                $this->_api['dispatcher']->dispatch(ControllerEvent::BEFORE_CALL, new ControllerEvent($controller_name, $instance, $action, $params));
+                $this['dispatcher']->dispatch(ControllerEvent::BEFORE_CALL, new ControllerEvent($controller_name, $instance, $action, $params));
 
                 $return = $this->getCachedCall($controller_name, $action);
 
@@ -108,7 +112,7 @@ class ControllerFactory
                     $return = call_user_func_array(array($instance, $action), $params);
                 }
 
-                $this->_api['dispatcher']->dispatch(ControllerEvent::CALL, new ControllerEvent($controller_name, $instance, $action, $params));
+                $this['dispatcher']->dispatch(ControllerEvent::CALL, new ControllerEvent($controller_name, $instance, $action, $params));
 
                 $this->cacheCall($controller_name, $action, $return);
 
@@ -142,7 +146,7 @@ class ControllerFactory
     public function getActions($controller_name = NULL)
     {
         if (empty($controller_name)) {
-            $controllers = $this->_api['plugins']->getPlugins('Controller');
+            $controllers = $this['plugins']->getPlugins('Controller');
 
             $actions = array();
 
@@ -152,7 +156,7 @@ class ControllerFactory
 
             return $actions;
         } else {
-            $controller = $this->_api['plugins']->getPluginClass('Controller', $controller_name);
+            $controller = $this['plugins']->getPluginClass('Controller', $controller_name);
 
             if ($controller) {
                 return $this->_getNormalizedActions($controller::getActions());

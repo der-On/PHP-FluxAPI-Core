@@ -3,7 +3,7 @@
 namespace FluxAPI\Factory;
 
 
-class PermissionFactory
+class PermissionFactory extends \Pimple
 {
     protected $_api;
 
@@ -11,14 +11,21 @@ class PermissionFactory
 
     protected $_access_overrides = array('*' => NULL);
 
+    public $config = array(
+        'default' => \FluxAPI\Api::PERMISSION_ALLOW
+    );
+
     public function __construct(\FluxAPI\Api $api)
     {
         $this->_api = $api;
+        $this['plugins'] = $api['plugins'];
+        $this['caches'] = $api['caches'];
+        $this->config = array_merge_recursive($this->config, $api->config['permission.options']);
     }
 
     public function getPermissionClass($permission_name)
     {
-        return $this->_api['plugins']->getPluginClass('Permission', $permission_name);
+        return $this['plugins']->getPluginClass('Permission', $permission_name);
     }
 
     public function getPermission($permission_name)
@@ -38,7 +45,7 @@ class PermissionFactory
 
     public function getDefaultAccess()
     {
-        return ($this->_api->config['permission.options']['default'] == \FluxAPI\Api::PERMISSION_ALLOW) ? TRUE : FALSE;
+        return ($this->config['default'] == \FluxAPI\Api::PERMISSION_ALLOW) ? TRUE : FALSE;
     }
 
     /**
@@ -114,7 +121,7 @@ class PermissionFactory
     {
         $source = new \FluxAPI\Cache\ModelPermissionSource($model_name, $model, $action);
 
-        return $this->_api['caches']->getCached(\FluxAPI\Cache::TYPE_PERMISSION, $source);
+        return $this['caches']->getCached(\FluxAPI\Cache::TYPE_PERMISSION, $source);
     }
 
     /**
@@ -126,7 +133,7 @@ class PermissionFactory
     {
         $source = new \FluxAPI\Cache\ControllerPermissionSource($controller_name, $action);
 
-        return $this->_api['caches']->getCached(\FluxAPI\Cache::TYPE_PERMISSION, $source);
+        return $this['caches']->getCached(\FluxAPI\Cache::TYPE_PERMISSION, $source);
     }
 
     /**
@@ -166,7 +173,7 @@ class PermissionFactory
             return $access_override;
         }
 
-        $permissions = $this->_api['plugins']->getPlugins('Permission');
+        $permissions = $this['plugins']->getPlugins('Permission');
 
         foreach($permissions as $permission_name => $permission) {
             $access = $this->getCachedModelAccess($model_name, $model, $action);
@@ -195,7 +202,7 @@ class PermissionFactory
             return $access_override;
         }
 
-        $permissions = $this->_api['plugins']->getPlugins('Permission');
+        $permissions = $this['plugins']->getPlugins('Permission');
 
         foreach($permissions as $permission_name => $permission) {
             $access = $this->getCachedControllerAccess($controller_name, $action);

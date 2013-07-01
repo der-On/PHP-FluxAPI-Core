@@ -12,6 +12,11 @@ class ModelFactory extends \Pimple
     public function __construct(\FluxAPI\Api $api)
     {
         $this->_api = $api;
+        $this['permissions'] = $api['permissions'];
+        $this['dispatcher'] = $api['dispatcher'];
+        $this['plugins'] = $api['plugins'];
+        $this['caches'] = $api['caches'];
+        $this['storages'] = $api['storages'];
     }
 
     /**
@@ -26,15 +31,15 @@ class ModelFactory extends \Pimple
     public function create($model_name, $data = NULL, $format = NULL, $isNew = TRUE)
     {
         // skip if user has no access
-        if (!$this->_api['permissions']->hasModelAccess($model_name, null, \FluxAPI\Api::MODEL_CREATE)) {
+        if (!$this['permissions']->hasModelAccess($model_name, null, \FluxAPI\Api::MODEL_CREATE)) {
             throw new AccessDeniedException(sprintf('You are not allowed to create a %s model.', $model_name));
             return null;
         }
 
-        $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_CREATE, new ModelEvent($model_name));
+        $this['dispatcher']->dispatch(ModelEvent::BEFORE_CREATE, new ModelEvent($model_name));
 
-        $models = $this->_api['plugins']->getPlugins('Model');
-        $extend = $this->_api['plugins']->getExtends('Model',$model_name);
+        $models = $this['plugins']->getPlugins('Model');
+        $extend = $this['plugins']->getExtends('Model',$model_name);
 
         if (isset($models[$model_name])) {
 
@@ -55,7 +60,7 @@ class ModelFactory extends \Pimple
                 $instance->populate($data);
             }
 
-            $this->_api['dispatcher']->dispatch(ModelEvent::CREATE, new ModelEvent($model_name, NULL, $instance));
+            $this['dispatcher']->dispatch(ModelEvent::CREATE, new ModelEvent($model_name, NULL, $instance));
             return $instance;
         }
 
@@ -64,7 +69,7 @@ class ModelFactory extends \Pimple
 
     protected function _modelDataFromFormat($model_name, $data, $format)
     {
-        $formats = $this->_api['plugins']->getPlugins('Format');
+        $formats = $this['plugins']->getPlugins('Format');
 
         if (!empty($format) && is_string($format) && in_array(ucfirst($format),array_keys($formats))) {
             $format_class = $formats[ucfirst($format)];
@@ -78,7 +83,7 @@ class ModelFactory extends \Pimple
 
     protected function _modelsToFormat($model_name, \FluxAPI\Collection\ModelCollection $models, $format)
     {
-        $formats = $this->_api['plugins']->getPlugins('Format');
+        $formats = $this['plugins']->getPlugins('Format');
 
         if (!empty($format) && is_string($format) && in_array(ucfirst($format),array_keys($formats))) {
             $format_class = $formats[ucfirst($format)];
@@ -92,7 +97,7 @@ class ModelFactory extends \Pimple
 
     protected function _modelToFormat($model_name, \FluxAPI\Model $model, $format)
     {
-        $formats = $this->_api['plugins']->getPlugins('Format');
+        $formats = $this['plugins']->getPlugins('Format');
 
         if (!empty($format) && is_string($format) && in_array(ucfirst($format),array_keys($formats))) {
             $format_class = $formats[ucfirst($format)];
@@ -127,7 +132,7 @@ class ModelFactory extends \Pimple
                 } else {
                     $validator_options = array();
                 }
-                $validator_class = $this->_api['plugins']->getPluginClass('FieldValidator', $validator_name);
+                $validator_class = $this['plugins']->getPluginClass('FieldValidator', $validator_name);
 
                 if ($validator_class) {
                     $validator = new $validator_class($this->_api);
@@ -150,7 +155,7 @@ class ModelFactory extends \Pimple
     public function getCachedModels($model_name, \FluxAPI\Query $query = NULL)
     {
         $source = new \FluxAPI\Cache\ModelSource($model_name, $query);
-        $instances = $this->_api['caches']->getCached(\FluxAPI\Cache::TYPE_MODEL, $source);
+        $instances = $this['caches']->getCached(\FluxAPI\Cache::TYPE_MODEL, $source);
 
         return $instances;
     }
@@ -158,13 +163,13 @@ class ModelFactory extends \Pimple
     public function cacheModels($model_name, \FluxAPI\Query $query = NULL, \FluxAPI\Collection\ModelCollection $instances)
     {
         $source = new \FluxAPI\Cache\ModelSource($model_name, $query, $instances);
-        $this->_api['caches']->store(\FluxAPI\Cache::TYPE_MODEL, $source, $instances);
+        $this['caches']->store(\FluxAPI\Cache::TYPE_MODEL, $source, $instances);
     }
 
     public function removeCachedModels($model_name, \FluxAPI\Collection\ModelCollection $instances)
     {
         $source = new \FluxAPI\Cache\ModelSource($model_name, NULL, $instances);
-        $this->_api['caches']->remove(\FluxAPI\Cache::TYPE_MODEL, $source);
+        $this['caches']->remove(\FluxAPI\Cache::TYPE_MODEL, $source);
     }
 
     /**
@@ -178,14 +183,14 @@ class ModelFactory extends \Pimple
     public function load($model_name, \FluxAPI\Query $query = NULL, $format = NULL)
     {
         // skip if user has no access
-        if (!$this->_api['permissions']->hasModelAccess($model_name, null, \FluxAPI\Api::MODEL_LOAD)) {
+        if (!$this['permissions']->hasModelAccess($model_name, null, \FluxAPI\Api::MODEL_LOAD)) {
             throw new AccessDeniedException(sprintf('You are not allowed to load %s models.', $model_name));
             return null;
         }
 
-        $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_LOAD, new ModelEvent($model_name, $query));
+        $this['dispatcher']->dispatch(ModelEvent::BEFORE_LOAD, new ModelEvent($model_name, $query));
 
-        $models = $this->_api['plugins']->getPlugins('Model');
+        $models = $this['plugins']->getPlugins('Model');
 
         if (isset($models[$model_name])) {
             $cached = TRUE;
@@ -193,11 +198,11 @@ class ModelFactory extends \Pimple
 
             if ($instances === NULL) {
                 $cached = FALSE;
-                $instances = $this->_api['storages']->getStorage($model_name)->load($model_name,$query);
+                $instances = $this['storages']->getStorage($model_name)->load($model_name,$query);
             }
 
             foreach($instances as $instance) {
-                $this->_api['dispatcher']->dispatch(ModelEvent::LOAD, new ModelEvent($model_name, $query, $instance));
+                $this['dispatcher']->dispatch(ModelEvent::LOAD, new ModelEvent($model_name, $query, $instance));
             }
 
             if (!$cached) $this->cacheModels($model_name, $query, $instances);
@@ -211,7 +216,7 @@ class ModelFactory extends \Pimple
     public function loadFirst($model_name, \FluxAPI\Query $query = NULL, $format = NULL)
     {
         // skip if user has no access
-        if (!$this->_api['permissions']->hasModelAccess($model_name, null, \FluxAPI\Api::MODEL_LOAD)) {
+        if (!$this['permissions']->hasModelAccess($model_name, null, \FluxAPI\Api::MODEL_LOAD)) {
             throw new AccessDeniedException(sprintf('You are not allowed to load a %s model.', $model_name));
             return null;
         }
@@ -236,39 +241,39 @@ class ModelFactory extends \Pimple
     public function save($model_name, $instances)
     {
         // skip if user has no access
-        if (!$this->_api['permissions']->hasModelAccess($model_name, null, \FluxAPI\Api::MODEL_SAVE)) {
+        if (!$this['permissions']->hasModelAccess($model_name, null, \FluxAPI\Api::MODEL_SAVE)) {
             throw new AccessDeniedException(sprintf('You are not allowed to save %s models.', $model_name));
             return null;
         }
 
-        if (is_object($instances) && is_subclass_of($instances, '\FluxAPI\Collection')) {
+        if (\FluxAPI\Collection\ModelCollection::isInstance($instances)) {
             foreach($instances as $instance) {
                 // skip if user has no access
-                if (!$this->_api['permissions']->hasModelAccess($model_name, $instance, \FluxAPI\Api::MODEL_CREATE)) {
+                if (!$this['permissions']->hasModelAccess($model_name, $instance, \FluxAPI\Api::MODEL_CREATE)) {
                     throw new AccessDeniedException(sprintf('You are not allowed to save the %s model with the id %s.', $model_name, $instance->id));
                     return FALSE;
                 }
 
-                $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_SAVE, new ModelEvent($model_name, NULL, $instance));
+                $this['dispatcher']->dispatch(ModelEvent::BEFORE_SAVE, new ModelEvent($model_name, NULL, $instance));
             }
         } else {
-            $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_SAVE, new ModelEvent($model_name, NULL, $instances));
+            $this['dispatcher']->dispatch(ModelEvent::BEFORE_SAVE, new ModelEvent($model_name, NULL, $instances));
         }
 
-        $models = $this->_api['plugins']->getPlugins('Model');
+        $models = $this['plugins']->getPlugins('Model');
 
         if (isset($models[$model_name])) {
             if (empty($instances)) {
                 return FALSE;
             }
 
-            $storage = $this->_api['storages']->getStorage($model_name);
+            $storage = $this['storages']->getStorage($model_name);
 
-            if (\FluxAPI\Collection\ModelCollection::isCollection($instances)) {
+            if (\FluxAPI\Collection\ModelCollection::isInstance($instances)) {
                 foreach($instances as $instance) {
                     if ($this->_validate($instance)) {
                         $storage->save($model_name, $instance);
-                        $this->_api['dispatcher']->dispatch(ModelEvent::SAVE, new ModelEvent($model_name, NULL, $instance));
+                        $this['dispatcher']->dispatch(ModelEvent::SAVE, new ModelEvent($model_name, NULL, $instance));
 
                         // update cache
                         //$this->cacheModels($model_name, NULL, array($instance));
@@ -281,7 +286,7 @@ class ModelFactory extends \Pimple
             } else {
                 if ($this->_validate($instances)) {
                     $return = $storage->save($model_name, $instances);
-                    $this->_api['dispatcher']->dispatch(ModelEvent::SAVE, new ModelEvent($model_name, NULL, $instances));
+                    $this['dispatcher']->dispatch(ModelEvent::SAVE, new ModelEvent($model_name, NULL, $instances));
 
                     // update cache
                     //$this->cacheModels($model_name, NULL, array($instances));
@@ -308,14 +313,14 @@ class ModelFactory extends \Pimple
     public function update($model_name, \FluxAPI\Query $query, $data, $format = NULL)
     {
         // skip if user has no access
-        if (!$this->_api['permissions']->hasModelAccess($model_name, null, \FluxAPI\Api::MODEL_UPDATE)) {
+        if (!$this['permissions']->hasModelAccess($model_name, null, \FluxAPI\Api::MODEL_UPDATE)) {
             throw new AccessDeniedException(sprintf('You are not allowed to update %s models.', $model_name));
             return null;
         }
 
-        $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_UPDATE, new ModelEvent($model_name, $query));
+        $this['dispatcher']->dispatch(ModelEvent::BEFORE_UPDATE, new ModelEvent($model_name, $query));
 
-        $storage = $this->_api['storages']->getStorage($model_name);
+        $storage = $this['storages']->getStorage($model_name);
 
         // validate data
         $createMethod = 'create' . ucfirst($model_name);
@@ -328,7 +333,7 @@ class ModelFactory extends \Pimple
             }
 
             $return = $storage->update($model_name, $query, $data);
-            $this->_api['dispatcher']->dispatch(ModelEvent::UPDATE, new ModelEvent($model_name, $query));
+            $this['dispatcher']->dispatch(ModelEvent::UPDATE, new ModelEvent($model_name, $query));
 
             return $return;
         } else {
@@ -347,22 +352,22 @@ class ModelFactory extends \Pimple
     public function delete($model_name, \FluxAPI\Query $query = NULL)
     {
         // skip if user has no access
-        if (!$this->_api['permissions']->hasModelAccess($model_name, null, \FluxAPI\Api::MODEL_DELETE)) {
+        if (!$this['permissions']->hasModelAccess($model_name, null, \FluxAPI\Api::MODEL_DELETE)) {
             throw new AccessDeniedException(sprintf('You are not allowed to delete %s models.', $model_name));
             return null;
         }
 
-        $this->_api['dispatcher']->dispatch(ModelEvent::BEFORE_DELETE, new ModelEvent($model_name, $query));
+        $this['dispatcher']->dispatch(ModelEvent::BEFORE_DELETE, new ModelEvent($model_name, $query));
 
-        $models = $this->_api['plugins']->getPlugins('Model');
+        $models = $this['plugins']->getPlugins('Model');
 
         if (isset($models[$model_name])) {
-            $storage = $this->_api['storages']->getStorage($model_name);
+            $storage = $this['storages']->getStorage($model_name);
             $instances = $storage->load($model_name, $query);
 
             $return = $storage->delete($model_name, $query);
 
-            $this->_api['dispatcher']->dispatch(ModelEvent::DELETE, new ModelEvent($model_name, $query));
+            $this['dispatcher']->dispatch(ModelEvent::DELETE, new ModelEvent($model_name, $query));
 
             // remove from cache
             $this->removeCachedModels($model_name, $instances);
@@ -381,7 +386,7 @@ class ModelFactory extends \Pimple
      */
     public function count($model_name, \FluxAPI\Query $query = NULL)
     {
-        $storage = $this->_api['storages']->getStorage($model_name);
+        $storage = $this['storages']->getStorage($model_name);
         $return = $storage->count($model_name, $query);
         return $return || 0;
     }

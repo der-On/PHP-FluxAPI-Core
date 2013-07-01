@@ -5,7 +5,7 @@ use \FluxAPI\Cache;
 use \FluxAPI\Cache\CachOptions;
 use \FluxAPI\Cache\CacheSource;
 
-class CacheFactory
+class CacheFactory extends \Pimple
 {
     protected $_api;
 
@@ -14,6 +14,7 @@ class CacheFactory
     public function __construct(\FluxAPI\Api $api)
     {
         $this->_api = $api;
+        $this['plugins'] = $api['plugins'];
     }
 
     public function getCache($cache_name)
@@ -33,7 +34,7 @@ class CacheFactory
 
     public function getCacheClass($cache_name)
     {
-        return $this->_api['plugins']->getPluginClass('Cache', $cache_name);
+        return $this['plugins']->getPluginClass('Cache', $cache_name);
     }
 
     /**
@@ -46,7 +47,7 @@ class CacheFactory
      */
     public function getCached($type, CacheSource $source, CacheOptions $options = NULL)
     {
-        $cache_names = array_keys($this->_api['plugins']->getPlugins('Cache'));
+        $cache_names = array_keys($this['plugins']->getPlugins('Cache'));
 
         foreach($cache_names as $cache_name) {
             $cache = $this->getCache($cache_name);
@@ -72,7 +73,7 @@ class CacheFactory
      */
     public function store($type, CacheSource $source, $resource, CacheOptions $options = NULL)
     {
-        $cache_names = array_keys($this->_api['plugins']->getPlugins('Cache'));
+        $cache_names = array_keys($this['plugins']->getPlugins('Cache'));
 
         foreach($cache_names as $cache_name) {
             $cache = $this->getCache($cache_name);
@@ -90,7 +91,7 @@ class CacheFactory
      */
     public function remove($type, CacheSource $source, CacheOptions $options = NULL)
     {
-        $cache_names = array_keys($this->_api['plugins']->getPlugins('Cache'));
+        $cache_names = array_keys($this['plugins']->getPlugins('Cache'));
 
         foreach($cache_names as $cache_name) {
             $cache = $this->getCache($cache_name);
@@ -106,7 +107,7 @@ class CacheFactory
      */
     public function clear($type)
     {
-        $cache_names = array_keys($this->_api['plugins']->getPlugins('Cache'));
+        $cache_names = array_keys($this['plugins']->getPlugins('Cache'));
 
         foreach($cache_names as $cache_name) {
             $cache = $this->getCache($cache_name);
