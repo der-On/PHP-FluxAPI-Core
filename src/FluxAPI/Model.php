@@ -103,6 +103,21 @@ abstract class Model
     }
 
     /**
+     * Removes a field
+     *
+     * @chainable
+     * @param string $name
+     */
+    public function removeField($name)
+    {
+        if ($this->hasField($name)) {
+            unset($this->_fields[$name]);
+        }
+
+        return $this;
+    }
+
+    /**
      * Returns a field definition by it's name
      *
      * @param string $name
