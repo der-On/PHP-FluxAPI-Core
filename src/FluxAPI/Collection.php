@@ -249,10 +249,10 @@ abstract class Collection implements \IteratorAggregate, \ArrayAccess, \Countabl
      *
      * See: http://php.net/manual/en/function.array-merge.php
      *
-     * @param Colelction $collection
+     * @param Collection $collection
      * @return $this
      */
-    public function merge(Colelction $collection)
+    public function merge(Collection $collection)
     {
         $this->_items = array_merge($this->_items, $collection->toArray());
 
