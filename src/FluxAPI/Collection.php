@@ -280,22 +280,23 @@ abstract class Collection implements \IteratorAggregate, \ArrayAccess, \Countabl
      */
     public function indexOf($item)
     {
-        foreach($this->_items as $i => $_item)
-        {
-            if (is_object($item)) {
-                if ($item === $_item) {
-                    return $i;
-                }
-            }
-            else {
-                if ($item == $_item) {
-                    return $i;
-                }
-            }
+        if (is_object($item)) {
+            $strict = true;
 
         }
+        else {
+            $strict = false;
+        }
 
-        return -1;
+        $index = array_search($item, $this->_items, $strict);
+
+        if ($index !== false)
+        {
+            return $index;
+        }
+        else {
+            return -1;
+        }
     }
 
     /**

@@ -282,6 +282,15 @@ abstract class Storage extends \Pimple implements StorageInterface
         // only save modified properties
         $modified_properties = $instance->getModifiedProperties();
 
+        // for update queries do not set the id again
+        if ($query->getType() == Query::TYPE_UPDATE) {
+            $id_offset = array_search('id', $modified_properties);
+
+            if ($id_offset !== false) {
+                unset($modified_properties[$id_offset]);
+            }
+        }
+
         // if nothing was modified we do not need to save the model at all
         if (count($modified_properties) == 0) {
             return TRUE;
