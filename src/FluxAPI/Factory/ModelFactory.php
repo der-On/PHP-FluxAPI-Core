@@ -243,7 +243,7 @@ class ModelFactory extends \Pimple
                         $storage->save($model_name, $instance);
                         $this['dispatcher']->dispatch(ModelEvent::SAVE, new ModelEvent($model_name, NULL, $instance));
                     } else {
-                        throw new \InvalidArgumentException(sprintf('The %s model is invalid.', $model_name));
+                        throw new \InvalidArgumentException(sprintf("The %s model is invalid with the following errors:\n %s", $model_name, $instance->getErrors()));
                     }
                 }
 
@@ -257,7 +257,7 @@ class ModelFactory extends \Pimple
 
                     return $return;
                 } else {
-                    throw new \InvalidArgumentException(sprintf('The %s model is invalid.', $model_name));
+                    throw new \InvalidArgumentException(sprintf("The %s model is invalid with the following errors:\n %s", $model_name, $instances->getErrors()));
                     return FALSE;
                 }
             }

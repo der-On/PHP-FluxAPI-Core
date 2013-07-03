@@ -58,6 +58,13 @@ abstract class Model
     protected $_query = NULL;
 
     /**
+     * Holds validation errors if any
+     *
+     * @var \FluxAPI\Collection\ModelErrorCollection
+     */
+    protected $_errors = NULL;
+
+    /**
      * Constructor
      *
      * @param [array $data] if set the model will contain that initial data
@@ -65,6 +72,8 @@ abstract class Model
     public function  __construct(\FluxAPI\Api $api, array $data = NULL)
     {
         $this->_api = $api;
+        $this->_errors = new \FluxAPI\Collection\ModelErrorCollection();
+
         $this->defineFields();
         $this->addExtends();
         $this->setDefaults();
@@ -86,6 +95,26 @@ abstract class Model
     public function getQuery()
     {
         return $this->_query;
+    }
+
+    /**
+     * Add a validation error to this model
+     *
+     * @param Exception\ValidateException $error
+     */
+    public function addError(\FluxAPI\Exception\ValidateException $error)
+    {
+        $this->_errors->push($error);
+    }
+
+    /**
+     * Returns the validation error collection of this model
+     *
+     * @return Collection\ModelErrorCollection
+     */
+    public function getErrors()
+    {
+        return $this->_errors;
     }
 
     /**

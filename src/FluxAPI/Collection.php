@@ -8,7 +8,7 @@ abstract class Collection implements \IteratorAggregate, \ArrayAccess, \Countabl
     const ORDER_ASCENDING = 'asc';
     const ORDER_DESCENDING = 'desc';
 
-    private $_items = array();
+    protected $_items = array();
 
     /**
      * Prepares an item for injection into the collection
@@ -425,5 +425,10 @@ abstract class Collection implements \IteratorAggregate, \ArrayAccess, \Countabl
         }
 
         return $str;
+    }
+
+    function __toString()
+    {
+        return $this->toString();
     }
 }
