@@ -458,45 +458,54 @@ abstract class Model
             return TRUE;
         }
 
-        // property was set initially, so we have to check further
-        if (isset($this->_shadow_data[$name])) {
+        $field = $this->getField($name);
 
-            // property is a relation field
-            if ($this->hasField($name) && $this->getField($name)->type == Field::TYPE_RELATION) {
-                // MANY-relation
-                if (is_array($this->_data[$name])) {
-                    // count has changed, so definitely modified
-                    if (count($this->_data[$name]) != count($this->_shadow_data[$name])) {
-                        return TRUE;
-                    }
-                    // count is the same, so maybe some instances have changed
-                    else {
-                        foreach($this->_data[$name] as $i => $relation_instance) {
-                            $id = (is_object($relation_instance)) ? $relation_instance->id : $relation_instance;
-                            $shadow_id = (is_object($this->_shadow_data[$name][$i])) ? $this->_shadow_data[$name][$i]->id : $this->_shadow_data[$name][$i];
+        // property is a relation field
+        if ($field  && $field->type == Field::TYPE_RELATION) {
+            // if relation was not loaded before, it is basically not modified as even direct setting of a relation will move it to the loaded relations
+            if (!in_array($name, $this->_loaded_relations)) {
+                return false;
+            }
 
-                            // as soon as one instance is different, return TRUE
-                            if ($id != $shadow_id) {
-                                return TRUE;
-                            }
+            // relation has been removed entirely or relation was empty before, so it is modified
+            if ((isset($this->_data[$name]) && !isset($this->_shadow_data[$name])) ||
+                (!isset($this->_data[$name]) && isset($this->_shadow_data[$name]))) {
+                return true;
+            }
+
+            // MANY-relation
+            if (in_array($field->relationType, array(Field::HAS_MANY, Field::BELONGS_TO_MANY))) {
+                // count has changed, so definitely modified
+                if ($this->_data[$name]->count() != $this->_shadow_data[$name]->count()) {
+                    return TRUE;
+                }
+                // count is the same, so maybe some instances have changed
+                else {
+                    foreach($this->_data[$name] as $i => $relation_instance) {
+                        $id = (is_object($relation_instance)) ? $relation_instance->id : $relation_instance;
+                        $shadow_id = (is_object($this->_shadow_data[$name][$i])) ? $this->_shadow_data[$name][$i]->id : $this->_shadow_data[$name][$i];
+
+                        // as soon as one instance is different, return TRUE
+                        if ($id != $shadow_id) {
+                            return TRUE;
                         }
                     }
                 }
-                // ONE-relation
-                else {
-                    $id = (is_object($this->_data[$name])) ? $this->_data[$name]->id : $this->_data[$name];
-                    $shadow_id = (is_object($this->_shadow_data[$name])) ? $this->_shadow_data[$name]->id : $this->_shadow_data[$name];
-
-                    // compare IDs, if they do not match, relation was modified
-                    return $id != $shadow_id;
-                }
             }
-            // property is a regular field so compare values
+            // ONE-relation
             else {
-                return $this->_data[$name] != $this->_shadow_data[$name];
+                $id = (is_object($this->_data[$name])) ? $this->_data[$name]->id : $this->_data[$name];
+                $shadow_id = (is_object($this->_shadow_data[$name])) ? $this->_shadow_data[$name]->id : $this->_shadow_data[$name];
+
+                // compare IDs, if they do not match, relation was modified
+                return $id != $shadow_id;
             }
         }
-        // if property is not in the initial copy it is definitely modified
+        // regular property which was set initially, so we have to check further
+        elseif (isset($this->_shadow_data[$name])) {
+            return $this->_data[$name] != $this->_shadow_data[$name];
+        }
+        // if property is regular and not in the initial copy it is definitely modified
         else {
             return TRUE;
         }
@@ -542,6 +551,25 @@ abstract class Model
         return $modified;
     }
 
+    /**
+     * Returns the value of the shadow copy of a property
+     *
+     * @param string $name property name
+     * @returns mixed|null
+     */
+    public function getShadowProperty($name)
+    {
+        if (isset($this->_shadow_data[$name])) {
+            return $this->_shadow_data[$name];
+        }
+        else {
+            return null;
+        }
+    }
+
+    /**
+     * Sets the models status to not new
+     */
     public function notNew()
     {
         $this->_new = false;

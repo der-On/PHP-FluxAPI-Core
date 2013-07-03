@@ -292,13 +292,15 @@ class ModelFactory extends \Pimple
         $model_instance = $this->_api->$createMethod($data);
 
         if ($this->_validate($model_instance, array_keys($data))) {
-
+            // validation may have changed values so update data from model
             foreach($data as $key => $value) {
                 $data[$key] = $model_instance->$key;
             }
 
-            $return = $storage->update($model_name, $query, $data);
-            $this['dispatcher']->dispatch(ModelEvent::UPDATE, new ModelEvent($model_name, $query));
+            $query->setData($data);
+
+            $return = $storage->update($model_name, $query, $query->getData());
+            // update event is dispatched from within the storage to be able to pass a model instance to the event
 
             return $return;
         } else {

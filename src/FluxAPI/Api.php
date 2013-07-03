@@ -30,6 +30,11 @@ class Api extends \Pimple
     const MODEL_CREATE = 'create';
     const MODEL_SAVE = 'save';
 
+    const LOG_INFO = 'info';
+    const LOG_DEBUG = 'debug';
+    const LOG_ERROR = 'error';
+    const LOG_WARNING = 'warning';
+
     /**
      * @var \Silex\Application The silex app
      */
@@ -60,6 +65,11 @@ class Api extends \Pimple
         );
 
         $this['logger'] = NULL;
+
+        // use monolog logger by default
+        if (isset($app['monolog'])) {
+            $this['logger'] = $app['monolog'];
+        }
 
         $this['caches'] = $this->share(function() use ($api) {
             return $api['cache_factory'];
@@ -137,6 +147,42 @@ class Api extends \Pimple
         $this['plugins']->registerExtends();
     }
 
+    /**
+     * @param $logger
+     */
+    public function setLogger($logger)
+    {
+        $this['logger'] = $logger;
+    }
+
+    /**
+     * Log a message of certain type
+     *
+     * @param string $message
+     * @param string $type one of Api::LOG_INFO, Api::LOG_DEBUG, Api::LOG_WARNING, Api::LOG_ERROR
+     */
+    public function log($message, $type = Api::LOG_INFO)
+    {
+        if ($this['logger']) {
+            switch($type) {
+                case Api::LOG_INFO:
+                    $this['logger']->addInfo($message);
+                    break;
+
+                case Api::LOG_DEBUG:
+                    $this['logger']->addDebug($message);
+                    break;
+
+                case Api::LOG_WARNING:
+                    $this['logger']->addWarning($message);
+                    break;
+
+                case Api::LOG_ERROR:
+                    $this['logger']->addError($message);
+                    break;
+            }
+        }
+    }
 
     public function getDefaultConfig()
     {

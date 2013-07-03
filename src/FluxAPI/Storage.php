@@ -39,6 +39,7 @@ abstract class Storage extends \Pimple implements StorageInterface
         $this->config = array_replace_recursive($this->config,$config);
         $this->_api = $api;
         $this['caches'] = $api['caches'];
+        $this['dispatcher'] = $api['dispatcher'];
 
         $this->addFilters();
     }
@@ -322,6 +323,7 @@ abstract class Storage extends \Pimple implements StorageInterface
         foreach($relation_fields as $relation_field) {
             // skip relations that should not be saved
             if ($relations_to_save !== NULL && !in_array($relation_field->name, $relations_to_save)) {
+                $instance->setPropertyModified($relation_field->name, false);
                 continue;
             }
 
@@ -430,6 +432,7 @@ abstract class Storage extends \Pimple implements StorageInterface
 
         // only save relations if there are relation fields in the given data
         $relations_to_save = array();
+        $relations_to_not_save = array();
         $data_keys = array_keys($data);
 
         if (count($models) > 0) {
@@ -439,12 +442,16 @@ abstract class Storage extends \Pimple implements StorageInterface
                 if (in_array($relation_field->name, $data_keys)) {
                     $relations_to_save[] = $relation_field->name;
                 }
+                else {
+                    $relations_to_not_save[] = $relation_field->name;
+                }
             }
         }
 
         foreach($models as $model) {
             $model->populate($data);
             $this->save($model_name, $model, $relations_to_save);
+            $this['dispatcher']->dispatch(\FluxAPI\Event\ModelEvent::UPDATE, new \FluxAPI\Event\ModelEvent($model_name, $query, $model));
         }
 
         return $models;
