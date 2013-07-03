@@ -366,11 +366,11 @@ abstract class Collection implements \IteratorAggregate, \ArrayAccess, \Countabl
 
                 switch($order) {
                     case Collection::ORDER_ASCENDING:
-                        return ($a->$property < $b->$property) ? -1 : 1;
+                        return ($a->$property > $b->$property) ? -1 : 1;
                         break;
 
                     case Collection::ORDER_DESCENDING:
-                        return ($a->$property > $b->$property) ? -1 : 1;
+                        return ($a->$property < $b->$property) ? -1 : 1;
                         break;
                 }
             }
