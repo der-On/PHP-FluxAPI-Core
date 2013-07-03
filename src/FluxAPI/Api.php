@@ -68,7 +68,7 @@ class Api extends \Pimple
 
         // use monolog logger by default
         if (isset($app['monolog'])) {
-            $this['logger'] = $app['monolog'];
+            $this->setLogger($app['monolog']);
         }
 
         $this['caches'] = $this->share(function() use ($api) {

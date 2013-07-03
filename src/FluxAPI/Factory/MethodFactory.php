@@ -67,6 +67,9 @@ class MethodFactory
             $callback = $this->getMethod($method);
             return call_user_func_array($callback, $arguments);
         }
+        else {
+            throw new \ErrorException(sprintf('There is no "%s" method registered.', $method));
+        }
         return NULL;
     }
 }
