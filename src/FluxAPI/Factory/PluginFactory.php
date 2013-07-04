@@ -125,7 +125,7 @@ class PluginFactory
                         elseif (is_file($plugin_dir_path) && substr($plugin_type,-strlen('.php')) == '.php') {
                             $plugin_name = ucfirst(basename($plugin_type,'.php'));
 
-                            $plugin_rel_path = $plugin . '/' . $plugin_name;
+                            $plugin_rel_path = $namespace . '/' . $plugin . '/' . $plugin_name;
 
                             // skip disabled base plugin for this plugin root
                             if (in_array($plugin_rel_path, $this->_api->config['plugin.options']['disabled'])) {
