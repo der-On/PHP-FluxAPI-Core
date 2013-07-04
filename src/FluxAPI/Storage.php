@@ -29,6 +29,13 @@ abstract class Storage extends \Pimple implements StorageInterface
     public $config = array();
 
     /**
+     * Internal OR flag
+     *
+     * @var bool
+     */
+    protected $_or = false;
+
+    /**
      * Constructor
      *
      * @param Api $api
@@ -42,6 +49,24 @@ abstract class Storage extends \Pimple implements StorageInterface
         $this['dispatcher'] = $api['dispatcher'];
 
         $this->addFilters();
+    }
+
+    /**
+     * Sets the internal OR flag for the next filter
+     */
+    public function filterOr()
+    {
+        $this->_or = true;
+    }
+
+    /**
+     * Returns true if the internal OR flag is set.
+     *
+     * @return bool
+     */
+    public function isFilterOr()
+    {
+        return $this->_or;
     }
 
     /**
@@ -111,6 +136,7 @@ abstract class Storage extends \Pimple implements StorageInterface
             ->addFilter('like','filterLike')
             ->addFilter('in','filterIn')
             ->addFilter('distinct', 'filterDistinct')
+            ->addFilter('or', 'filterOr')
             ;
     }
 
@@ -175,7 +201,12 @@ abstract class Storage extends \Pimple implements StorageInterface
      */
     public function executeFilter($callback,array $params = array())
     {
-        return call_user_func_array(array($this,$callback),$params);
+        $return = call_user_func_array(array($this,$callback),$params);
+        // reset the or filter
+        if ($callback != 'filterOr') {
+            $this->_or = false;
+        }
+        return $return;
     }
 
     /**

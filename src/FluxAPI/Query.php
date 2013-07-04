@@ -54,7 +54,7 @@ class Query
      * @param array $params
      * @return Query $this
      */
-    public function filter($name, array $params)
+    public function filter($name, array $params = array())
     {
         $this->_filters[] = array($name,$params);
 

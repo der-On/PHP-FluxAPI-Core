@@ -159,6 +159,18 @@ interface StorageInterface
     public function filterDistinct(&$qb, array $params);
 
     /**
+     * Sets the internal OR flag for the next filter
+     */
+    public function filterOr();
+
+    /**
+     * Returns true if the internal OR flag is set.
+     *
+     * @return bool
+     */
+    public function isFilterOr();
+
+    /**
      * Loads a single or a list of related models of a model instance.
      *
      * Override this in your storage plugin.
