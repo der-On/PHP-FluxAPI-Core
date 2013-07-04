@@ -30,7 +30,7 @@ abstract class Collection implements \IteratorAggregate, \ArrayAccess, \Countabl
     public static function isInstance($var)
     {
         $self_class = get_called_class();
-        return (is_object($var) && (get_class($var) == $self_class || is_subclass_of($var, $self_class)));
+        return (is_object($var) && ($var instanceof $self_class));
     }
 
     public function __construct(array $items = array())
