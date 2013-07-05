@@ -111,6 +111,7 @@ abstract class Storage extends \Pimple implements StorageInterface
      *  - count
      *  - like
      *  - in
+     *  - or
      *
      * Your storage plugin should at least implement those filters.
      */
@@ -267,52 +268,91 @@ abstract class Storage extends \Pimple implements StorageInterface
     /**
      * @param string $model_name
      * @param Query $query
-     * @param Collection\ModelCollection $instances
+     * @param Collection\ModelCollection $models
      */
-    public function cacheModels($model_name, \FluxAPI\Query $query = NULL, \FluxAPI\Collection\ModelCollection $instances)
+    public function cacheModels($model_name, \FluxAPI\Query $query = NULL, \FluxAPI\Collection\ModelCollection $models)
     {
-        $source = new \FluxAPI\Cache\ModelSource($model_name, $query, $instances);
-        $this['caches']->store(\FluxAPI\Cache::TYPE_MODEL, $source, $instances);
+        $source = new \FluxAPI\Cache\ModelSource($model_name, $query, $models);
+        $this['caches']->store(\FluxAPI\Cache::TYPE_MODEL, $source, $models);
     }
 
     /**
      * @param string $model_name
      * @param Query $query
-     * @param Collection\ModelCollection $instances
+     * @param Model $model
      */
-    public function removeCachedModels($model_name, \FluxAPI\Query $query = NULL, \FluxAPI\Collection\ModelCollection $instances = NULL)
+    public function cacheModel($model_name, \FluxAPI\Query $query = NULL, \FluxAPI\Model $model)
     {
-        $source = new \FluxAPI\Cache\ModelSource($model_name, $query, $instances);
+        $models = new \FluxAPI\Collection\ModelCollection();
+        $models->setQuery($query);
+        $models->push($model);
+
+        $this->cacheModels($model_name, $query, $models);
+    }
+
+    /**
+     * @param string $model_name
+     * @param Query $query
+     * @param Collection\ModelCollection $models
+     */
+    public function removeCachedModels($model_name, \FluxAPI\Query $query = NULL, \FluxAPI\Collection\ModelCollection $models = NULL)
+    {
+        $source = new \FluxAPI\Cache\ModelSource($model_name, $query, $models);
         $this['caches']->remove(\FluxAPI\Cache::TYPE_MODEL, $source);
+    }
+
+    /**
+     * @param string $model_name
+     * @param Query $query
+     * @param Model $model
+     */
+    public function removeCachedModel($model_name, \FluxAPI\Query $query = NULL, \FluxAPI\Model $model)
+    {
+        $models = new \FluxAPI\Collection\ModelCollection();
+        $models->setQuery($query);
+        $models->push($model);
+
+        $this->removeCachedModels($model_name, $query, $models);
+    }
+
+    /**
+     * Implement this in your Storage adapter
+     *
+     * @param Model $model
+     * @param string $name relation field name
+     */
+    public function removeCachedRelationModels(\FluxAPI\Model $model, $name)
+    {
+
     }
 
     /**
      * Saves/updates a given model instance to the storage
      *
      * @param string $model_name
-     * @param Model $instance
+     * @param Model $model
      * @param array $relations_to_save if set, a list of relation field names to save
      * @return bool
      */
-    public function save($model_name, Model $instance, array $relations_to_save = NULL)
+    public function save($model_name, Model $model, array $relations_to_save = NULL)
     {
         // if the model is new we have to set it's ID
-        if ($instance->isNew()) {
-            $instance->id = $this->getNewId();
+        if ($model->isNew()) {
+            $model->id = $this->getNewId();
         }
 
         $query = new Query();
         $query->setType(Query::TYPE_INSERT);
 
-        if ($this->exists($model_name, $instance)) {
+        if ($this->exists($model_name, $model)) {
             $query->setType(Query::TYPE_UPDATE)
-                  ->filter('equal', array('id', $instance->id));
+                  ->filter('equal', array('id', $model->id));
         }
 
         $query->setModelName($model_name);
 
         // only save modified properties
-        $modified_properties = $instance->getModifiedProperties();
+        $modified_properties = $model->getModifiedProperties();
 
         // for update queries do not set the id again
         if ($query->getType() == Query::TYPE_UPDATE) {
@@ -328,7 +368,7 @@ abstract class Storage extends \Pimple implements StorageInterface
             return TRUE;
         }
 
-        $data = $instance->toArray();
+        $data = $model->toArray();
 
         foreach($data as $name => $value) {
             if (!in_array($name, $modified_properties)) {
@@ -341,20 +381,31 @@ abstract class Storage extends \Pimple implements StorageInterface
             $query->setData($data);
             $success = $this->executeQuery($query);
 
-            // remove from caches
-            $this->removeCachedModels($model_name, $instance->getQuery());
+            // remove model from caches as it was updated
+            $this->removeCachedModel($model_name, $model->getQuery(), $model);
         }
         else {
             $success = TRUE;
         }
 
         // save relations
-        $relation_fields = $instance->getRelationFields(); // collect all fields representing a relation to another model
+        $this->_saveRelations($model_name, $model, $modified_properties, $relations_to_save);
+
+        // if model was new before, now it is not anymore.
+        $model->notNew();
+
+        return $success;
+    }
+
+    protected function _saveRelations($model_name, \FluxAPI\Model $model, array $modified_properties, array $relations_to_save = null)
+    {
+        // collect all fields representing a relation to another model
+        $relation_fields = $model->getRelationFields();
 
         foreach($relation_fields as $relation_field) {
             // skip relations that should not be saved
             if ($relations_to_save !== NULL && !in_array($relation_field->name, $relations_to_save)) {
-                $instance->setPropertyModified($relation_field->name, false);
+                $model->setPropertyModified($relation_field->name, false);
                 continue;
             }
 
@@ -363,51 +414,50 @@ abstract class Storage extends \Pimple implements StorageInterface
                 continue;
             }
 
-            $relation_instances = new \FluxAPI\Collection\ModelCollection();
+            $relation_models = new \FluxAPI\Collection\ModelCollection();
             $added_relation_ids = array();
 
             $field_name = $relation_field->name;
 
-            if (isset($instance->$field_name)) { // check if the instance has one or multiple related models
-                if (\FluxAPI\Collection\ModelCollection::isInstance($instance->$field_name)) {
-                    $relation_instances = $instance->$field_name;
+            if (isset($model->$field_name)) { // check if the instance has one or multiple related models
+                if (\FluxAPI\Collection\ModelCollection::isInstance($model->$field_name)) {
+                    $relation_models = $model->$field_name;
                 } else {
-                    $relation_instances->push($instance->$field_name);
+                    $relation_models->push($model->$field_name);
                 }
             }
 
             // HAS-ONE relation has to be removed before an update to prevent duplicate entries of same relation in the database
             if($relation_field->relationType == Field::HAS_ONE) {
-                $this->removeAllRelations($instance, $relation_field);
+                $this->removeAllRelations($model, $relation_field);
             }
 
             // after all related models have been collected we need to store the relation
-            foreach($relation_instances as $relation_instance) {
+            foreach($relation_models as $relation_model) {
                 // relation is stored as simple ID and no object so we have to load it
-                if ($relation_instance !== FALSE && !empty($relation_instance) && (is_string($relation_instance) || is_numeric($relation_instance))) {
-                    $relation_instance = $this->_api->loadFirst($relation_field->relationModel, $relation_instance);
+                if ($relation_model !== FALSE && !empty($relation_model) && (is_string($relation_model) || is_numeric($relation_model))) {
+                    $relation_model = $this->_api->loadFirst($relation_field->relationModel, $relation_model);
                 }
 
-                if ($relation_instance !== FALSE && !empty($relation_instance)) {
-                    if ($relation_instance->isNew()) { // if the related model instance is new, it needs to be saved first
-                        $this->_api->save($relation_field->relationModel, $relation_instance);
+                if ($relation_model !== FALSE && !empty($relation_model)) {
+                    if ($relation_model->isNew()) { // if the related model instance is new, it needs to be saved first
+                        $this->_api->save($relation_field->relationModel, $relation_model);
                     }
 
-                    $added_relation_ids[] = $relation_instance->id;
+                    $added_relation_ids[] = $relation_model->id;
 
-                    $this->addRelation($instance, $relation_instance, $relation_field); // now we can store the relation to this model
+                    $this->addRelation($model, $relation_model, $relation_field); // now we can store the relation to this model
                 }
             }
 
             // remove has-many relations that have been there before but keep the currently added
             if (in_array($relation_field->relationType, array(Field::HAS_MANY))) {
-                $this->removeAllRelations($instance, $relation_field, $added_relation_ids);
+                $this->removeAllRelations($model, $relation_field, $added_relation_ids);
             }
+
+            // clear relation results from cache
+            $this->removeCachedRelationModels($model, $field_name);
         }
-
-        $instance->notNew();
-
-        return $success;
     }
 
     /**

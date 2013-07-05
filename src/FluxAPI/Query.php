@@ -236,4 +236,26 @@ class Query
 
         return NULL;
     }
+
+    public function toArray()
+    {
+        return array(
+            'type' => $this->getType(),
+            'modelName' => $this->getModelName(),
+            'filters' => $this->getFilters(),
+            'data' => $this->getData()
+        );
+    }
+
+    public function toString()
+    {
+        $arr = $this->toArray();
+        unset($arr['data']);
+        return json_encode($arr);
+    }
+
+    public function __toString()
+    {
+        return $this->toString();
+    }
 }

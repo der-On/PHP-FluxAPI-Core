@@ -213,6 +213,49 @@ interface StorageInterface
     public function removeAllRelations(\FluxAPI\Model $model, \FluxAPI\Field $field, array $exclude_ids = array());
 
     /**
+     * @param string $model_name
+     * @param \FluxAPI\Query $query
+     * @return null|array
+     */
+    public function getCachedModels($model_name, \FluxAPI\Query $query = NULL);
+
+    /**
+     * @param string $model_name
+     * @param Query $query
+     * @param Collection\ModelCollection $models
+     */
+    public function cacheModels($model_name, \FluxAPI\Query $query = NULL, \FluxAPI\Collection\ModelCollection $models);
+
+    /**
+     * @param string $model_name
+     * @param Query $query
+     * @param Model $model
+     */
+    public function cacheModel($model_name, \FluxAPI\Query $query = NULL, \FluxAPI\Model $model);
+
+    /**
+     * @param string $model_name
+     * @param Query $query
+     * @param Collection\ModelCollection $models
+     */
+    public function removeCachedModels($model_name, \FluxAPI\Query $query = NULL, \FluxAPI\Collection\ModelCollection $models = NULL);
+
+    /**
+     * @param string $model_name
+     * @param Query $query
+     * @param Model $model
+     */
+    public function removeCachedModel($model_name, \FluxAPI\Query $query = NULL, \FluxAPI\Model $model);
+
+    /**
+     * Implement this in your Storage adapter
+     *
+     * @param Model $model
+     * @param string $name relation field name
+     */
+    public function removeCachedRelationModels(\FluxAPI\Model $model, $name);
+
+    /**
      * Checks if the storage plugin is already connected to the storage host (e.g. Database)
      *
      * Override this in your storage plugin.
@@ -314,34 +357,13 @@ interface StorageInterface
     public function exists($model_name, Model $instance);
 
     /**
-     * @param string $model_name
-     * @param \FluxAPI\Query $query
-     * @return null|array
-     */
-    public function getCachedModels($model_name, \FluxAPI\Query $query = NULL);
-
-    /**
-     * @param string $model_name
-     * @param Query $query
-     * @param Collection\ModelCollection $instances
-     */
-    public function cacheModels($model_name, \FluxAPI\Query $query = NULL, \FluxAPI\Collection\ModelCollection $instances);
-
-    /**
-     * @param string $model_name
-     * @param Query $query
-     * @param Collection\ModelCollection $instances
-     */
-    public function removeCachedModels($model_name, \FluxAPI\Query $query = NULL, \FluxAPI\Collection\ModelCollection $instances);
-
-    /**
      * Saves/updates a given model instance to the storage
      *
      * @param string $model_name
-     * @param Model $instance
+     * @param Model $model
      * @return bool
      */
-    public function save($model_name, Model $instance);
+    public function save($model_name, Model $model);
 
     /**
      * Loads instances of a model from the storage

@@ -7,11 +7,11 @@ class ModelSource extends CacheSource
     public $query = NULL;
     public $instances = NULL;
 
-    public function __construct($model_name, \FluxAPI\Query $query = NULL, \FluxAPI\Collection\ModelCollection $instances = NULL)
+    public function __construct($model_name, \FluxAPI\Query $query = NULL, \FluxAPI\Collection\ModelCollection $models = NULL)
     {
         $this->model_name = $model_name;
         $this->query = $query;
-        $this->instances = $instances;
+        $this->models = $models;
     }
 
     /**
@@ -22,9 +22,9 @@ class ModelSource extends CacheSource
     public function toHash()
     {
         if ($this->query) {
-            return md5($this->model_name . $this->query->getType() . serialize($this->query->getFilters()));
+            return $this->query->toString();
         } else {
-            return md5($this->model_name);
+            return $this->model_name;
         }
     }
 }
