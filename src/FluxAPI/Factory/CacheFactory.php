@@ -11,6 +11,8 @@ class CacheFactory extends \Pimple
 
     protected $_caches = NULL;
 
+    protected $_disabled = array();
+
     public function __construct(\FluxAPI\Api $api)
     {
         $this->_api = $api;
@@ -47,6 +49,10 @@ class CacheFactory extends \Pimple
      */
     public function getCached($type, CacheSource $source, CacheOptions $options = NULL)
     {
+        if ($this->isDisabled($type)) {
+            return null;
+        }
+
         $cache_names = array_keys($this['plugins']->getPlugins('Cache'));
 
         foreach($cache_names as $cache_name) {
@@ -73,6 +79,10 @@ class CacheFactory extends \Pimple
      */
     public function store($type, CacheSource $source, $resource, CacheOptions $options = NULL)
     {
+        if ($this->isDisabled($type)) {
+            return;
+        }
+
         $cache_names = array_keys($this['plugins']->getPlugins('Cache'));
 
         foreach($cache_names as $cache_name) {
@@ -91,6 +101,10 @@ class CacheFactory extends \Pimple
      */
     public function remove($type, CacheSource $source, CacheOptions $options = NULL)
     {
+        if ($this->isDisabled($type)) {
+            return;
+        }
+
         $cache_names = array_keys($this['plugins']->getPlugins('Cache'));
 
         foreach($cache_names as $cache_name) {
@@ -107,6 +121,10 @@ class CacheFactory extends \Pimple
      */
     public function clear($type)
     {
+        if ($this->isDisabled($type)) {
+            return;
+        }
+
         $cache_names = array_keys($this['plugins']->getPlugins('Cache'));
 
         foreach($cache_names as $cache_name) {
@@ -126,5 +144,30 @@ class CacheFactory extends \Pimple
         foreach($types as $type) {
             $this->clear($type);
         }
+    }
+
+    /**
+     * @param string $type cache type to disable
+     */
+    public function disable($type)
+    {
+        if (!isset($this->_disabled[$type])) {
+            $this->_disabled[$type] = true;
+        }
+    }
+
+    /**
+     * @param string $type cache type to enable
+     */
+    public function enable($type)
+    {
+        if (isset($this->_disabled[$type])) {
+            $this->_disabled[$type] = false;
+        }
+    }
+
+    public function isDisabled($type)
+    {
+        return (isset($this->_disabled[$type]) && $this->_disabled[$type]);
     }
 }
