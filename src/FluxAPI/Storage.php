@@ -376,7 +376,7 @@ abstract class Storage extends \Pimple implements StorageInterface
             }
         }
 
-        // do not execute query with no data to store
+        // only execute query if there is data to store
         if (count($data) > 0) {
             $query->setData($data);
             $success = $this->executeQuery($query);
