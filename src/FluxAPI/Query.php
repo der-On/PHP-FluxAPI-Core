@@ -114,6 +114,28 @@ class Query
     }
 
     /**
+     * Removes filters form query
+     *
+     * @chainable
+     * @param string|null $name if not set all filters will be removed, if set only fitlers of certain type will be removed
+     * @return $this
+     */
+    public function removeFilters($name = NULL)
+    {
+        if (empty($name)) {
+            $this->_filters = array();
+        } else {
+            foreach($this->_filters as $i => $filter) {
+                if ($filter[0] == $name) {
+                    array_splice($this->_filters, $i, 1);
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Sets the storage this query belongs to
      *
      * @param Storage $storage

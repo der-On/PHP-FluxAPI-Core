@@ -294,9 +294,8 @@ class Api extends \Pimple
             $query->filter('equal',array('id',$id));
         }
 
-        if (!$query->hasFilter('limit')) {
-            $query->filter('limit',array(0,1));
-        }
+        $query->removeFilters('limit');
+        $query->filter('limit',array(0,1));
 
         $model = $this['models']->loadFirst($model_name, $query, $format);
 
@@ -346,14 +345,8 @@ class Api extends \Pimple
             $query->filter('equal',array('id',$id));
         }
 
-        $limit_filters = $query->getFilters('limit');
-        if (count($limit_filters) == 0) {
-            $query->filter('limit',array(0,1));
-        } else {
-            foreach($limit_filters as &$filter) {
-                $filter[1][1] = 1;
-            }
-        }
+        $query->removeFilters('limit');
+        $query->filter('limit',array(0,1));
 
         return $this['models']->delete($model_name, $query);
     }
@@ -395,7 +388,10 @@ class Api extends \Pimple
             $query = new Query();
             $query->filter('equal',array('id',$id));
         }
-        $query->filter('limit',array(0,1));
+
+        if (!$query->hasFilter('limit')) {
+            $query->filter('limit',array(0,1));
+        }
 
         $result = $this['models']->update($model_name, $query, $data, $format);
 

@@ -188,6 +188,7 @@ class ModelFactory extends \Pimple
             return null;
         }
 
+        $query->removeFilters('limit');
         $query->filter('limit',array(0,1));
         $models = $this->load($model_name, $query);
 

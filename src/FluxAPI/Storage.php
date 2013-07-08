@@ -476,23 +476,24 @@ abstract class Storage extends \Pimple implements StorageInterface
         $query->setModelName($model_name);
 
         $cached = TRUE;
-        $instances = $this->getCachedModels($model_name, $query);
+        $models = $this->getCachedModels($model_name, $query);
 
-        if ($instances === NULL) {
+        if ($models === NULL) {
             $cached = FALSE;
-            $instances = $this->executeQuery($query);
-            $instances->setQuery($query); // append query to collection
+            $models = $this->executeQuery($query);
+            $models->setQuery($query); // append query to collection
         }
 
-        foreach($instances as $instance) {
-            $instance->notNew();
+        foreach($models as $model) {
+            $model->setQuery($query); // append query to each model
+            $model->notNew();
         }
 
         if (!$cached) {
-            $this->cacheModels($model_name, $query, $instances);
+            $this->cacheModels($model_name, $query, $models);
         }
 
-        return $instances;
+        return $models;
     }
 
     /**
@@ -508,7 +509,6 @@ abstract class Storage extends \Pimple implements StorageInterface
         if (empty($query)) {
             $query = new Query();
         }
-
         $models = $this->load($model_name, $query);
 
         // only save relations if there are relation fields in the given data
