@@ -576,26 +576,32 @@ abstract class Model
     }
 
     /**
-     * Returns an array represantation of the model
+     * Returns an array representation of the model
      *
+     * @param bool $convert_dates (default = true) will convert dates and datetime objects to strings
      * @return array
      */
-    public function toArray()
+    public function toArray($convert_dates = true)
     {
         $array = array();
         foreach($this->_fields as $name => $field) {
             if ($field->type != Field::TYPE_RELATION) {
-                switch($field->type) {
-                    case Field::TYPE_DATE:
-                        $array[$name] = (is_object($this->_data[$name])) ? \FluxAPI\Utils::dateToString($this->_data[$name]) : $this->_data[$name];
-                        break;
+                if ($convert_dates) {
+                    switch($field->type) {
+                        case Field::TYPE_DATE:
+                            $array[$name] = (is_object($this->_data[$name])) ? \FluxAPI\Utils::dateToString($this->_data[$name]) : $this->_data[$name];
+                            break;
 
-                    case Field::TYPE_DATETIME:
-                        $array[$name] = (is_object($this->_data[$name])) ? \FluxAPI\Utils::dateTimeToString($this->_data[$name]) : $this->_data[$name];
-                        break;
+                        case Field::TYPE_DATETIME:
+                            $array[$name] = (is_object($this->_data[$name])) ? \FluxAPI\Utils::dateTimeToString($this->_data[$name]) : $this->_data[$name];
+                            break;
 
-                    default:
-                        $array[$name] = $this->_data[$name];
+                        default:
+                            $array[$name] = $this->_data[$name];
+                    }
+                }
+                else {
+                    $array[$name] = $this->_data[$name];
                 }
             }
         }
@@ -603,7 +609,7 @@ abstract class Model
     }
 
     /**
-     * Returns a string represantation of the model
+     * Returns a string representation of the model
      *
      * @return string
      */
