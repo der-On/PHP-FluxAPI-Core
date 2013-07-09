@@ -26,4 +26,9 @@ class Utils
     {
         return new \DateTime($str);
     }
+
+    public static function objectToArray($object)
+    {
+        return json_decode(json_encode($object), true);
+    }
 }

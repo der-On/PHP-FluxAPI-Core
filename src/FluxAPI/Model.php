@@ -378,6 +378,10 @@ abstract class Model
             $models = $this->$name;
         }
 
+        if (!\FluxAPI\Collection\ModelCollection::isInstance($this->_data[$name])) {
+            $this->_data[$name] = new \FluxAPI\Collection\ModelCollection();
+        }
+
         $this->_data[$name]->push($model);
     }
 
@@ -578,15 +582,15 @@ abstract class Model
     /**
      * Returns an array representation of the model
      *
-     * @param bool $convert_dates (default = true) will convert dates and datetime objects to strings
+     * @param bool $convert_objects (default = true) will convert dates and datetime to strings and other objects to arrays
      * @return array
      */
-    public function toArray($convert_dates = true)
+    public function toArray($convert_objects = true)
     {
         $array = array();
         foreach($this->_fields as $name => $field) {
             if ($field->type != Field::TYPE_RELATION) {
-                if ($convert_dates) {
+                if ($convert_objects) {
                     switch($field->type) {
                         case Field::TYPE_DATE:
                             $array[$name] = (is_object($this->_data[$name])) ? \FluxAPI\Utils::dateToString($this->_data[$name]) : $this->_data[$name];
@@ -597,7 +601,7 @@ abstract class Model
                             break;
 
                         default:
-                            $array[$name] = $this->_data[$name];
+                            $array[$name] = (is_object($this->_data[$name])) ? \FluxAPI\Utils::objectToArray($this->_data[$name]) : $this->_data[$name];
                     }
                 }
                 else {
