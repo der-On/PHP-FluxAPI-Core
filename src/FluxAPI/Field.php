@@ -75,6 +75,12 @@ class Field
      */
     public $relationOrder = null;
 
+    /**
+     * Grouping in which to load MANY-Relations. If set it is an array where the keys are fields and values can be one of Field::ORDER_ASC or Field::ORDER_DESC
+     * @var array | null
+     */
+    public $relationGroup = null;
+
     const TYPE_STRING = 'string';
     const TYPE_BINARY = 'binary';
     const TYPE_BYTEARRAY = 'bitearray';
@@ -97,6 +103,7 @@ class Field
 
     const ORDER_ASC = 'ASC';
     const ORDER_DESC = 'DESC';
+    const ORDER_NONE = 'NONE';
 
     /**
      * Constructor

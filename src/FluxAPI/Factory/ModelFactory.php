@@ -176,7 +176,7 @@ class ModelFactory extends \Pimple
 
             return $this->_modelsToFormat($model_name, $instances, $format);
         }
-
+        // TODO: must return model collection transformed to requested Format
         return array();
     }
 

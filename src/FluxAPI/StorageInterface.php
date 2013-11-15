@@ -111,6 +111,16 @@ interface StorageInterface
     public function filterOrder(&$qb, array $params);
 
     /**
+     * 'group' filter implementation.
+     *
+     * Override this in your storage plugin.
+     *
+     * @param $qb some kind of query builder object
+     * @param array $params
+     */
+    public function filterGroup(&$qb, array $params);
+
+    /**
      * 'limit' filter implementation.
      *
      * Override this in your storage plugin.

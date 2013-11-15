@@ -132,6 +132,7 @@ abstract class Storage extends \Pimple implements StorageInterface
             ->addFilter('<=','filterLessThenOrEqual')
             ->addFilter('range','filterRange')
             ->addFilter('order','filterOrder')
+            ->addFilter('group','filterGroup')
             ->addFilter('limit','filterLimit')
             ->addFilter('count','filterCount')
             ->addFilter('like','filterLike')
