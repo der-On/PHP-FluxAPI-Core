@@ -588,6 +588,23 @@ abstract class Storage extends \Pimple implements StorageInterface
     }
 
     /**
+     * Executes a raw query
+     *
+     * Override this in your storage plugin.
+     *
+     * @param mixed $query
+     * @return mixed
+     */
+    public function executeRawQuery($query)
+    {
+        if (!$this->isConnected()) {
+            $this->connect();
+        }
+
+        return null;
+    }
+
+    /**
      * Converts the given data to a serialized string
      *
      * @param mixed $data
