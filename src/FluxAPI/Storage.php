@@ -52,11 +52,11 @@ abstract class Storage extends \Pimple implements StorageInterface
     }
 
     /**
-     * Sets the internal OR flag for the next filter
+     * Triggers the internal OR flag for the next filter
      */
     public function filterOr()
     {
-        $this->_or = true;
+        $this->_or = $this->_or ? false : true;
     }
 
     /**
@@ -112,6 +112,7 @@ abstract class Storage extends \Pimple implements StorageInterface
      *  - like
      *  - in
      *  - or
+     *  - raw
      *
      * Your storage plugin should at least implement those filters.
      */
@@ -139,6 +140,7 @@ abstract class Storage extends \Pimple implements StorageInterface
             ->addFilter('in','filterIn')
             ->addFilter('distinct', 'filterDistinct')
             ->addFilter('or', 'filterOr')
+            ->addFilter('raw', 'filterRaw')
             ;
     }
 
