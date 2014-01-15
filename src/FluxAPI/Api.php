@@ -463,9 +463,13 @@ class Api extends \Pimple
         $self = $this;
 
         $model_name = ucfirst($model_name);
+        $model_name_lower = ucfirst(strtolower($model_name));
 
         // load multiple model instances
         $this['methods']->registerMethod('load'.$model_name.'s', function($query = NULL, $format = NULL) use ($model_name, $self) {
+            return $self->load($model_name, $query, $format);
+        });
+        $this['methods']->registerMethod('load'.$model_name_lower.'s', function($query = NULL, $format = NULL) use ($model_name, $self) {
             return $self->load($model_name, $query, $format);
         });
 
@@ -473,9 +477,15 @@ class Api extends \Pimple
         $this['methods']->registerMethod('load'.$model_name, function($query = NULL, $format = NULL) use ($model_name, $self) {
             return $self->loadFirst($model_name, $query, $format);
         });
+        $this['methods']->registerMethod('load'.$model_name_lower, function($query = NULL, $format = NULL) use ($model_name, $self) {
+            return $self->loadFirst($model_name, $query, $format);
+        });
 
         // save a model instance
         $this['methods']->registerMethod('save'.$model_name, function($instance) use ($model_name, $self) {
+            return $self->save($model_name, $instance);
+        });
+        $this['methods']->registerMethod('save'.$model_name_lower, function($instance) use ($model_name, $self) {
             return $self->save($model_name, $instance);
         });
 
@@ -483,9 +493,15 @@ class Api extends \Pimple
         $this['methods']->registerMethod('delete'.$model_name.'s', function($query = NULL) use ($model_name, $self) {
             return $self->delete($model_name, $query);
         });
+        $this['methods']->registerMethod('delete'.$model_name_lower.'s', function($query = NULL) use ($model_name, $self) {
+            return $self->delete($model_name, $query);
+        });
 
         // delete a single model instance
         $this['methods']->registerMethod('delete'.$model_name, function($query) use ($model_name, $self) {
+            return $self->deleteFirst($model_name, $query);
+        });
+        $this['methods']->registerMethod('delete'.$model_name_lower, function($query) use ($model_name, $self) {
             return $self->deleteFirst($model_name, $query);
         });
 
@@ -493,9 +509,15 @@ class Api extends \Pimple
         $this['methods']->registerMethod('update'.$model_name.'s', function($query, array $data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model_name, $self) {
             return $self->update($model_name, $query, $data, $format);
         });
+        $this['methods']->registerMethod('update'.$model_name_lower.'s', function($query, array $data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model_name, $self) {
+            return $self->update($model_name, $query, $data, $format);
+        });
 
         // update a single model instance
         $this['methods']->registerMethod('update'.$model_name, function($query, array $data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model_name, $self) {
+            return $self->updateFirst($model_name, $query, $data, $format);
+        });
+        $this['methods']->registerMethod('update'.$model_name_lower, function($query, array $data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model_name, $self) {
             return $self->updateFirst($model_name, $query, $data, $format);
         });
 
@@ -503,9 +525,15 @@ class Api extends \Pimple
         $this['methods']->registerMethod('create'.$model_name, function($data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model_name, $self) {
             return $self->create($model_name, $data, $format);
         });
+        $this['methods']->registerMethod('create'.$model_name_lower, function($data = array(), $format = Api::DATA_FORMAT_ARRAY) use ($model_name, $self) {
+            return $self->create($model_name, $data, $format);
+        });
 
         // extend an existing model
         $this['methods']->registerMethod('extend'.$model_name, function($fields = array(), $format = self::DATA_FORMAT_ARRAY) use ($model_name, $self) {
+            return $self->extendModel($model_name, $fields, $format);
+        });
+        $this['methods']->registerMethod('extend'.$model_name_lower, function($fields = array(), $format = self::DATA_FORMAT_ARRAY) use ($model_name, $self) {
             return $self->extendModel($model_name, $fields, $format);
         });
 
@@ -513,10 +541,16 @@ class Api extends \Pimple
         $this['methods']->registerMethod('reduce'.$model_name, function($fields = NULL, $format = self::DATA_FORMAT_ARRAY) use ($model_name, $self) {
             return $self->reduceModel($model_name, $fields, $format);
         });
+        $this['methods']->registerMethod('reduce'.$model_name_lower, function($fields = NULL, $format = self::DATA_FORMAT_ARRAY) use ($model_name, $self) {
+            return $self->reduceModel($model_name, $fields, $format);
+        });
 
         // count models
         $this['methods']->registerMethod('count' . $model_name . 's', function(Query $query = NULL) use ($model_name, $self) {
            return $self->count($model_name, $query);
+        });
+        $this['methods']->registerMethod('count' . $model_name_lower . 's', function(Query $query = NULL) use ($model_name, $self) {
+            return $self->count($model_name, $query);
         });
     }
 
@@ -527,18 +561,30 @@ class Api extends \Pimple
      */
     public function unregisterModelMethods($model_name)
     {
+        $model_name_lower = ucfirst(strtolower($model_name));
         $this['methods']
             ->unregisterMethod('create'.$model_name)
+            ->unregisterMethod('create'.$model_name_lower)
             ->unregisterMethod('create'.$model_name.'s')
+            ->unregisterMethod('create'.$model_name_lower.'s')
             ->unregisterMethod('load'.$model_name)
+            ->unregisterMethod('load'.$model_name_lower)
             ->unregisterMethod('load'.$model_name.'s')
+            ->unregisterMethod('load'.$model_name_lower.'s')
             ->unregisterMethod('update'.$model_name)
+            ->unregisterMethod('update'.$model_name_lower)
             ->unregisterMethod('update'.$model_name.'s')
+            ->unregisterMethod('update'.$model_name_lower.'s')
             ->unregisterMethod('delete'.$model_name)
+            ->unregisterMethod('delete'.$model_name_lower)
             ->unregisterMethod('delete'.$model_name.'s')
+            ->unregisterMethod('delete'.$model_name_lower.'s')
             ->unregisterMethod('extend'.$model_name)
+            ->unregisterMethod('extend'.$model_name_lower)
             ->unregisterMethod('reduce'.$model_name)
+            ->unregisterMethod('reduce'.$model_name_lower)
             ->unregisterMethod('count'.$model_name.'s')
+            ->unregisterMethod('count'.$model_name_lower.'s')
             ;
     }
 
