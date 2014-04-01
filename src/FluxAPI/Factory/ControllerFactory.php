@@ -152,6 +152,13 @@ class ControllerFactory extends \Pimple
 
             foreach($controllers as $name => $controller) {
                 $actions[$name] = $this->_getNormalizedActions($controller::getActions());
+
+                // warn if an action value is not an array
+                foreach($actions[$name] as $action => $value) {
+                    if(!is_array($value)) {
+                        throw new \Exception(sprintf('The value for the "%s" action in %s->getActions() must be an array.', $action, $name));
+                    }
+                }
             }
 
             return $actions;
