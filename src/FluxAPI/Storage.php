@@ -492,6 +492,8 @@ abstract class Storage extends \Pimple implements StorageInterface
             $model->notNew();
         }
 
+        $this['dispatcher']->dispatch(\FluxAPI\Event\QueryEvent::AFTER_EXECUTE, new \FluxAPI\Event\QueryEvent($query, $models));
+
         if (!$cached) {
             $this->cacheModels($model_name, $query, $models);
         }
