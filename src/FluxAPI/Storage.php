@@ -586,6 +586,8 @@ abstract class Storage extends \Pimple implements StorageInterface
             $this->connect();
         }
 
+        $this['dispatcher']->dispatch(\FluxAPI\Event\QueryEvent::BEFORE_EXECUTE, new \FluxAPI\Event\QueryEvent($query));
+
         return NULL;
     }
 
